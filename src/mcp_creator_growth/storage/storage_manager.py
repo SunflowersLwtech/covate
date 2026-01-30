@@ -271,8 +271,22 @@ class StorageManager:
         output_path = Path(output_path)
 
         # Gather all data with explicit type annotations
-        debug_records: list[dict[str, Any]] = self.debug.list_records()
-        sessions: list[dict[str, Any]] = self.sessions.list_sessions(limit=1000)
+        # Fix: Fetch full records instead of index summaries
+        debug_summaries = self.debug.list_records()
+        debug_records: list[dict[str, Any]] = []
+        for r in debug_summaries:
+            # list_records returns dicts with 'id', ensure it exists
+            if r_id := r.get("id"):
+                if full_record := self.debug.get_record(r_id):
+                    debug_records.append(full_record)
+
+        session_summaries = self.sessions.list_sessions(limit=1000)
+        sessions: list[dict[str, Any]] = []
+        for s in session_summaries:
+            # list_sessions returns normalized dicts with 'session_id'
+            if s_id := s.get("session_id"):
+                if full_session := self.sessions.load_session(s_id):
+                    sessions.append(full_session)
 
         export_data = {
             "version": 1,
