@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from ..debug import server_debug_log as debug_log
+from .serializers import save_toon_file
 
 
 class DebugIndexManager:
@@ -552,6 +553,48 @@ class DebugIndexManager:
         }
         debug_log(f"Index compacted: {stats}")
         return stats
+
+    def export_toon(self, output_path: Path | str) -> int:
+        """
+        Export all debug records to TOON format (Token Optimized).
+
+        This flattens the nested structure and uses short keys to save tokens.
+
+        Args:
+            output_path: Path to output file
+
+        Returns:
+            Number of records exported
+        """
+        records = []
+        for index_entry in self._index["records"]:
+            record_id = index_entry["id"]
+            record = self.get_record(record_id)
+            if not record:
+                continue
+
+            # Create optimized flat structure
+            context = record.get("context", {})
+
+            optimized_record = {
+                "id": record.get("id"),
+                "ts": record.get("timestamp"),
+                "et": context.get("error_type", ""),
+                "msg": context.get("error_message", ""),
+                "cause": record.get("cause", ""),
+                "sol": record.get("solution", ""),
+                "tags": ",".join(record.get("tags", []))
+            }
+
+            # Add any other context fields with ctx_ prefix
+            for k, v in context.items():
+                if k not in ["error_type", "error_message"]:
+                    optimized_record[f"ctx_{k}"] = v
+
+            records.append(optimized_record)
+
+        save_toon_file(output_path, records)
+        return len(records)
 
 
 # Alias for test compatibility

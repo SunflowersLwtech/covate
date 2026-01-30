@@ -6,6 +6,7 @@ JSON serialization and deserialization utilities for storage.
 Handles sessions, debug records, and metadata.
 """
 
+import csv
 import json
 from datetime import datetime
 from pathlib import Path
@@ -195,3 +196,86 @@ def merge_data(
             result[key] = result[key] + value
 
     return result
+
+
+def save_toon_file(
+    file_path: Path | str,
+    data: list[dict[str, Any]],
+) -> None:
+    """
+    Save list of records to TOON format (Token Optimized Object Notation).
+
+    This is a CSV-like format that reduces token usage by avoiding repeated keys.
+    It flattens the dictionary structure.
+
+    Args:
+        file_path: Path to save the file
+        data: List of dicts to save
+    """
+    file_path = Path(file_path)
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if not data:
+        return
+
+    # Collect all unique keys from all records
+    keys = set()
+    for record in data:
+        keys.update(record.keys())
+
+    # Sort keys for consistent column order
+    fieldnames = sorted(list(keys))
+
+    with open(file_path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for record in data:
+            # Handle nested objects by JSON dumping them if needed, or str()
+            # For TOON, we assume the caller has already flattened the structure ideally
+            row = {}
+            for k, v in record.items():
+                if isinstance(v, (dict, list)):
+                    row[k] = json.dumps(v, ensure_ascii=False)
+                else:
+                    row[k] = v
+            writer.writerow(row)
+
+    debug_log(f"Saved TOON file: {file_path}")
+
+
+def load_toon_file(file_path: Path | str) -> list[dict[str, Any]]:
+    """
+    Load data from a TOON file.
+
+    Args:
+        file_path: Path to the TOON file
+
+    Returns:
+        List of dicts
+    """
+    file_path = Path(file_path)
+
+    if not file_path.exists():
+        return []
+
+    results = []
+    try:
+        with open(file_path, "r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # Try to parse JSON fields back
+                record = {}
+                for k, v in row.items():
+                    if v and (v.startswith("{") or v.startswith("[")):
+                        try:
+                            record[k] = json.loads(v)
+                        except json.JSONDecodeError:
+                            record[k] = v
+                    else:
+                        record[k] = v
+                results.append(record)
+    except Exception as e:
+        debug_log(f"Error reading TOON file {file_path}: {e}")
+        return []
+
+    return results
