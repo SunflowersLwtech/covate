@@ -20,6 +20,8 @@ from .serializers import (
     load_json_file,
     serialize_session,
     deserialize_session,
+    save_toon_file,
+    load_toon_file,
 )
 from .global_index import GlobalIndexManager
 from .project_meta import ProjectMetaManager
@@ -62,6 +64,8 @@ __all__ = [
     "load_json_file",
     "serialize_session",
     "deserialize_session",
+    "save_toon_file",
+    "load_toon_file",
     # Global index
     "GlobalIndexManager",
     # Project meta
