@@ -6,6 +6,7 @@ JSON serialization and deserialization utilities for storage.
 Handles sessions, debug records, and metadata.
 """
 
+import csv
 import json
 from datetime import datetime
 from pathlib import Path
@@ -195,3 +196,84 @@ def merge_data(
             result[key] = result[key] + value
 
     return result
+
+
+def save_toon_file(
+    file_path: Path | str,
+    data: list[dict[str, Any]],
+) -> None:
+    """
+    Save list of dicts to TOON (CSV) format.
+
+    Args:
+        file_path: Path to save the file
+        data: List of dictionaries to save
+    """
+    file_path = Path(file_path)
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if not data:
+        return
+
+    # Collect all unique keys
+    keys: set[str] = set()
+    for item in data:
+        keys.update(item.keys())
+    fieldnames = sorted(list(keys))
+
+    try:
+        with open(file_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+
+            for item in data:
+                row = {}
+                for k, v in item.items():
+                    if isinstance(v, (dict, list)):
+                        row[k] = json.dumps(v, cls=DateTimeEncoder, ensure_ascii=False)
+                    else:
+                        row[k] = v
+                writer.writerow(row)
+
+        debug_log(f"Saved TOON file: {file_path}")
+
+    except IOError as e:
+        debug_log(f"Error saving TOON file {file_path}: {e}")
+
+
+def load_toon_file(file_path: Path | str) -> list[dict[str, Any]]:
+    """
+    Load list of dicts from TOON (CSV) format.
+
+    Args:
+        file_path: Path to the TOON file
+
+    Returns:
+        List of dictionaries
+    """
+    file_path = Path(file_path)
+
+    if not file_path.exists():
+        return []
+
+    try:
+        with open(file_path, "r", newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            data = []
+            for row in reader:
+                item = {}
+                for k, v in row.items():
+                    # Attempt to parse JSON strings back to objects
+                    if isinstance(v, str) and (v.strip().startswith("{") or v.strip().startswith("[")):
+                        try:
+                            item[k] = json.loads(v)
+                        except json.JSONDecodeError:
+                            item[k] = v
+                    else:
+                        item[k] = v
+                data.append(item)
+            return data
+
+    except (csv.Error, IOError) as e:
+        debug_log(f"Error reading TOON file {file_path}: {e}")
+        return []
