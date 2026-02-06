@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from ..debug import server_debug_log as debug_log
+from ..utils.toon import dump_toon, load_toon
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -112,6 +113,51 @@ def load_json_file(file_path: Path | str) -> dict[str, Any] | None:
         return None
     except IOError as e:
         debug_log(f"Error reading file {file_path}: {e}")
+        return None
+
+
+def save_toon_file(
+    file_path: Path | str,
+    data: list[dict[str, Any]],
+) -> None:
+    """
+    Save data to a TOON file.
+
+    Args:
+        file_path: Path to save the file
+        data: List of dictionaries to save
+    """
+    file_path = Path(file_path)
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    content = dump_toon(data)
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    debug_log(f"Saved TOON file: {file_path}")
+
+
+def load_toon_file(file_path: Path | str) -> list[dict[str, Any]] | None:
+    """
+    Load data from a TOON file.
+
+    Args:
+        file_path: Path to the TOON file
+
+    Returns:
+        Loaded list of dictionaries or None if file doesn't exist
+    """
+    file_path = Path(file_path)
+
+    if not file_path.exists():
+        return None
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return load_toon(content)
+    except Exception as e:
+        debug_log(f"Error reading TOON file {file_path}: {e}")
         return None
 
 
