@@ -330,6 +330,10 @@ For any MCP-compatible IDE, use these settings:
 
 **After configuration, restart your IDE.**
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/sunflowerslwtech-mcp-creator-growth).
+
 ## Usage
 
 ### Available Tools
