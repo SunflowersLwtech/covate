@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-creator-growth": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--from", "${CLAUDE_PLUGIN_ROOT}", "mcp-creator-growth"],
+      "env": {
+        "MCP_DEBUG": "false"
+      }
+    }
+  }
+}
