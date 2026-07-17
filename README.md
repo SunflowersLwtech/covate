@@ -1,5 +1,3 @@
-> **📦 Moved to [sunkit](https://github.com/SunflowersLwtech/sunkit)** — this repository is archived. Development continues in the sunkit plugin marketplace (install: `/plugin marketplace add SunflowersLwtech/sunkit`). Full commit history is preserved there.
-
 # <img src="assets/icon.png" width="48" height="48" align="top" style="margin-right: 10px;"> MCP Creator Growth
 
 [English](README.md) | [简体中文](README_zh-CN.md) | [繁體中文](README_zh-TW.md)
