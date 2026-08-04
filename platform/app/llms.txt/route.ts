@@ -27,6 +27,8 @@ The open-source MCP is available now. The Learning Platform is in early access; 
 waitlist at ${SITE}.
 
 ## Learn
+The Covate Learning Center (${SITE}/learn) — honest, practical guides on staying a strong developer
+while you build with AI. Free to read. Current guides:
 - How to actually learn from AI-generated code (without skill decay): ${SITE}/learn/how-to-learn-from-ai-generated-code
   — why generated code doesn't stick, what "vibe coding" skill decay is, and the active-recall-on-your-diffs habit Covate automates.
 - Does using AI make you a worse programmer? An honest look: ${SITE}/learn/does-ai-make-you-a-worse-programmer

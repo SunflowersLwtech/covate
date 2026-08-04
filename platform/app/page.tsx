@@ -85,6 +85,7 @@ export default function Home() {
           covate<span className="text-accent">.</span>
         </span>
         <nav className="flex items-center gap-6 text-sm text-secondary">
+          <a href="/learn" className="transition-colors hover:text-primary">Learn</a>
           <a href="#how" className="transition-colors hover:text-primary">How it works</a>
           <a href="#pricing" className="hidden transition-colors hover:text-primary sm:inline">Open-core</a>
           <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
@@ -229,7 +230,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-xs text-dim sm:flex-row">
           <span className="font-mono">covate<span className="text-accent">.</span> — a DUOCODE TECHNOLOGY product</span>
           <div className="flex gap-5">
-            <a href="/learn/how-to-learn-from-ai-generated-code" className="hover:text-secondary">Learn</a>
+            <a href="/learn" className="hover:text-secondary">Learn</a>
             <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-secondary">GitHub</a>
             <a href={SITE} className="hover:text-secondary">Home</a>
           </div>
