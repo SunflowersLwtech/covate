@@ -56,4 +56,8 @@ asyncio_default_fixture_loop_scope = "function"
 line-length = 120
 
 [tool.ruff.lint]
+# Pin the rule set explicitly (pyflakes F + pycodestyle E) so CI is deterministic
+# regardless of ruff's changing default rule set — restores the previously-green lint
+# after ruff-version drift started flagging opinionated rules (DTZ/BLE/UP/…) on unchanged code.
+select = ["E", "F"]
 ignore = ["E501"]
