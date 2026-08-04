@@ -264,6 +264,17 @@ export default function LearnFromAiCode() {
               ))}
             </div>
           </section>
+
+          {/* Related */}
+          <section className="border-t border-border pt-6">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">Related</p>
+            <a
+              href="/learn/does-ai-make-you-a-worse-programmer"
+              className="mt-3 inline-block text-sm text-accent underline underline-offset-4 hover:text-accent-soft"
+            >
+              Does using AI make you a worse programmer? An honest look →
+            </a>
+          </section>
         </article>
 
         <div className="mt-12 border-t border-border pt-6 font-mono text-xs text-dim">
