@@ -79,7 +79,9 @@ export default function Home() {
       ))}
       {/* Nav */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <span className="font-mono text-sm font-semibold tracking-tight text-primary">
+        <span className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Covate" width={26} height={26} className="rounded-md" />
           covate<span className="text-accent">.</span>
         </span>
         <nav className="flex items-center gap-6 text-sm text-secondary">

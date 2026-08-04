@@ -45,7 +45,9 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-deep text-primary">
       <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-        <a href={SITE} className="font-mono text-sm font-semibold tracking-tight text-primary">
+        <a href={SITE} className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Covate" width={26} height={26} className="rounded-md" />
           covate<span className="text-accent">.</span>
         </a>
         <nav className="flex items-center gap-6 text-sm text-secondary">
