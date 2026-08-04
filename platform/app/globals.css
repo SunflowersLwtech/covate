@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Developer-dark palette (GitHub-dark lineage) with an emerald "growth" accent */
+  /* Developer-dark palette (GitHub-dark lineage). Accent + gradient echo the Covate
+     favicon: a green ("growth"/leaf) → blue (cyan "V") gradient. */
   --color-deep: #0a0e14;
   --color-surface: #131a24;
   --color-border: #232c39;
@@ -10,9 +11,18 @@
   --color-dim: #667180;
   --color-accent: #34d399;
   --color-accent-soft: #6ee7b7;
+  --color-brand-blue: #38bdf8;
 
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+
+/* Brand gradient (green → blue) mirroring the favicon's C→V color flow. */
+.text-brand {
+  background-image: linear-gradient(105deg, var(--color-accent-soft) 0%, var(--color-accent) 42%, var(--color-brand-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 html {

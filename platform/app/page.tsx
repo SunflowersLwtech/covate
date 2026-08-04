@@ -97,7 +97,7 @@ export default function Home() {
               Open-source MCP · learning platform
             </p>
             <h1 className="mx-auto mt-5 max-w-2xl text-4xl font-semibold leading-[1.1] tracking-tight text-primary sm:text-6xl">
-              Turn AI-assisted coding into <span className="text-accent">real understanding</span>.
+              Turn AI-assisted coding into <span className="text-brand">real understanding</span>.
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-secondary">
               When AI writes most of your code, it&rsquo;s easy to ship things you don&rsquo;t actually understand.

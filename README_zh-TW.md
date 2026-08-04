@@ -1,4 +1,4 @@
-# <img src="assets/icon.png" width="48" height="48" align="top" style="margin-right: 10px;"> Covate
+# <img src="assets/favicon.png" width="48" height="48" align="top" style="margin-right: 10px;"> Covate
 
 [English](README.md) | [简体中文](README_zh-CN.md) | [繁體中文](README_zh-TW.md)
 
