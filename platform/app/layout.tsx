@@ -5,8 +5,8 @@ import "./globals.css";
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
-// Deploy URL for now; swap to https://covate.org once the domain is live.
-export const SITE = "https://covate-platform.vercel.app";
+// Live custom domain (covate.org, on Cloudflare DNS → Vercel). The vercel.app URL still serves.
+export const SITE = "https://covate.org";
 export const GITHUB = "https://github.com/SunflowersLwtech/covate";
 
 const TITLE = "Covate — turn AI-assisted coding into real understanding";
