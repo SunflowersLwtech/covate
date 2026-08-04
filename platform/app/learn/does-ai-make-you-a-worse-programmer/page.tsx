@@ -259,12 +259,14 @@ export default function DoesAiMakeYouWorse() {
           {/* Related */}
           <section className="border-t border-border pt-6">
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">Related</p>
-            <a
-              href="/learn/how-to-learn-from-ai-generated-code"
-              className="mt-3 inline-block text-sm text-accent underline underline-offset-4 hover:text-accent-soft"
-            >
-              How to actually learn from AI-generated code (without skill decay) →
-            </a>
+            <div className="mt-3 flex flex-col gap-2">
+              <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+                How to actually learn from AI-generated code (without skill decay) →
+              </a>
+              <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+                How to review AI-generated code before you merge it →
+              </a>
+            </div>
           </section>
         </article>
 

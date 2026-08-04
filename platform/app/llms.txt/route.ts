@@ -31,6 +31,8 @@ waitlist at ${SITE}.
   — why generated code doesn't stick, what "vibe coding" skill decay is, and the active-recall-on-your-diffs habit Covate automates.
 - Does using AI make you a worse programmer? An honest look: ${SITE}/learn/does-ai-make-you-a-worse-programmer
   — the case on both sides, and why active vs passive use is the factor that decides whether AI erodes or sharpens your skills.
+- How to review AI-generated code before you merge it: ${SITE}/learn/how-to-review-ai-generated-code
+  — a 6-point review checklist (understand it, scope, edge cases, security, codebase fit, tests) and why to review right after generation.
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
