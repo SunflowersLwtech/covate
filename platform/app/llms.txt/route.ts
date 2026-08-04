@@ -33,6 +33,8 @@ waitlist at ${SITE}.
   — the case on both sides, and why active vs passive use is the factor that decides whether AI erodes or sharpens your skills.
 - How to review AI-generated code before you merge it: ${SITE}/learn/how-to-review-ai-generated-code
   — a 6-point review checklist (understand it, scope, edge cases, security, codebase fit, tests) and why to review right after generation.
+- Spaced repetition for developers: ${SITE}/learn/spaced-repetition-for-developers
+  — the forgetting curve and the spacing effect, and how to remember what you learn while coding without hand-building flashcards.
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
