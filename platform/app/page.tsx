@@ -1,6 +1,43 @@
 import { FAQ, GITHUB, SITE } from "./layout";
 import { WaitlistForm } from "./WaitlistForm";
 
+// Home-page-specific structured data (site-wide Organization/WebApplication live in layout).
+const homeLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": SITE + "#article",
+    headline: "Covate: turn AI-assisted coding into real understanding",
+    description:
+      "Covate quizzes you on your own code changes so you actually learn while you build with AI, then a paid Learning Platform tracks your progress.",
+    inLanguage: "en",
+    datePublished: "2026-08-04",
+    dateModified: "2026-08-04",
+    mainEntityOfPage: { "@type": "WebPage", "@id": SITE },
+    author: { "@id": SITE + "#organization" },
+    publisher: { "@id": SITE + "#organization" },
+    about: { "@type": "Thing", name: "learning to program while coding with AI assistants" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": SITE + "#breadcrumb",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Covate", item: SITE },
+      { "@type": "ListItem", position: 2, name: "Learning Platform", item: SITE },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+];
+
 const STEPS = [
   {
     n: "01",
@@ -37,6 +74,9 @@ const PAID = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-deep text-primary">
+      {homeLd.map((ld, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      ))}
       {/* Nav */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <span className="font-mono text-sm font-semibold tracking-tight text-primary">
@@ -187,6 +227,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-xs text-dim sm:flex-row">
           <span className="font-mono">covate<span className="text-accent">.</span> — a DUOCODE TECHNOLOGY product</span>
           <div className="flex gap-5">
+            <a href="/learn/how-to-learn-from-ai-generated-code" className="hover:text-secondary">Learn</a>
             <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-secondary">GitHub</a>
             <a href={SITE} className="hover:text-secondary">Home</a>
           </div>

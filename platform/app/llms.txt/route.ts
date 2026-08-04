@@ -26,6 +26,10 @@ learning — and keep their skills sharp — instead of shipping code they don't
 The open-source MCP is available now. The Learning Platform is in early access; join the
 waitlist at ${SITE}.
 
+## Learn
+- How to actually learn from AI-generated code (without skill decay): ${SITE}/learn/how-to-learn-from-ai-generated-code
+  — why generated code doesn't stick, what "vibe coding" skill decay is, and the active-recall-on-your-diffs habit Covate automates.
+
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
 `;

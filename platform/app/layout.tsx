@@ -104,47 +104,16 @@ const appLd = {
   ],
 };
 
-const articleLd = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "@id": SITE + "#article",
-  headline: "Covate: turn AI-assisted coding into real understanding",
-  description: DESCRIPTION,
-  inLanguage: "en",
-  datePublished: "2026-08-04",
-  dateModified: "2026-08-04",
-  mainEntityOfPage: { "@type": "WebPage", "@id": SITE },
-  author: { "@id": SITE + "#organization" },
-  publisher: { "@id": SITE + "#organization" },
-  about: { "@type": "Thing", name: "learning to program while coding with AI assistants" },
-};
-
-const breadcrumbLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "@id": SITE + "#breadcrumb",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Covate", item: SITE },
-    { "@type": "ListItem", position: 2, name: "Learning Platform", item: SITE },
-  ],
-};
-
-const faqLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQ.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
-
+// Only site-wide entities (Organization, WebApplication) are injected globally.
+// Page-specific structured data (Article / BreadcrumbList / FAQPage) is rendered by
+// each page itself, so a sub-page like /learn/* carries its OWN correct graph instead
+// of inheriting the home page's.
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <head>
         <meta name="theme-color" content="#0a0e14" />
-        {[orgLd, appLd, articleLd, breadcrumbLd, faqLd].map((ld, i) => (
+        {[orgLd, appLd].map((ld, i) => (
           <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         ))}
       </head>
