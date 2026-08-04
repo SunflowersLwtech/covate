@@ -32,6 +32,22 @@ A context-aware **Model Context Protocol (MCP)** server that acts as a learning 
 
 ---
 
+## ☁️ Covate Learning Platform (early access)
+
+Covate is **open-core**. The MCP server in this repo is free and open-source (MIT) forever —
+run it locally, no account required. The optional **[Covate Learning Platform](https://covate-platform.vercel.app)**
+is the paid cloud layer that turns the learning moments Covate already captures into lasting growth:
+
+- ☁️ **Sync** your learning sessions across every machine
+- 📊 **Review dashboard** of every past quiz and answer
+- 📈 **Progress tracking** and weak-topic analysis
+- 🎯 **Personalized study plan** with spaced repetition
+
+It's early access — **[join the waitlist →](https://covate-platform.vercel.app)**. The MCP stays fully
+functional without it.
+
+---
+
 ## 📦 Available Tools
 
 | Tool | Type | Description |
