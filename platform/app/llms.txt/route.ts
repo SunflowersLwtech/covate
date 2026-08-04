@@ -35,6 +35,8 @@ waitlist at ${SITE}.
   — a 6-point review checklist (understand it, scope, edge cases, security, codebase fit, tests) and why to review right after generation.
 - Spaced repetition for developers: ${SITE}/learn/spaced-repetition-for-developers
   — the forgetting curve and the spacing effect, and how to remember what you learn while coding without hand-building flashcards.
+- Should you still learn to code in the age of AI? ${SITE}/learn/should-you-still-learn-to-code-with-ai
+  — yes, and what shifts: AI raises the abstraction, understanding/reviewing/judgment matter more, syntax matters less.
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
