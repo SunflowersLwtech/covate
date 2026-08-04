@@ -31,6 +31,8 @@ The Covate Learning Center (${SITE}/learn) — honest, practical guides on stayi
 while you build with AI. Free to read. Current guides:
 - How to actually learn from AI-generated code (without skill decay): ${SITE}/learn/how-to-learn-from-ai-generated-code
   — why generated code doesn't stick, what "vibe coding" skill decay is, and the active-recall-on-your-diffs habit Covate automates.
+- How to learn a new codebase fast: ${SITE}/learn/how-to-learn-a-new-codebase-fast
+  — a practical 7-step method (map it, run it, trace one request end to end, read the tests, use git history, verify AI's tour, ship a small change) for understanding code you didn't write, without reading everything first.
 - Does using AI make you a worse programmer? An honest look: ${SITE}/learn/does-ai-make-you-a-worse-programmer
   — the case on both sides, and why active vs passive use is the factor that decides whether AI erodes or sharpens your skills.
 - How to review AI-generated code before you merge it: ${SITE}/learn/how-to-review-ai-generated-code

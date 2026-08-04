@@ -57,6 +57,13 @@ const ARTICLES: readonly Article[] = [
       "AI writes most of your code now — so how do you keep learning instead of quietly losing your skills? A practical guide to understanding AI-generated code, avoiding vibe-coding skill decay, and turning every diff into durable knowledge with active recall.",
   },
   {
+    slug: "how-to-learn-a-new-codebase-fast",
+    category: "Onboarding",
+    title: "How to learn a new codebase fast",
+    description:
+      "Just joined a project or opened a big unfamiliar repo? Reading it top to bottom doesn't work. A practical 7-step method for understanding a new codebase fast — run it, trace one real request end to end, read the tests, use git history — without trying to understand everything first.",
+  },
+  {
     slug: "does-ai-make-you-a-worse-programmer",
     category: "AI & skills",
     title: "Does using AI make you a worse programmer? An honest look",
