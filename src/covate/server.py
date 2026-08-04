@@ -1,5 +1,5 @@
 """
-MCP Creator Growth Server
+Covate Server
 =========================
 
 Provides MCP tools for learning sessions and debug assistance.
@@ -18,7 +18,7 @@ from .debug import server_debug_log as debug_log
 from . import __version__
 
 # Server name
-SERVER_NAME = "MCP Creator Growth"
+SERVER_NAME = "Covate"
 
 # =============================================================================
 # SERVER INSTRUCTIONS - Injected at MCP initialization (sent once to client)
@@ -29,7 +29,7 @@ SERVER_NAME = "MCP Creator Growth"
 # - Local first: All data stored in .mcp-sidecar/ directory
 # =============================================================================
 SERVER_INSTRUCTIONS = """
-MCP Creator Growth - Learning & Debug Assistant
+Covate - Learning & Debug Assistant
 
 DESIGN PHILOSOPHY:
 • learning_session: FOR THE USER - helps users learn from AI-generated changes
@@ -524,7 +524,7 @@ def agent_guidelines() -> str:
     - How to handle tool responses
     - Best practices for debug tools
     """
-    return """# MCP Creator Growth - Agent Guidelines
+    return """# Covate - Agent Guidelines
 
 ## Rule 1: Learning Session Gatekeeper
 

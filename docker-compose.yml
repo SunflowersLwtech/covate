@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  mcp-creator-growth:
+  covate:
     build:
       context: .
       dockerfile: Dockerfile
-    image: mcp-creator-growth:latest
-    container_name: mcp-creator-growth
+    image: covate:latest
+    container_name: covate
     stdin_open: true
     tty: true
     environment:

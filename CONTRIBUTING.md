@@ -1,4 +1,4 @@
-# Contributing to MCP Creator Growth
+# Contributing to Covate
 
 Thank you for your interest in contributing! This document provides guidelines and instructions for contributing.
 
@@ -27,13 +27,13 @@ Please be respectful and constructive in all interactions. We welcome contributo
 
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/mcp_creator_growth.git
-   cd mcp_creator_growth
+   git clone https://github.com/YOUR_USERNAME/covate.git
+   cd covate
    ```
 
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream https://github.com/SunflowersLwtech/mcp_creator_growth.git
+   git remote add upstream https://github.com/SunflowersLwtech/covate.git
    ```
 
 ---
@@ -58,11 +58,11 @@ Please be respectful and constructive in all interactions. We welcome contributo
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Create virtual environment
-uv venv --python 3.11 mcp-creator-growth
+uv venv --python 3.11 covate
 
 # Activate environment
-source mcp-creator-growth/bin/activate          # macOS/Linux
-# mcp-creator-growth\Scripts\activate           # Windows
+source covate/bin/activate          # macOS/Linux
+# covate\Scripts\activate           # Windows
 
 # Install with dev dependencies
 uv pip install -e '.[dev]'
@@ -75,11 +75,11 @@ uv pip install -e '.[dev]'
 
 ```bash
 # Create virtual environment
-python -m venv mcp-creator-growth
+python -m venv covate
 
 # Activate environment
-source mcp-creator-growth/bin/activate           # macOS/Linux
-# mcp-creator-growth\Scripts\activate            # Windows
+source covate/bin/activate           # macOS/Linux
+# covate\Scripts\activate            # Windows
 
 # Install with dev dependencies
 pip install -e '.[dev]'
@@ -94,20 +94,20 @@ After setup, configure Claude Code to use your local development version:
 **Using CLI (recommended):**
 ```bash
 # Add your local development server
-claude mcp add --scope local mcp-creator-growth-dev -- $(pwd)/mcp-creator-growth/bin/mcp-creator-growth
+claude mcp add --scope local covate-dev -- $(pwd)/covate/bin/covate
 
 # Or with debug logging enabled
-claude mcp add --scope local mcp-creator-growth-dev \
+claude mcp add --scope local covate-dev \
   --env MCP_DEBUG=true \
-  -- $(pwd)/mcp-creator-growth/bin/mcp-creator-growth
+  -- $(pwd)/covate/bin/covate
 ```
 
 **Using JSON configuration** (`~/.claude.json`):
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth-dev": {
-      "command": "/absolute/path/to/project/mcp-creator-growth/bin/mcp-creator-growth",
+    "covate-dev": {
+      "command": "/absolute/path/to/project/covate/bin/covate",
       "args": [],
       "env": {
         "MCP_DEBUG": "true"
@@ -121,7 +121,7 @@ claude mcp add --scope local mcp-creator-growth-dev \
 
 ```bash
 # Check the server starts correctly
-python -c "import mcp_creator_growth; print(f'Version: {mcp_creator_growth.__version__}')"
+python -c "import covate; print(f'Version: {covate.__version__}')"
 
 # Run linting
 ruff check src/
@@ -201,7 +201,7 @@ pytest -v --tb=short
 pytest tests/test_server.py -v
 
 # Run with coverage report
-pytest --cov=src/mcp_creator_growth --cov-report=html
+pytest --cov=src/covate --cov-report=html
 ```
 
 ### Writing Tests
@@ -210,7 +210,7 @@ Tests should be placed in the `tests/` directory (create if needed):
 
 ```python
 import pytest
-from mcp_creator_growth.server import mcp
+from covate.server import mcp
 
 @pytest.mark.asyncio
 async def test_learning_session_defaults():
@@ -280,7 +280,7 @@ ruff check src/
 ruff check src/ --fix
 
 # Check specific file
-ruff check src/mcp_creator_growth/server.py
+ruff check src/covate/server.py
 ```
 
 ### Pre-commit Check
@@ -294,7 +294,7 @@ ruff check src/
 pytest -v
 
 # Import works
-python -c "import mcp_creator_growth"
+python -c "import covate"
 ```
 
 ---
@@ -334,8 +334,8 @@ python -c "import mcp_creator_growth"
 ## Project Structure
 
 ```
-mcp_creator_growth/
-├── src/mcp_creator_growth/     # Main source code
+covate/
+├── src/covate/     # Main source code
 │   ├── __init__.py             # Package init with version
 │   ├── __main__.py             # Entry point
 │   ├── server.py               # MCP server and tool definitions
@@ -397,7 +397,7 @@ All user data is stored locally in `.mcp-sidecar/`:
 
 ## Questions?
 
-- **Issues**: Open an [Issue](https://github.com/SunflowersLwtech/mcp_creator_growth/issues)
+- **Issues**: Open an [Issue](https://github.com/SunflowersLwtech/covate/issues)
 - **Discussions**: Check existing issues before creating new ones
 - **Context**: Provide as much detail as possible
 

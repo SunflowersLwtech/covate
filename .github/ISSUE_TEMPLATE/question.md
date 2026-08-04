@@ -16,7 +16,7 @@ What would you like to know?
 ## Environment (if relevant)
 - OS:
 - Python version:
-- MCP Creator Growth version:
+- Covate version:
 
 ## Additional Information
 Any other details that might help answer your question.

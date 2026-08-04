@@ -1,14 +1,14 @@
-# MCP Creator Growth - Windows Installation Script
-# Usage: irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.ps1 | iex
+# Covate - Windows Installation Script
+# Usage: irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.ps1 | iex
 # Or: .\scripts\install.ps1
 #
 # Parameters:
-#   -InstallPath - Custom installation path (default: ~/mcp-creator-growth)
+#   -InstallPath - Custom installation path (default: ~/covate)
 #   -UseUV       - Force use uv
 #   -UseConda    - Force use conda
 
 param(
-    [string]$InstallPath = "$env:USERPROFILE\mcp-creator-growth",
+    [string]$InstallPath = "$env:USERPROFILE\covate",
     [switch]$UseUV,
     [switch]$UseConda
 )
@@ -19,7 +19,7 @@ $EnvManager = ""
 $ScriptPath = ""
 
 Write-Host "================================================" -ForegroundColor Cyan
-Write-Host "  MCP Creator Growth - Installation Script" -ForegroundColor Cyan
+Write-Host "  Covate - Installation Script" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -37,7 +37,7 @@ function Find-ExistingInstallation {
 
     # Check pip installation
     try {
-        $pipShow = pip show mcp-creator-growth 2>$null
+        $pipShow = pip show covate 2>$null
         if ($pipShow) {
             $editableLocation = $pipShow | Select-String "Editable project location:"
             if ($editableLocation) {
@@ -51,9 +51,9 @@ function Find-ExistingInstallation {
 
     # Check common alternative locations
     $altPaths = @(
-        "$env:USERPROFILE\Documents\mcp-creator-growth",
-        "$env:USERPROFILE\Desktop\mcp-creator-growth",
-        "$env:USERPROFILE\Projects\mcp-creator-growth"
+        "$env:USERPROFILE\Documents\covate",
+        "$env:USERPROFILE\Desktop\covate",
+        "$env:USERPROFILE\Projects\covate"
     )
     foreach ($path in $altPaths) {
         if (Test-Path "$path\.env_manager") {
@@ -78,8 +78,8 @@ if ($existingInstallations.Count -gt 0) {
 
     foreach ($installation in $existingInstallations) {
         Write-Host "  Found: $installation" -ForegroundColor Cyan
-        if (Test-Path "$installation\src\mcp_creator_growth\__init__.py") {
-            $content = Get-Content "$installation\src\mcp_creator_growth\__init__.py" -Raw
+        if (Test-Path "$installation\src\covate\__init__.py") {
+            $content = Get-Content "$installation\src\covate\__init__.py" -Raw
             if ($content -match '__version__\s*=\s*"([^"]+)"') {
                 Write-Host "  Version: $($Matches[1])" -ForegroundColor Gray
             }
@@ -93,7 +93,7 @@ if ($existingInstallations.Count -gt 0) {
     # Download and execute update script
     try {
         Write-Host "Downloading update script from GitHub..." -ForegroundColor Gray
-        $updateScript = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.ps1" -ErrorAction Stop
+        $updateScript = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.ps1" -ErrorAction Stop
 
         if ([string]::IsNullOrWhiteSpace($updateScript)) {
             throw "Downloaded script is empty"
@@ -207,7 +207,7 @@ if (Test-Path $InstallPath) {
     Pop-Location
 } else {
     Write-Host "  Cloning repository..." -ForegroundColor Gray
-    git clone https://github.com/SunflowersLwtech/mcp_creator_growth.git $InstallPath
+    git clone https://github.com/SunflowersLwtech/covate.git $InstallPath
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Error: Failed to clone repository" -ForegroundColor Red
         exit 1
@@ -222,35 +222,35 @@ Write-Host "[3/4] Creating virtual environment..." -ForegroundColor Yellow
 
 switch ($EnvManager) {
     "uv" {
-        if (-not (Test-Path "mcp-creator-growth")) {
-            uv venv --python $PythonVersionRequired mcp-creator-growth
+        if (-not (Test-Path "covate")) {
+            uv venv --python $PythonVersionRequired covate
             Write-Host "  Virtual environment created with Python $PythonVersionRequired" -ForegroundColor Green
         } else {
             Write-Host "  Virtual environment already exists." -ForegroundColor Gray
         }
-        $ScriptPath = "$InstallPath\mcp-creator-growth\Scripts\mcp-creator-growth.exe"
+        $ScriptPath = "$InstallPath\covate\Scripts\covate.exe"
     }
     "conda" {
-        $envExists = conda env list | Select-String "mcp-creator-growth"
+        $envExists = conda env list | Select-String "covate"
         if (-not $envExists) {
-            conda create -n mcp-creator-growth python=$PythonVersionRequired -y
+            conda create -n covate python=$PythonVersionRequired -y
             Write-Host "  Conda environment created." -ForegroundColor Green
         } else {
             Write-Host "  Conda environment already exists." -ForegroundColor Gray
         }
         # Get conda env path
-        $condaInfo = conda env list | Select-String "mcp-creator-growth"
+        $condaInfo = conda env list | Select-String "covate"
         $CondaEnvPath = ($condaInfo -split '\s+')[-1]
-        $ScriptPath = "$CondaEnvPath\Scripts\mcp-creator-growth.exe"
+        $ScriptPath = "$CondaEnvPath\Scripts\covate.exe"
     }
     "venv" {
-        if (-not (Test-Path "mcp-creator-growth")) {
-            python -m venv mcp-creator-growth
+        if (-not (Test-Path "covate")) {
+            python -m venv covate
             Write-Host "  Virtual environment created." -ForegroundColor Green
         } else {
             Write-Host "  Virtual environment already exists." -ForegroundColor Gray
         }
-        $ScriptPath = "$InstallPath\mcp-creator-growth\Scripts\mcp-creator-growth.exe"
+        $ScriptPath = "$InstallPath\covate\Scripts\covate.exe"
     }
 }
 
@@ -263,12 +263,12 @@ switch ($EnvManager) {
         uv pip install -e '.[dev]' --quiet
     }
     "conda" {
-        conda activate mcp-creator-growth
+        conda activate covate
         pip install -e '.[dev]' --quiet
         conda deactivate
     }
     "venv" {
-        & ".\mcp-creator-growth\Scripts\pip.exe" install -e '.[dev]' --quiet
+        & ".\covate\Scripts\pip.exe" install -e '.[dev]' --quiet
     }
 }
 
@@ -292,11 +292,11 @@ Write-Host "  Configure Your IDE" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "For Claude Code (one command):" -ForegroundColor Yellow
-Write-Host "  claude mcp add mcp-creator-growth -- `"$ScriptPath`"" -ForegroundColor White
+Write-Host "  claude mcp add covate -- `"$ScriptPath`"" -ForegroundColor White
 Write-Host ""
 Write-Host "For other IDEs (Cursor, Windsurf, etc.), add this to MCP config:" -ForegroundColor Yellow
 Write-Host "  {" -ForegroundColor Gray
-Write-Host "    `"mcp-creator-growth`": {" -ForegroundColor Gray
+Write-Host "    `"covate`": {" -ForegroundColor Gray
 Write-Host "      `"command`": `"$($ScriptPath -replace '\\', '\\\\')`"" -ForegroundColor Gray
 Write-Host "    }" -ForegroundColor Gray
 Write-Host "  }" -ForegroundColor Gray

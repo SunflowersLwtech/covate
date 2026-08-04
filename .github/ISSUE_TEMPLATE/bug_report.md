@@ -26,7 +26,7 @@ Paste any error messages here
 ## Environment
 - OS: [e.g., Windows 11, macOS 14, Ubuntu 22.04]
 - Python version: [e.g., 3.11.5]
-- MCP Creator Growth version: [e.g., 1.0.0]
+- Covate version: [e.g., 1.0.0]
 - Claude Code version: [e.g., 1.0.0]
 
 ## Additional Context

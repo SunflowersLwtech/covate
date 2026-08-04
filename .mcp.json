@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "mcp-creator-growth": {
+    "covate": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "${CLAUDE_PLUGIN_ROOT}", "mcp-creator-growth"],
+      "args": ["--from", "${CLAUDE_PLUGIN_ROOT}", "covate"],
       "env": {
         "MCP_DEBUG": "false"
       }

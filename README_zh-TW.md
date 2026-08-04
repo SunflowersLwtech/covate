@@ -1,4 +1,4 @@
-# <img src="assets/icon.png" width="48" height="48" align="top" style="margin-right: 10px;"> MCP Creator Growth
+# <img src="assets/icon.png" width="48" height="48" align="top" style="margin-right: 10px;"> Covate
 
 [English](README.md) | [简体中文](README_zh-CN.md) | [繁體中文](README_zh-TW.md)
 
@@ -7,8 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![MCP Standard](https://img.shields.io/badge/MCP-Standard-green.svg)](https://modelcontextprotocol.io/)
-[![Glama MCP](https://img.shields.io/badge/Glama-MCP%20Server-blue)](https://glama.ai/mcp/servers/@SunflowersLwtech/mcp_creator_growth)
-[![DeepWiki](https://img.shields.io/badge/DeepWiki-文檔-purple)](https://deepwiki.com/SunflowersLwtech/mcp_creator_growth)
+[![Glama MCP](https://img.shields.io/badge/Glama-MCP%20Server-blue)](https://glama.ai/mcp/servers/@SunflowersLwtech/covate)
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-文檔-purple)](https://deepwiki.com/SunflowersLwtech/covate)
 
 ---
 
@@ -16,9 +16,9 @@
 
 | 資源 | 描述 |
 |------|------|
-| [**Glama MCP 市場**](https://glama.ai/mcp/servers/@SunflowersLwtech/mcp_creator_growth) | 官方 MCP 伺服器列表，含安裝指南 |
-| [**DeepWiki 文檔**](https://deepwiki.com/SunflowersLwtech/mcp_creator_growth) | AI 生成的程式碼庫深度解析 |
-| [**GitHub 倉庫**](https://github.com/SunflowersLwtech/mcp_creator_growth) | 原始碼、Issue 和貢獻 |
+| [**Glama MCP 市場**](https://glama.ai/mcp/servers/@SunflowersLwtech/covate) | 官方 MCP 伺服器列表，含安裝指南 |
+| [**DeepWiki 文檔**](https://deepwiki.com/SunflowersLwtech/covate) | AI 生成的程式碼庫深度解析 |
+| [**GitHub 倉庫**](https://github.com/SunflowersLwtech/covate) | 原始碼、Issue 和貢獻 |
 
 ---
 
@@ -129,7 +129,7 @@
 <td>
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.sh | bash
 ```
 
 </td>
@@ -139,7 +139,7 @@ curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth
 <td>
 
 ```powershell
-irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.ps1 | iex
 ```
 
 </td>
@@ -149,7 +149,7 @@ irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/s
 安裝腳本會：
 1. **智能檢測**：如果檢測到已安裝，自動執行更新而非重新安裝
 2. **環境檢測**：自動檢測 Python 環境（uv → conda → venv）
-3. **克隆倉庫**：克隆到 `~/mcp-creator-growth`（可自訂）
+3. **克隆倉庫**：克隆到 `~/covate`（可自訂）
 4. **安裝依賴**：建立虛擬環境並安裝所有依賴
 5. **配置指引**：輸出配置 IDE 所需的確切命令
 
@@ -164,20 +164,20 @@ irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/s
 
 ```bash
 # 1. 克隆倉庫
-git clone https://github.com/SunflowersLwtech/mcp_creator_growth.git
-cd mcp_creator_growth
+git clone https://github.com/SunflowersLwtech/covate.git
+cd covate
 
 # 2. 建立虛擬環境並安裝
 # 使用 uv（推薦）
-uv venv --python 3.11 mcp-creator-growth
-source mcp-creator-growth/bin/activate          # macOS/Linux
-# mcp-creator-growth\Scripts\activate           # Windows
+uv venv --python 3.11 covate
+source covate/bin/activate          # macOS/Linux
+# covate\Scripts\activate           # Windows
 uv pip install -e '.[dev]'
 
 # 或者使用標準 venv
-python -m venv mcp-creator-growth
-source mcp-creator-growth/bin/activate           # macOS/Linux
-# mcp-creator-growth\Scripts\activate            # Windows
+python -m venv covate
+source covate/bin/activate           # macOS/Linux
+# covate\Scripts\activate            # Windows
 pip install -e '.[dev]'
 ```
 
@@ -194,10 +194,10 @@ pip install -e '.[dev]'
 **選項 1：CLI (推薦)**
 ```bash
 # macOS / Linux
-claude mcp add mcp-creator-growth -- ~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth
+claude mcp add covate -- ~/covate/covate/bin/covate
 
 # Windows
-claude mcp add mcp-creator-growth -- %USERPROFILE%\mcp-creator-growth\mcp-creator-growth\Scripts\mcp-creator-growth.exe
+claude mcp add covate -- %USERPROFILE%\covate\covate\Scripts\covate.exe
 ```
 
 **選項 2：配置文件**
@@ -206,8 +206,8 @@ claude mcp add mcp-creator-growth -- %USERPROFILE%\mcp-creator-growth\mcp-creato
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
-      "command": "~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth"
+    "covate": {
+      "command": "~/covate/covate/bin/covate"
     }
   }
 }
@@ -217,22 +217,22 @@ Windows 用戶：
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
-      "command": "C:\\Users\\YourName\\mcp-creator-growth\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe"
+    "covate": {
+      "command": "C:\\Users\\YourName\\covate\\covate\\Scripts\\covate.exe"
     }
   }
 }
 ```
 
 示例路徑：
-- Unix (uv): `~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth`
-- Windows (uv): `C:\\Users\\YourName\\mcp-creator-growth\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe`
-- Windows (conda): `C:\\Users\\YourName\\anaconda3\\envs\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe`
+- Unix (uv): `~/covate/covate/bin/covate`
+- Windows (uv): `C:\\Users\\YourName\\covate\\covate\\Scripts\\covate.exe`
+- Windows (conda): `C:\\Users\\YourName\\anaconda3\\envs\\covate\\Scripts\\covate.exe`
 
 路徑說明（以 Unix 示例為例）：
-- `~/mcp-creator-growth` → 倉庫目錄
-- `mcp-creator-growth` → uv/venv 建立的虛擬環境目錄
-- `bin/mcp-creator-growth` → 可執行檔
+- `~/covate` → 倉庫目錄
+- `covate` → uv/venv 建立的虛擬環境目錄
+- `bin/covate` → 可執行檔
 
 ### Cursor
 
@@ -240,8 +240,8 @@ Windows 用戶：
 
 ```json
 {
-  "mcp-creator-growth": {
-    "command": "~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth"
+  "covate": {
+    "command": "~/covate/covate/bin/covate"
   }
 }
 ```
@@ -249,8 +249,8 @@ Windows 用戶：
 Windows 用戶：
 ```json
 {
-  "mcp-creator-growth": {
-    "command": "C:\\Users\\YourName\\mcp-creator-growth\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe"
+  "covate": {
+    "command": "C:\\Users\\YourName\\covate\\covate\\Scripts\\covate.exe"
   }
 }
 ```
@@ -262,8 +262,8 @@ Windows 用戶：
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
-      "command": "~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth"
+    "covate": {
+      "command": "~/covate/covate/bin/covate"
     }
   }
 }
@@ -272,7 +272,7 @@ Windows 用戶：
 ### 其他 IDE
 
 對於任何兼容 MCP 的 IDE，使用這些設置：
-- **Command:** `<install-path>/mcp-creator-growth/bin/mcp-creator-growth` (或 Windows 上的 `mcp-creator-growth\Scripts\mcp-creator-growth.exe`)
+- **Command:** `<install-path>/covate/bin/covate` (或 Windows 上的 `covate\Scripts\covate.exe`)
 - **Transport:** stdio
 
 **配置完成後，重啟你的 IDE。**
@@ -318,7 +318,7 @@ Agent 將創建一個互動學習卡片並**等待**直到你完成它。
 <td>
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.sh | bash
+curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.sh | bash
 ```
 
 </td>
@@ -328,7 +328,7 @@ curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth
 <td>
 
 ```powershell
-irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.ps1 | iex
+irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.ps1 | iex
 ```
 
 </td>
@@ -352,12 +352,12 @@ irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/s
 
 **macOS / Linux:**
 ```bash
-~/mcp-creator-growth/scripts/update.sh
+~/covate/scripts/update.sh
 ```
 
 **Windows (PowerShell):**
 ```powershell
-~\mcp-creator-growth\scripts\update.ps1
+~\covate\scripts\update.ps1
 ```
 
 ### 手動更新
@@ -367,20 +367,20 @@ irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/s
 
 ```bash
 # 進入安裝目錄
-cd ~/mcp-creator-growth  # 或你的自訂安裝路徑
+cd ~/covate  # 或你的自訂安裝路徑
 
 # 拉取最新程式碼
 git pull origin main
 
 # 更新依賴
 # 使用 uv
-source mcp-creator-growth/bin/activate          # macOS/Linux
-# mcp-creator-growth\Scripts\activate           # Windows
+source covate/bin/activate          # macOS/Linux
+# covate\Scripts\activate           # Windows
 uv pip install -e '.[dev]' --upgrade
 
 # 或使用標準 venv
-source mcp-creator-growth/bin/activate           # macOS/Linux
-# mcp-creator-growth\Scripts\activate            # Windows
+source covate/bin/activate           # macOS/Linux
+# covate\Scripts\activate            # Windows
 pip install -e '.[dev]' --upgrade
 ```
 
@@ -446,7 +446,7 @@ pip install -e '.[dev]' --upgrade
 | **多語言支援** | 用你偏好的語言提供解釋 |
 | **語音互動** | 「嘿 Claude，考考我昨天做了什麼」 |
 
-> **想影響藍圖？** [提交 Issue](https://github.com/SunflowersLwtech/mcp_creator_growth/issues) 或加入討論！
+> **想影響藍圖？** [提交 Issue](https://github.com/SunflowersLwtech/covate/issues) 或加入討論！
 
 ---
 
@@ -480,7 +480,7 @@ pip install -e '.[dev]' --upgrade
 |------|------|
 | **郵箱** | sunflowers0607@outlook.com |
 | **郵箱** | weiliu0607@gmail.com |
-| **GitHub Issues** | [提交 Issue](https://github.com/SunflowersLwtech/mcp_creator_growth/issues) |
+| **GitHub Issues** | [提交 Issue](https://github.com/SunflowersLwtech/covate/issues) |
 
 ---
 
@@ -493,5 +493,5 @@ pip install -e '.[dev]' --upgrade
 <p align="center">
   基於 <a href="https://github.com/jlowin/fastmcp">FastMCP</a> 建構 •
   <a href="https://modelcontextprotocol.io">MCP 標準</a> •
-  <a href="https://glama.ai/mcp/servers/@SunflowersLwtech/mcp_creator_growth">Glama MCP</a>
+  <a href="https://glama.ai/mcp/servers/@SunflowersLwtech/covate">Glama MCP</a>
 </p>

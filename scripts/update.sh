@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# MCP Creator Growth - Linux/macOS Update Script
+# Covate - Linux/macOS Update Script
 #
 # Usage (Remote - Recommended):
-#   curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.sh | bash
 #
 # Usage (Local):
 #   ./scripts/update.sh
@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 echo -e "${CYAN}================================================${NC}"
-echo -e "${CYAN}  MCP Creator Growth - Update Script${NC}"
+echo -e "${CYAN}  Covate - Update Script${NC}"
 echo -e "${CYAN}================================================${NC}"
 echo ""
 
@@ -70,16 +70,16 @@ find_installation_path() {
 
     # Method 2: Scan for .env_manager marker file
     local search_paths=(
-        "$HOME/mcp-creator-growth"
-        "$HOME/Documents/mcp-creator-growth"
-        "$HOME/Desktop/mcp-creator-growth"
-        "$HOME/projects/mcp-creator-growth"
-        "/opt/mcp-creator-growth"
-        "/mnt/c/Users/${USER}/mcp-creator-growth"
-        "/mnt/c/Users/${USER}/Documents/mcp-creator-growth"
-        "/mnt/c/projects/mcp-creator-growth"
-        "/mnt/d/projects/mcp-creator-growth"
-        "/mnt/e/projects/mcp-creator-growth"
+        "$HOME/covate"
+        "$HOME/Documents/covate"
+        "$HOME/Desktop/covate"
+        "$HOME/projects/covate"
+        "/opt/covate"
+        "/mnt/c/Users/${USER}/covate"
+        "/mnt/c/Users/${USER}/Documents/covate"
+        "/mnt/c/projects/covate"
+        "/mnt/d/projects/covate"
+        "/mnt/e/projects/covate"
     )
 
     for path in "${search_paths[@]}"; do
@@ -103,7 +103,7 @@ find_installation_path() {
 
     # Method 3: Check pip installed package location
     if command -v pip &> /dev/null; then
-        local pip_output=$(pip show mcp-creator-growth 2>/dev/null || true)
+        local pip_output=$(pip show covate 2>/dev/null || true)
         if [[ -n "$pip_output" ]]; then
             local editable_location=$(echo "$pip_output" | grep "Editable project location:" | cut -d: -f2- | xargs)
             if [[ -n "$editable_location" && -d "$editable_location" ]]; then
@@ -161,7 +161,7 @@ find_installation_path() {
         echo -e "${RED}Error: No installation found!${NC}"
         echo ""
         echo -e "${YELLOW}Please install first:${NC}"
-        echo -e "${NC}  curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.sh | bash${NC}"
+        echo -e "${NC}  curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.sh | bash${NC}"
         echo ""
         exit 1
     fi
@@ -184,7 +184,7 @@ find_installation_path() {
         echo -e "${GRAY}      Source: ${unique_sources[$i]}${NC}"
 
         # Get version if possible
-        local version_file="${unique_candidates[$i]}/src/mcp_creator_growth/__init__.py"
+        local version_file="${unique_candidates[$i]}/src/covate/__init__.py"
         if [[ -f "$version_file" ]]; then
             local version=$(grep -oP '__version__\s*=\s*"\K[^"]+' "$version_file" 2>/dev/null || echo "unknown")
             echo -e "${GRAY}      Version: $version${NC}"
@@ -228,10 +228,10 @@ if [[ -f ".env_manager" ]]; then
 else
     # Fallback: detect from existing environment
     # Check new naming convention first
-    if [[ -d "mcp-creator-growth" ]]; then
+    if [[ -d "covate" ]]; then
         # Could be uv or venv, check pyvenv.cfg
-        if [[ -f "mcp-creator-growth/pyvenv.cfg" ]]; then
-            if grep -q "uv" "mcp-creator-growth/pyvenv.cfg" 2>/dev/null; then
+        if [[ -f "covate/pyvenv.cfg" ]]; then
+            if grep -q "uv" "covate/pyvenv.cfg" 2>/dev/null; then
                 ENV_MANAGER="uv"
             else
                 ENV_MANAGER="venv"
@@ -239,7 +239,7 @@ else
         else
             ENV_MANAGER="venv"  # Default assumption
         fi
-    elif conda env list 2>/dev/null | grep -q "mcp-creator-growth"; then
+    elif conda env list 2>/dev/null | grep -q "covate"; then
         ENV_MANAGER="conda"
     elif [[ -d ".venv" ]]; then
         # Legacy uv installation
@@ -252,7 +252,7 @@ else
     else
         echo -e "${RED}  Error: Cannot detect environment manager.${NC}"
         echo -e "${YELLOW}  Please run install script again:${NC}"
-        echo -e "${NC}    curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.sh | bash${NC}"
+        echo -e "${NC}    curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.sh | bash${NC}"
         exit 1
     fi
     echo -e "${GREEN}  Environment: $ENV_MANAGER (detected)${NC}"
@@ -260,8 +260,8 @@ fi
 
 # Get current version
 CURRENT_VERSION="unknown"
-if [[ -f "src/mcp_creator_growth/__init__.py" ]]; then
-    CURRENT_VERSION=$(grep -oP '__version__\s*=\s*"\K[^"]+' "src/mcp_creator_growth/__init__.py" 2>/dev/null || echo "unknown")
+if [[ -f "src/covate/__init__.py" ]]; then
+    CURRENT_VERSION=$(grep -oP '__version__\s*=\s*"\K[^"]+' "src/covate/__init__.py" 2>/dev/null || echo "unknown")
 fi
 
 echo -e "${GRAY}  Current version: $CURRENT_VERSION${NC}"
@@ -310,8 +310,8 @@ echo -e "${YELLOW}[4/5] Updating dependencies...${NC}"
 case $ENV_MANAGER in
     uv)
         # Check new location first, then legacy
-        NEW_PATH="$INSTALL_PATH/mcp-creator-growth/bin/mcp-creator-growth"
-        LEGACY_PATH="$INSTALL_PATH/.venv/bin/mcp-creator-growth"
+        NEW_PATH="$INSTALL_PATH/covate/bin/covate"
+        LEGACY_PATH="$INSTALL_PATH/.venv/bin/covate"
         if [[ -f "$NEW_PATH" ]]; then
             EXE_PATH="$NEW_PATH"
         elif [[ -f "$LEGACY_PATH" ]]; then
@@ -321,17 +321,17 @@ case $ENV_MANAGER in
         fi
         ;;
     conda)
-        CONDA_ENV_PATH=$(conda env list 2>/dev/null | grep "mcp-creator-growth" | awk '{print $NF}')
+        CONDA_ENV_PATH=$(conda env list 2>/dev/null | grep "covate" | awk '{print $NF}')
         if [[ -n "$CONDA_ENV_PATH" ]]; then
-            EXE_PATH="$CONDA_ENV_PATH/bin/mcp-creator-growth"
+            EXE_PATH="$CONDA_ENV_PATH/bin/covate"
         else
             EXE_PATH=""
         fi
         ;;
     venv)
         # Check new location first, then legacy
-        NEW_PATH="$INSTALL_PATH/mcp-creator-growth/bin/mcp-creator-growth"
-        LEGACY_PATH="$INSTALL_PATH/venv/bin/mcp-creator-growth"
+        NEW_PATH="$INSTALL_PATH/covate/bin/covate"
+        LEGACY_PATH="$INSTALL_PATH/venv/bin/covate"
         if [[ -f "$NEW_PATH" ]]; then
             EXE_PATH="$NEW_PATH"
         elif [[ -f "$LEGACY_PATH" ]]; then
@@ -361,7 +361,7 @@ if [[ "$IS_LOCKED" == true && "$FORCE" == false ]]; then
     echo -e "${NC}    1. Close your AI coding assistant${NC}"
     echo -e "${GRAY}       (Claude Code, Cursor, Windsurf, etc.)${NC}"
     echo -e "${NC}    2. Run this command again:${NC}"
-    echo -e "${GRAY}       curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.sh | bash${NC}"
+    echo -e "${GRAY}       curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.sh | bash${NC}"
     echo ""
     echo -e "${GRAY}  Or use --force to skip dependency update:${NC}"
     echo -e "${GRAY}    curl -fsSL ... | bash -s -- --force${NC}"
@@ -376,8 +376,8 @@ else
     case $ENV_MANAGER in
         uv)
             # Check new location first, then legacy
-            if [[ -f "mcp-creator-growth/bin/activate" ]]; then
-                source mcp-creator-growth/bin/activate
+            if [[ -f "covate/bin/activate" ]]; then
+                source covate/bin/activate
             elif [[ -f ".venv/bin/activate" ]]; then
                 source .venv/bin/activate
             fi
@@ -389,7 +389,7 @@ else
             fi
             ;;
         conda)
-            if conda activate mcp-creator-growth 2>/dev/null && pip install -e '.[dev]' --force-reinstall --no-deps --quiet && conda deactivate 2>/dev/null; then
+            if conda activate covate 2>/dev/null && pip install -e '.[dev]' --force-reinstall --no-deps --quiet && conda deactivate 2>/dev/null; then
                 echo -e "${GREEN}  Dependencies updated.${NC}"
             else
                 echo -e "${YELLOW}  Warning: Dependency update encountered issues.${NC}"
@@ -397,8 +397,8 @@ else
             ;;
         venv)
             # Check new location first, then legacy
-            if [[ -f "mcp-creator-growth/bin/activate" ]]; then
-                source mcp-creator-growth/bin/activate
+            if [[ -f "covate/bin/activate" ]]; then
+                source covate/bin/activate
             elif [[ -f "venv/bin/activate" ]]; then
                 source venv/bin/activate
             fi
@@ -422,14 +422,14 @@ echo -e "${YELLOW}[5/5] Verifying installation...${NC}"
 
 # Get new version
 NEW_VERSION="unknown"
-if [[ -f "src/mcp_creator_growth/__init__.py" ]]; then
-    NEW_VERSION=$(grep -oP '__version__\s*=\s*"\K[^"]+' "src/mcp_creator_growth/__init__.py" 2>/dev/null || echo "unknown")
+if [[ -f "src/covate/__init__.py" ]]; then
+    NEW_VERSION=$(grep -oP '__version__\s*=\s*"\K[^"]+' "src/covate/__init__.py" 2>/dev/null || echo "unknown")
 fi
 
 # Verify installed version matches code version
 INSTALLED_VERSION="unknown"
 if command -v pip &> /dev/null; then
-    INSTALLED_VERSION=$(pip show mcp-creator-growth 2>/dev/null | grep "^Version:" | cut -d: -f2 | xargs || echo "unknown")
+    INSTALLED_VERSION=$(pip show covate 2>/dev/null | grep "^Version:" | cut -d: -f2 | xargs || echo "unknown")
 fi
 
 if [[ "$NEW_VERSION" != "unknown" ]]; then

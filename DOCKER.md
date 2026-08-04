@@ -1,13 +1,13 @@
 # Docker Deployment Guide
 
-This guide explains how to use MCP Creator Growth with Docker.
+This guide explains how to use Covate with Docker.
 
 ## Quick Start
 
 ### 1. Build the Image
 
 ```bash
-docker build -t mcp-creator-growth .
+docker build -t covate .
 ```
 
 ### 2. Run with Docker
@@ -15,7 +15,7 @@ docker build -t mcp-creator-growth .
 For interactive use:
 
 ```bash
-docker run -i mcp-creator-growth
+docker run -i covate
 ```
 
 ### 3. Run with Docker Compose
@@ -41,7 +41,7 @@ Mount your project directory to allow the MCP server to access your code:
 docker run -i \
   -v $(pwd):/workspace \
   -w /workspace \
-  mcp-creator-growth
+  covate
 ```
 
 ## Using with Claude Desktop
@@ -55,7 +55,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
+    "covate": {
       "command": "docker",
       "args": [
         "run",
@@ -65,7 +65,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
         "/path/to/your/project:/workspace",
         "-w",
         "/workspace",
-        "mcp-creator-growth"
+        "covate"
       ]
     }
   }
@@ -79,7 +79,7 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
+    "covate": {
       "command": "docker",
       "args": [
         "run",
@@ -89,7 +89,7 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
         "C:\\path\\to\\your\\project:/workspace",
         "-w",
         "/workspace",
-        "mcp-creator-growth"
+        "covate"
       ]
     }
   }
@@ -105,7 +105,7 @@ To persist this data:
 ```bash
 docker run -i \
   -v mcp-data:/data/.mcp-sidecar \
-  mcp-creator-growth
+  covate
 ```
 
 Or use the provided docker-compose.yml which includes a named volume.
@@ -116,21 +116,21 @@ To share your image on Docker Hub:
 
 ```bash
 # Tag the image
-docker tag mcp-creator-growth:latest your-username/mcp-creator-growth:latest
+docker tag covate:latest your-username/covate:latest
 
 # Push to Docker Hub
-docker push your-username/mcp-creator-growth:latest
+docker push your-username/covate:latest
 ```
 
 ## Glama.ai Integration
 
-This Docker setup is optimized for use with [Glama.ai](https://glama.ai/mcp/servers/@SunflowersLwtech/mcp_creator_growth).
+This Docker setup is optimized for use with [Glama.ai](https://glama.ai/mcp/servers/@SunflowersLwtech/covate).
 
 Users can pull and run your MCP server directly:
 
 ```bash
-docker pull sunflowerslwtech/mcp-creator-growth:latest
-docker run -i sunflowerslwtech/mcp-creator-growth:latest
+docker pull sunflowerslwtech/covate:latest
+docker run -i sunflowerslwtech/covate:latest
 ```
 
 ## Troubleshooting
@@ -146,7 +146,7 @@ docker ps -a
 View logs:
 
 ```bash
-docker logs mcp-creator-growth
+docker logs covate
 ```
 
 ### Permission Issues
@@ -156,7 +156,7 @@ Ensure volumes have proper permissions:
 ```bash
 docker run -i -u $(id -u):$(id -g) \
   -v $(pwd):/workspace \
-  mcp-creator-growth
+  covate
 ```
 
 ### Debug Mode
@@ -164,7 +164,7 @@ docker run -i -u $(id -u):$(id -g) \
 Enable debug logging:
 
 ```bash
-docker run -i -e MCP_DEBUG=true mcp-creator-growth
+docker run -i -e MCP_DEBUG=true covate
 ```
 
 ## Security Considerations
@@ -180,6 +180,6 @@ To build multi-platform images (e.g., for ARM and x86):
 ```bash
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  -t your-username/mcp-creator-growth:latest \
+  -t your-username/covate:latest \
   --push .
 ```

@@ -1,21 +1,21 @@
 #!/bin/bash
-# MCP Creator Growth - Unix Installation Script
-# Usage: curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.sh | bash
+# Covate - Unix Installation Script
+# Usage: curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.sh | bash
 #
 # Environment variables:
-#   MCP_INSTALL_PATH - Custom installation path (default: ~/mcp-creator-growth)
+#   MCP_INSTALL_PATH - Custom installation path (default: ~/covate)
 #   MCP_USE_UV       - Force use uv (set to "1" to enable)
 #   MCP_USE_CONDA    - Force use conda (set to "1" to enable)
 
 set -e
 
-INSTALL_PATH="${MCP_INSTALL_PATH:-$HOME/mcp-creator-growth}"
+INSTALL_PATH="${MCP_INSTALL_PATH:-$HOME/covate}"
 PYTHON_VERSION_REQUIRED="3.11"
 ENV_MANAGER=""
 SCRIPT_PATH=""
 
 echo "================================================"
-echo "  MCP Creator Growth - Installation Script"
+echo "  Covate - Installation Script"
 echo "================================================"
 echo ""
 
@@ -36,7 +36,7 @@ find_existing_installation() {
         local pip_cmd="pip"
         command -v pip3 &> /dev/null && pip_cmd="pip3"
 
-        local pip_output=$($pip_cmd show mcp-creator-growth 2>/dev/null || true)
+        local pip_output=$($pip_cmd show covate 2>/dev/null || true)
         if [[ -n "$pip_output" ]]; then
             local editable_location=$(echo "$pip_output" | grep "Editable project location:" | cut -d: -f2- | xargs)
             if [[ -n "$editable_location" && -d "$editable_location" ]]; then
@@ -47,8 +47,8 @@ find_existing_installation() {
 
     # Check common alternative locations
     local alt_paths=(
-        "$HOME/Documents/mcp-creator-growth"
-        "/opt/mcp-creator-growth"
+        "$HOME/Documents/covate"
+        "/opt/covate"
     )
 
     for path in "${alt_paths[@]}"; do
@@ -74,8 +74,8 @@ if [[ ${#existing_installations[@]} -gt 0 ]]; then
 
     for installation in "${existing_installations[@]}"; do
         echo "  Found: $installation"
-        if [[ -f "$installation/src/mcp_creator_growth/__init__.py" ]]; then
-            version=$(grep -oP '__version__\s*=\s*"\K[^"]+' "$installation/src/mcp_creator_growth/__init__.py" 2>/dev/null || echo "unknown")
+        if [[ -f "$installation/src/covate/__init__.py" ]]; then
+            version=$(grep -oP '__version__\s*=\s*"\K[^"]+' "$installation/src/covate/__init__.py" 2>/dev/null || echo "unknown")
             echo "  Version: $version"
         fi
     done
@@ -85,7 +85,7 @@ if [[ ${#existing_installations[@]} -gt 0 ]]; then
     echo ""
 
     # Download and execute update script
-    if curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.sh | bash; then
+    if curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.sh | bash; then
         exit 0
     else
         echo "Failed to download update script. Trying local update..."
@@ -176,7 +176,7 @@ if [ -d "$INSTALL_PATH" ]; then
     git pull origin main 2>/dev/null || true
 else
     echo "  Cloning repository..."
-    git clone https://github.com/SunflowersLwtech/mcp_creator_growth.git "$INSTALL_PATH"
+    git clone https://github.com/SunflowersLwtech/covate.git "$INSTALL_PATH"
     cd "$INSTALL_PATH"
 fi
 
@@ -189,33 +189,33 @@ echo "[3/4] Creating virtual environment..."
 
 case "$ENV_MANAGER" in
     "uv")
-        if [ ! -d "mcp-creator-growth" ]; then
-            uv venv --python $PYTHON_VERSION_REQUIRED mcp-creator-growth
+        if [ ! -d "covate" ]; then
+            uv venv --python $PYTHON_VERSION_REQUIRED covate
             echo "  Virtual environment created with Python $PYTHON_VERSION_REQUIRED"
         else
             echo "  Virtual environment already exists."
         fi
-        SCRIPT_PATH="$INSTALL_PATH/mcp-creator-growth/bin/mcp-creator-growth"
+        SCRIPT_PATH="$INSTALL_PATH/covate/bin/covate"
         ;;
     "conda")
-        if ! conda env list | grep -q "mcp-creator-growth"; then
-            conda create -n mcp-creator-growth python=$PYTHON_VERSION_REQUIRED -y
+        if ! conda env list | grep -q "covate"; then
+            conda create -n covate python=$PYTHON_VERSION_REQUIRED -y
             echo "  Conda environment created."
         else
             echo "  Conda environment already exists."
         fi
         # Get conda env path
-        CONDA_ENV_PATH=$(conda env list | grep "mcp-creator-growth" | awk '{print $NF}')
-        SCRIPT_PATH="$CONDA_ENV_PATH/bin/mcp-creator-growth"
+        CONDA_ENV_PATH=$(conda env list | grep "covate" | awk '{print $NF}')
+        SCRIPT_PATH="$CONDA_ENV_PATH/bin/covate"
         ;;
     "venv")
-        if [ ! -d "mcp-creator-growth" ]; then
-            python3 -m venv mcp-creator-growth
+        if [ ! -d "covate" ]; then
+            python3 -m venv covate
             echo "  Virtual environment created."
         else
             echo "  Virtual environment already exists."
         fi
-        SCRIPT_PATH="$INSTALL_PATH/mcp-creator-growth/bin/mcp-creator-growth"
+        SCRIPT_PATH="$INSTALL_PATH/covate/bin/covate"
         ;;
 esac
 
@@ -229,12 +229,12 @@ case "$ENV_MANAGER" in
         ;;
     "conda")
         eval "$(conda shell.bash hook)"
-        conda activate mcp-creator-growth
+        conda activate covate
         pip install -e '.[dev]' --quiet
         conda deactivate
         ;;
     "venv")
-        ./mcp-creator-growth/bin/pip install -e '.[dev]' --quiet
+        ./covate/bin/pip install -e '.[dev]' --quiet
         ;;
 esac
 
@@ -256,11 +256,11 @@ echo "  Configure Your IDE"
 echo "================================================"
 echo ""
 echo "For Claude Code (one command):"
-echo "  claude mcp add mcp-creator-growth -- $SCRIPT_PATH"
+echo "  claude mcp add covate -- $SCRIPT_PATH"
 echo ""
 echo "For other IDEs (Cursor, Windsurf, etc.), add this to MCP config:"
 echo "  {"
-echo "    \"mcp-creator-growth\": {"
+echo "    \"covate\": {"
 echo "      \"command\": \"$SCRIPT_PATH\""
 echo "    }"
 echo "  }"

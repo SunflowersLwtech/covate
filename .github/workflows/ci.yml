@@ -30,7 +30,7 @@ jobs:
 
       - name: Verify installation
         run: |
-          python -c "import mcp_creator_growth; print(f'Version: {mcp_creator_growth.__version__}')"
+          python -c "import covate; print(f'Version: {covate.__version__}')"
 
   lint:
     runs-on: ubuntu-latest

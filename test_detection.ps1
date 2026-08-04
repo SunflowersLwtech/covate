@@ -18,7 +18,7 @@ Write-Host ""
 # Test 2: Check pip installation
 Write-Host "[Test 2] Checking pip installation..." -ForegroundColor Yellow
 try {
-    $pipShow = pip show mcp-creator-growth 2>$null
+    $pipShow = pip show covate 2>$null
     if ($pipShow) {
         $version = ($pipShow | Select-String "^Version:").ToString().Split()[1]
         $location = $pipShow | Select-String "Editable project location:"
@@ -41,8 +41,8 @@ Write-Host ""
 
 # Test 3: Check code version
 Write-Host "[Test 3] Checking code version..." -ForegroundColor Yellow
-if (Test-Path "src\mcp_creator_growth\__init__.py") {
-    $content = Get-Content "src\mcp_creator_growth\__init__.py" -Raw
+if (Test-Path "src\covate\__init__.py") {
+    $content = Get-Content "src\covate\__init__.py" -Raw
     if ($content -match '__version__\s*=\s*"([^"]+)"') {
         $codeVersion = $Matches[1]
         Write-Host "  ✅ Code version: $codeVersion" -ForegroundColor Green

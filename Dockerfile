@@ -1,10 +1,10 @@
-# MCP Creator Growth - Dockerfile
+# Covate - Dockerfile
 # This image provides a ready-to-use MCP server for learning and debugging assistance
 
 FROM python:3.11-slim
 
 # Set metadata
-LABEL org.opencontainers.image.source="https://github.com/SunflowersLwtech/mcp_creator_growth"
+LABEL org.opencontainers.image.source="https://github.com/SunflowersLwtech/covate"
 LABEL org.opencontainers.image.description="Context-aware MCP server for AI coding assistant learning"
 LABEL org.opencontainers.image.licenses="MIT"
 
@@ -39,12 +39,12 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Health check (optional, for when running as HTTP service)
 # HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-#   CMD python -c "import mcp_creator_growth; print('OK')" || exit 1
+#   CMD python -c "import covate; print('OK')" || exit 1
 
 # Run the MCP server via stdio
-ENTRYPOINT ["mcp-creator-growth"]
+ENTRYPOINT ["covate"]
 
 # Note: MCP servers communicate via stdin/stdout by default
 # To use this container with Claude Desktop or other MCP clients:
-# 1. Build: docker build -t mcp-creator-growth .
-# 2. Configure in your MCP client to run: docker run -i mcp-creator-growth
+# 1. Build: docker build -t covate .
+# 2. Configure in your MCP client to run: docker run -i covate

@@ -1,4 +1,4 @@
-# <img src="assets/icon.png" width="48" height="48" align="top" style="margin-right: 10px;"> MCP Creator Growth
+# <img src="assets/icon.png" width="48" height="48" align="top" style="margin-right: 10px;"> Covate
 
 [English](README.md) | [简体中文](README_zh-CN.md) | [繁體中文](README_zh-TW.md)
 
@@ -7,9 +7,9 @@ A context-aware **Model Context Protocol (MCP)** server that acts as a learning 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![MCP Standard](https://img.shields.io/badge/MCP-Standard-green.svg)](https://modelcontextprotocol.io/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://github.com/SunflowersLwtech/mcp_creator_growth/blob/main/DOCKER.md)
-[![Glama MCP](https://img.shields.io/badge/Glama-MCP%20Server-blue)](https://glama.ai/mcp/servers/@SunflowersLwtech/mcp_creator_growth)
-[![DeepWiki](https://img.shields.io/badge/DeepWiki-Documentation-purple)](https://deepwiki.com/SunflowersLwtech/mcp_creator_growth)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://github.com/SunflowersLwtech/covate/blob/main/DOCKER.md)
+[![Glama MCP](https://img.shields.io/badge/Glama-MCP%20Server-blue)](https://glama.ai/mcp/servers/@SunflowersLwtech/covate)
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-Documentation-purple)](https://deepwiki.com/SunflowersLwtech/covate)
 
 ---
 
@@ -17,9 +17,9 @@ A context-aware **Model Context Protocol (MCP)** server that acts as a learning 
 
 | Resource | Description |
 |----------|-------------|
-| [**Glama MCP Marketplace**](https://glama.ai/mcp/servers/@SunflowersLwtech/mcp_creator_growth) | Official MCP server listing with installation guides |
-| [**DeepWiki Documentation**](https://deepwiki.com/SunflowersLwtech/mcp_creator_growth) | AI-generated deep analysis of the codebase |
-| [**GitHub Repository**](https://github.com/SunflowersLwtech/mcp_creator_growth) | Source code, issues, and contributions |
+| [**Glama MCP Marketplace**](https://glama.ai/mcp/servers/@SunflowersLwtech/covate) | Official MCP server listing with installation guides |
+| [**DeepWiki Documentation**](https://deepwiki.com/SunflowersLwtech/covate) | AI-generated deep analysis of the codebase |
+| [**GitHub Repository**](https://github.com/SunflowersLwtech/covate) | Source code, issues, and contributions |
 
 ---
 
@@ -130,7 +130,7 @@ A context-aware **Model Context Protocol (MCP)** server that acts as a learning 
 <td>
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.sh | bash
 ```
 
 </td>
@@ -140,7 +140,7 @@ curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth
 <td>
 
 ```powershell
-irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.ps1 | iex
 ```
 
 </td>
@@ -149,7 +149,7 @@ irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/s
 
 The installer will:
 1. Auto-detect your Python environment (uv → conda → venv)
-2. Clone the repository to `~/mcp-creator-growth`
+2. Clone the repository to `~/covate`
 3. Create virtual environment and install dependencies
 4. Print the exact command to configure your IDE
 
@@ -162,20 +162,20 @@ The installer will:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/SunflowersLwtech/mcp_creator_growth.git
-cd mcp_creator_growth
+git clone https://github.com/SunflowersLwtech/covate.git
+cd covate
 
 # 2. Create virtual environment and install
 # Using uv (recommended)
-uv venv --python 3.11 mcp-creator-growth
-source mcp-creator-growth/bin/activate          # macOS/Linux
-# mcp-creator-growth\Scripts\activate           # Windows
+uv venv --python 3.11 covate
+source covate/bin/activate          # macOS/Linux
+# covate\Scripts\activate           # Windows
 uv pip install -e '.[dev]'
 
 # Or using standard venv
-python -m venv mcp-creator-growth
-source mcp-creator-growth/bin/activate           # macOS/Linux
-# mcp-creator-growth\Scripts\activate            # Windows
+python -m venv covate
+source covate/bin/activate           # macOS/Linux
+# covate\Scripts\activate            # Windows
 pip install -e '.[dev]'
 ```
 
@@ -190,15 +190,15 @@ pip install -e '.[dev]'
 
 ```bash
 # 1. Pull from Docker Hub
-docker pull sunflowerslwtech/mcp-creator-growth:latest
+docker pull sunflowerslwtech/covate:latest
 
 # Or build locally
-git clone https://github.com/SunflowersLwtech/mcp_creator_growth.git
-cd mcp_creator_growth
-docker build -t mcp-creator-growth .
+git clone https://github.com/SunflowersLwtech/covate.git
+cd covate
+docker build -t covate .
 
 # 2. Run with Docker
-docker run -i mcp-creator-growth
+docker run -i covate
 
 # 3. Or use Docker Compose
 docker-compose up -d
@@ -221,10 +221,10 @@ After installation, configure your AI coding IDE to use this MCP server.
 **Option 1: CLI (Recommended)**
 ```bash
 # macOS / Linux
-claude mcp add mcp-creator-growth -- ~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth
+claude mcp add covate -- ~/covate/covate/bin/covate
 
 # Windows
-claude mcp add mcp-creator-growth -- %USERPROFILE%\mcp-creator-growth\mcp-creator-growth\Scripts\mcp-creator-growth.exe
+claude mcp add covate -- %USERPROFILE%\covate\covate\Scripts\covate.exe
 ```
 
 **Option 2: Config File**
@@ -233,8 +233,8 @@ Add to `~/.claude.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
-      "command": "~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth"
+    "covate": {
+      "command": "~/covate/covate/bin/covate"
     }
   }
 }
@@ -244,22 +244,22 @@ For Windows:
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
-      "command": "C:\\Users\\YourName\\mcp-creator-growth\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe"
+    "covate": {
+      "command": "C:\\Users\\YourName\\covate\\covate\\Scripts\\covate.exe"
     }
   }
 }
 ```
 
 Example paths:
-- Unix (uv): `~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth`
-- Windows (uv): `C:\\Users\\YourName\\mcp-creator-growth\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe`
-- Windows (conda): `C:\\Users\\YourName\\anaconda3\\envs\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe`
+- Unix (uv): `~/covate/covate/bin/covate`
+- Windows (uv): `C:\\Users\\YourName\\covate\\covate\\Scripts\\covate.exe`
+- Windows (conda): `C:\\Users\\YourName\\anaconda3\\envs\\covate\\Scripts\\covate.exe`
 
 Path breakdown (Unix example):
-- `~/mcp-creator-growth` → repository directory
-- `mcp-creator-growth` → virtual environment directory created by uv/venv
-- `bin/mcp-creator-growth` → executable
+- `~/covate` → repository directory
+- `covate` → virtual environment directory created by uv/venv
+- `bin/covate` → executable
 
 ### Cursor
 
@@ -267,8 +267,8 @@ Add to Cursor MCP settings (Settings → MCP → Add Server):
 
 ```json
 {
-  "mcp-creator-growth": {
-    "command": "~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth"
+  "covate": {
+    "command": "~/covate/covate/bin/covate"
   }
 }
 ```
@@ -276,8 +276,8 @@ Add to Cursor MCP settings (Settings → MCP → Add Server):
 For Windows:
 ```json
 {
-  "mcp-creator-growth": {
-    "command": "C:\\Users\\YourName\\mcp-creator-growth\\mcp-creator-growth\\Scripts\\mcp-creator-growth.exe"
+  "covate": {
+    "command": "C:\\Users\\YourName\\covate\\covate\\Scripts\\covate.exe"
   }
 }
 ```
@@ -289,8 +289,8 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
-      "command": "~/mcp-creator-growth/mcp-creator-growth/bin/mcp-creator-growth"
+    "covate": {
+      "command": "~/covate/covate/bin/covate"
     }
   }
 }
@@ -303,7 +303,7 @@ To use Docker with any MCP-compatible IDE:
 ```json
 {
   "mcpServers": {
-    "mcp-creator-growth": {
+    "covate": {
       "command": "docker",
       "args": [
         "run",
@@ -313,7 +313,7 @@ To use Docker with any MCP-compatible IDE:
         "/path/to/your/project:/workspace",
         "-w",
         "/workspace",
-        "mcp-creator-growth"
+        "covate"
       ]
     }
   }
@@ -325,7 +325,7 @@ See **[DOCKER.md](DOCKER.md)** for detailed Docker configuration examples for Cl
 ### Other IDEs
 
 For any MCP-compatible IDE, use these settings:
-- **Command:** `<install-path>/mcp-creator-growth/bin/mcp-creator-growth` (or `mcp-creator-growth\Scripts\mcp-creator-growth.exe` on Windows)
+- **Command:** `<install-path>/covate/bin/covate` (or `covate\Scripts\covate.exe` on Windows)
 - **Transport:** stdio
 
 **After configuration, restart your IDE.**
@@ -371,7 +371,7 @@ The remote update script automatically detects your installation and works with 
 <td>
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.sh | bash
+curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.sh | bash
 ```
 
 </td>
@@ -381,7 +381,7 @@ curl -fsSL https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth
 <td>
 
 ```powershell
-irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.ps1 | iex
+irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.ps1 | iex
 ```
 
 </td>
@@ -405,12 +405,12 @@ The update script will:
 
 **macOS / Linux:**
 ```bash
-~/mcp-creator-growth/scripts/update.sh
+~/covate/scripts/update.sh
 ```
 
 **Windows (PowerShell):**
 ```powershell
-~\mcp-creator-growth\scripts\update.ps1
+~\covate\scripts\update.ps1
 ```
 
 ### Manual Update
@@ -420,20 +420,20 @@ The update script will:
 
 ```bash
 # Navigate to installation directory
-cd ~/mcp-creator-growth  # or your custom installation path
+cd ~/covate  # or your custom installation path
 
 # Pull latest changes
 git pull origin main
 
 # Update dependencies
 # Using uv
-source mcp-creator-growth/bin/activate          # macOS/Linux
-# mcp-creator-growth\Scripts\activate           # Windows
+source covate/bin/activate          # macOS/Linux
+# covate\Scripts\activate           # Windows
 uv pip install -e '.[dev]' --upgrade
 
 # Or using standard venv
-source mcp-creator-growth/bin/activate           # macOS/Linux
-# mcp-creator-growth\Scripts\activate            # Windows
+source covate/bin/activate           # macOS/Linux
+# covate\Scripts\activate            # Windows
 pip install -e '.[dev]' --upgrade
 ```
 
@@ -499,7 +499,7 @@ We're building toward a **Personalized Learning Center** that grows with you. He
 | **Multi-language Support** | Explanations in your preferred language |
 | **Voice Interface** | "Hey Claude, quiz me on what we did yesterday" |
 
-> **Want to influence the roadmap?** [Open an issue](https://github.com/SunflowersLwtech/mcp_creator_growth/issues) or join the discussion!
+> **Want to influence the roadmap?** [Open an issue](https://github.com/SunflowersLwtech/covate/issues) or join the discussion!
 
 ---
 
@@ -533,7 +533,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 |---------|---------|
 | **Email** | sunflowers0607@outlook.com |
 | **Email** | weiliu0607@gmail.com |
-| **GitHub Issues** | [Open an Issue](https://github.com/SunflowersLwtech/mcp_creator_growth/issues) |
+| **GitHub Issues** | [Open an Issue](https://github.com/SunflowersLwtech/covate/issues) |
 
 ---
 
@@ -546,5 +546,5 @@ This project is licensed under the [MIT License](LICENSE).
 <p align="center">
   Built with <a href="https://github.com/jlowin/fastmcp">FastMCP</a> •
   <a href="https://modelcontextprotocol.io">MCP Standard</a> •
-  <a href="https://glama.ai/mcp/servers/@SunflowersLwtech/mcp_creator_growth">Glama MCP</a>
+  <a href="https://glama.ai/mcp/servers/@SunflowersLwtech/covate">Glama MCP</a>
 </p>

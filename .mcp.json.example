@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "mcp-creator-growth": {
+    "covate": {
       "type": "stdio",
-      "command": "${HOME}/mcp-creator-growth/mcp-creator-growth/bin/python",
-      "args": ["-m", "mcp_creator_growth"],
+      "command": "${HOME}/covate/covate/bin/python",
+      "args": ["-m", "covate"],
       "env": {
         "MCP_DEBUG": "${MCP_DEBUG:-false}"
       }

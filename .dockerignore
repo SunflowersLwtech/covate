@@ -29,7 +29,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-.mcp-creator-growth/
+.covate/
 
 # IDE
 .vscode/

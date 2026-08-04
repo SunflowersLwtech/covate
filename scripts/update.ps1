@@ -1,7 +1,7 @@
-# MCP Creator Growth - Windows Update Script
+# Covate - Windows Update Script
 #
 # Usage (Remote - Recommended):
-#   irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.ps1 | iex
+#   irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.ps1 | iex
 #
 # Usage (Local):
 #   .\scripts\update.ps1
@@ -19,7 +19,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 Write-Host "================================================" -ForegroundColor Cyan
-Write-Host "  MCP Creator Growth - Update Script" -ForegroundColor Cyan
+Write-Host "  Covate - Update Script" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -42,13 +42,13 @@ function Find-InstallationPath {
     # Method 2: Scan for .env_manager marker file (written by install.ps1)
     # Check common locations without iterating all drives to avoid duplicates
     $searchPaths = @(
-        (Join-Path $env:USERPROFILE "mcp-creator-growth"),
-        (Join-Path $env:USERPROFILE "Documents\mcp-creator-growth"),
-        (Join-Path $env:USERPROFILE "Desktop\mcp-creator-growth"),
-        (Join-Path $env:USERPROFILE "Projects\mcp-creator-growth"),
-        "C:\projects\mcp-creator-growth",
-        "D:\projects\mcp-creator-growth",
-        "E:\projects\mcp-creator-growth"
+        (Join-Path $env:USERPROFILE "covate"),
+        (Join-Path $env:USERPROFILE "Documents\covate"),
+        (Join-Path $env:USERPROFILE "Desktop\covate"),
+        (Join-Path $env:USERPROFILE "Projects\covate"),
+        "C:\projects\covate",
+        "D:\projects\covate",
+        "E:\projects\covate"
     )
 
     foreach ($path in $searchPaths) {
@@ -70,7 +70,7 @@ function Find-InstallationPath {
 
     # Method 3: Check pip installed package location
     try {
-        $pipShow = pip show mcp-creator-growth 2>$null
+        $pipShow = pip show covate 2>$null
         if ($pipShow) {
             $editableLocation = $pipShow | Select-String "Editable project location:"
             if ($editableLocation) {
@@ -97,8 +97,8 @@ function Find-InstallationPath {
 
     # Method 4: Search Windows Additional Working Directories (if multiple installations)
     $workingDirs = @(
-        (Join-Path $env:USERPROFILE "mcp-creator-growth"),
-        (Join-Path $env:USERPROFILE "Documents\mcp-creator-growth")
+        (Join-Path $env:USERPROFILE "covate"),
+        (Join-Path $env:USERPROFILE "Documents\covate")
     )
     foreach ($dir in $workingDirs) {
         if ((Test-Path $dir) -and (Test-Path (Join-Path $dir "pyproject.toml"))) {
@@ -127,7 +127,7 @@ function Find-InstallationPath {
         Write-Host "Error: No installation found!" -ForegroundColor Red
         Write-Host ""
         Write-Host "Please install first:" -ForegroundColor Yellow
-        Write-Host "  irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.ps1 | iex" -ForegroundColor White
+        Write-Host "  irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.ps1 | iex" -ForegroundColor White
         Write-Host ""
         exit 1
     }
@@ -150,7 +150,7 @@ function Find-InstallationPath {
         Write-Host "      Source: $($candidate.Source)" -ForegroundColor Gray
 
         # Get version if possible
-        $versionFile = Join-Path $candidate.Path "src\mcp_creator_growth\__init__.py"
+        $versionFile = Join-Path $candidate.Path "src\covate\__init__.py"
         if (Test-Path $versionFile) {
             $content = Get-Content $versionFile -Raw
             if ($content -match '__version__\s*=\s*"([^"]+)"') {
@@ -198,10 +198,10 @@ if (Test-Path ".env_manager") {
 } else {
     # Fallback: detect from existing environment
     # Check for new naming convention first
-    if (Test-Path "mcp-creator-growth") {
+    if (Test-Path "covate") {
         # Could be uv or venv, check for uv-specific files
-        if (Test-Path "mcp-creator-growth\pyvenv.cfg") {
-            $cfg = Get-Content "mcp-creator-growth\pyvenv.cfg" -Raw
+        if (Test-Path "covate\pyvenv.cfg") {
+            $cfg = Get-Content "covate\pyvenv.cfg" -Raw
             if ($cfg -match "uv") {
                 $EnvManager = "uv"
             } else {
@@ -210,7 +210,7 @@ if (Test-Path ".env_manager") {
         } else {
             $EnvManager = "venv"  # Default assumption
         }
-    } elseif ((conda env list 2>$null | Select-String "mcp-creator-growth")) {
+    } elseif ((conda env list 2>$null | Select-String "covate")) {
         $EnvManager = "conda"
     } elseif (Test-Path ".venv") {
         # Legacy uv installation
@@ -223,7 +223,7 @@ if (Test-Path ".env_manager") {
     } else {
         Write-Host "  Error: Cannot detect environment manager." -ForegroundColor Red
         Write-Host "  Please run install script again:" -ForegroundColor Yellow
-        Write-Host "    irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/install.ps1 | iex" -ForegroundColor White
+        Write-Host "    irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/install.ps1 | iex" -ForegroundColor White
         Pop-Location
         exit 1
     }
@@ -233,7 +233,7 @@ if (Test-Path ".env_manager") {
 # Get current version
 $currentVersion = "unknown"
 try {
-    $initFile = Get-Content "src\mcp_creator_growth\__init__.py" -Raw
+    $initFile = Get-Content "src\covate\__init__.py" -Raw
     if ($initFile -match '__version__\s*=\s*"([^"]+)"') {
         $currentVersion = $Matches[1]
     }
@@ -290,21 +290,21 @@ Write-Host "[4/5] Updating dependencies..." -ForegroundColor Yellow
 $ExePath = switch ($EnvManager) {
     "uv" {
         # Check new location first, then legacy
-        $newPath = Join-Path $InstallPath "mcp-creator-growth\Scripts\mcp-creator-growth.exe"
-        $legacyPath = Join-Path $InstallPath ".venv\Scripts\mcp-creator-growth.exe"
+        $newPath = Join-Path $InstallPath "covate\Scripts\covate.exe"
+        $legacyPath = Join-Path $InstallPath ".venv\Scripts\covate.exe"
         if (Test-Path $newPath) { $newPath } elseif (Test-Path $legacyPath) { $legacyPath } else { $newPath }
     }
     "conda" {
-        $condaInfo = conda env list 2>$null | Select-String "mcp-creator-growth"
+        $condaInfo = conda env list 2>$null | Select-String "covate"
         if ($condaInfo) {
             $CondaEnvPath = ($condaInfo -split '\s+')[-1]
-            Join-Path $CondaEnvPath "Scripts\mcp-creator-growth.exe"
+            Join-Path $CondaEnvPath "Scripts\covate.exe"
         } else { $null }
     }
     "venv" {
         # Check new location first, then legacy
-        $newPath = Join-Path $InstallPath "mcp-creator-growth\Scripts\mcp-creator-growth.exe"
-        $legacyPath = Join-Path $InstallPath "venv\Scripts\mcp-creator-growth.exe"
+        $newPath = Join-Path $InstallPath "covate\Scripts\covate.exe"
+        $legacyPath = Join-Path $InstallPath "venv\Scripts\covate.exe"
         if (Test-Path $newPath) { $newPath } elseif (Test-Path $legacyPath) { $legacyPath } else { $newPath }
     }
 }
@@ -329,7 +329,7 @@ if ($isLocked -and -not $Force) {
     Write-Host "    1. Close your AI coding assistant" -ForegroundColor White
     Write-Host "       (Claude Code, Cursor, Windsurf, etc.)" -ForegroundColor Gray
     Write-Host "    2. Run this command again:" -ForegroundColor White
-    Write-Host "       irm https://raw.githubusercontent.com/SunflowersLwtech/mcp_creator_growth/main/scripts/update.ps1 | iex" -ForegroundColor Gray
+    Write-Host "       irm https://raw.githubusercontent.com/SunflowersLwtech/covate/main/scripts/update.ps1 | iex" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  Or use -Force to skip dependency update:" -ForegroundColor Gray
     Write-Host "    irm ... | iex -Force" -ForegroundColor Gray
@@ -348,13 +348,13 @@ if ($Force -and $isLocked) {
                 uv pip install -e ".[dev]" --reinstall --quiet
             }
             "conda" {
-                $null = conda activate mcp-creator-growth 2>&1
+                $null = conda activate covate 2>&1
                 pip install -e ".[dev]" --force-reinstall --no-deps --quiet
                 $null = conda deactivate 2>&1
             }
             "venv" {
                 # Check new location first, then legacy
-                $newPipPath = Join-Path $InstallPath "mcp-creator-growth\Scripts\pip.exe"
+                $newPipPath = Join-Path $InstallPath "covate\Scripts\pip.exe"
                 $legacyPipPath = Join-Path $InstallPath "venv\Scripts\pip.exe"
                 $pipPath = if (Test-Path $newPipPath) { $newPipPath } else { $legacyPipPath }
                 & $pipPath install -e ".[dev]" --force-reinstall --no-deps --quiet
@@ -378,7 +378,7 @@ Write-Host "[5/5] Verifying installation..." -ForegroundColor Yellow
 # Get new version
 $newVersion = "unknown"
 try {
-    $initFile = Get-Content "src\mcp_creator_growth\__init__.py" -Raw
+    $initFile = Get-Content "src\covate\__init__.py" -Raw
     if ($initFile -match '__version__\s*=\s*"([^"]+)"') {
         $newVersion = $Matches[1]
     }
@@ -387,7 +387,7 @@ try {
 # Verify installed version matches code version
 $installedVersion = "unknown"
 try {
-    $pipOutput = pip show mcp-creator-growth 2>$null
+    $pipOutput = pip show covate 2>$null
     if ($pipOutput) {
         $versionLine = $pipOutput | Select-String "^Version:"
         if ($versionLine) {
