@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Developer-dark palette (GitHub-dark lineage) with an emerald "growth" accent */
+  --color-deep: #0a0e14;
+  --color-surface: #131a24;
+  --color-border: #232c39;
+  --color-primary: #e6edf3;
+  --color-secondary: #9aa7b5;
+  --color-dim: #667180;
+  --color-accent: #34d399;
+  --color-accent-soft: #6ee7b7;
+
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-deep);
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle grid backdrop, developer-terminal feel */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(52, 211, 153, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(52, 211, 153, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
