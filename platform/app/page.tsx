@@ -93,8 +93,8 @@ export default function Home() {
 
       <main>
         {/* Hero */}
-        <section className="bg-grid border-b border-border">
-          <div className="mx-auto max-w-3xl px-6 pb-20 pt-16 text-center sm:pt-24">
+        <section className="hero-aurora bg-grid border-b border-border">
+          <div className="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-16 text-center sm:pt-24">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
               Open-source MCP · learning platform
             </p>

@@ -25,6 +25,34 @@
   color: transparent;
 }
 
+/* Soft brand aurora glow behind the hero — green→blue, echoing the favicon.
+   Adds depth/artistry over the terminal grid without touching content. */
+.hero-aurora {
+  position: relative;
+  isolation: isolate;
+}
+.hero-aurora::before {
+  content: "";
+  position: absolute;
+  inset: -30% -5% auto -5%;
+  height: 460px;
+  background:
+    radial-gradient(38% 60% at 28% 32%, rgba(52, 211, 153, 0.20), transparent 62%),
+    radial-gradient(42% 58% at 72% 42%, rgba(56, 189, 248, 0.18), transparent 62%),
+    radial-gradient(36% 52% at 50% 14%, rgba(110, 231, 183, 0.14), transparent 66%);
+  filter: blur(36px);
+  pointer-events: none;
+  z-index: -1;
+  animation: aurora-drift 22s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+  from { transform: translateX(-2%) translateY(0) scale(1); }
+  to   { transform: translateX(3%) translateY(-2%) scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-aurora::before { animation: none; }
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
