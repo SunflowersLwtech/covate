@@ -20,6 +20,10 @@ create table if not exists platform_user (
   name          text,
   avatar_url    text,
   plan          text not null default 'free' check (plan in ('free', 'paid')),
+  -- The MCP sync client authenticates with this opaque per-user token (generated on
+  -- account creation, shown once in the dashboard, pasted into the MCP config). The
+  -- ingestion API looks the user up by it. Web dashboard login uses GitHub OAuth instead.
+  sync_token    text unique not null default encode(gen_random_bytes(24), 'hex'),
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
