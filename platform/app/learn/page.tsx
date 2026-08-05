@@ -50,6 +50,13 @@ type Article = {
 // new /learn/<slug> page (also add it to sitemap.ts and llms.txt).
 const ARTICLES: readonly Article[] = [
   {
+    slug: "what-is-vibe-coding",
+    category: "Fundamentals",
+    title: "What is vibe coding? Meaning, origin, and when to use it",
+    description:
+      "Vibe coding means describing what you want to an AI in plain English and largely accepting what it produces without reading the code closely. A clear definition, where the term came from (Andrej Karpathy, 2025), where it genuinely works, where it bites you, and how to do it without quietly losing your skills.",
+  },
+  {
     slug: "how-to-learn-from-ai-generated-code",
     category: "Skill retention",
     title: "How to actually learn from AI-generated code (without skill decay)",

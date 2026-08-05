@@ -29,6 +29,8 @@ waitlist at ${SITE}.
 ## Learn
 The Covate Learning Center (${SITE}/learn) — honest, practical guides on staying a strong developer
 while you build with AI. Free to read. Current guides:
+- What is vibe coding? Meaning, origin, and when to use it: ${SITE}/learn/what-is-vibe-coding
+  — a plain-English definition, the Karpathy origin (Feb 2025) and Collins Word of the Year 2025, where vibe coding works (prototypes) vs bites you (production, security, code you maintain), and how to vibe code without skill decay.
 - How to actually learn from AI-generated code (without skill decay): ${SITE}/learn/how-to-learn-from-ai-generated-code
   — why generated code doesn't stick, what "vibe coding" skill decay is, and the active-recall-on-your-diffs habit Covate automates.
 - How to learn a new codebase fast: ${SITE}/learn/how-to-learn-a-new-codebase-fast
