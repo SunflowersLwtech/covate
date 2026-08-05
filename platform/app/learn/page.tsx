@@ -85,6 +85,13 @@ const ARTICLES: readonly Article[] = [
       "AI writes the code, but you're still responsible for it. A practical checklist for reviewing AI-generated code before you merge — what to actually check, the failure modes to watch for, and how to review it while you still understand it.",
   },
   {
+    slug: "prompt-engineering-for-coding",
+    category: "Prompting",
+    title: "Prompt engineering for coding",
+    description:
+      "AI coding assistants are only as good as what you ask them. A practical guide to prompting them well — give context, be specific, set constraints, plan first, iterate — to get usable code from Claude, Cursor, Copilot and ChatGPT, and why you still have to understand and verify what comes back.",
+  },
+  {
     slug: "spaced-repetition-for-developers",
     category: "Memory & retention",
     title: "Spaced repetition for developers: how to actually remember what you learn",

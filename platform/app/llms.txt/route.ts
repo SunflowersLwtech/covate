@@ -37,6 +37,8 @@ while you build with AI. Free to read. Current guides:
   — the case on both sides, and why active vs passive use is the factor that decides whether AI erodes or sharpens your skills.
 - How to review AI-generated code before you merge it: ${SITE}/learn/how-to-review-ai-generated-code
   — a 6-point review checklist (understand it, scope, edge cases, security, codebase fit, tests) and why to review right after generation.
+- Prompt engineering for coding: ${SITE}/learn/prompt-engineering-for-coding
+  — seven habits for getting usable code from AI assistants (context, specificity, constraints, plan-first, examples, small steps, verify), and why good prompting still isn't the same as understanding.
 - Spaced repetition for developers: ${SITE}/learn/spaced-repetition-for-developers
   — the forgetting curve and the spacing effect, and how to remember what you learn while coding without hand-building flashcards.
 - Should you still learn to code in the age of AI? ${SITE}/learn/should-you-still-learn-to-code-with-ai
