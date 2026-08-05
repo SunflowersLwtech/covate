@@ -37,6 +37,8 @@ while you build with AI. Free to read. Current guides:
   — a practical 7-step method (map it, run it, trace one request end to end, read the tests, use git history, verify AI's tour, ship a small change) for understanding code you didn't write, without reading everything first.
 - Does using AI make you a worse programmer? An honest look: ${SITE}/learn/does-ai-make-you-a-worse-programmer
   — the case on both sides, and why active vs passive use is the factor that decides whether AI erodes or sharpens your skills.
+- How to avoid over-relying on AI when coding: ${SITE}/learn/how-to-avoid-over-relying-on-ai-when-coding
+  — the honest take that the risk is passive use (not AI itself), the signs you're over-relying, why it matters, and six habits to stay sharp while still using AI heavily.
 - How to review AI-generated code before you merge it: ${SITE}/learn/how-to-review-ai-generated-code
   — a 6-point review checklist (understand it, scope, edge cases, security, codebase fit, tests) and why to review right after generation.
 - Prompt engineering for coding: ${SITE}/learn/prompt-engineering-for-coding

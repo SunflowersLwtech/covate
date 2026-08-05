@@ -78,6 +78,13 @@ const ARTICLES: readonly Article[] = [
       "Does relying on AI coding assistants make you a worse programmer? The honest answer: it can — through skill decay — but it doesn't have to. A balanced look at the evidence on both sides, and the single factor (active vs passive use) that decides which way it goes for you.",
   },
   {
+    slug: "how-to-avoid-over-relying-on-ai-when-coding",
+    category: "Staying sharp",
+    title: "How to avoid over-relying on AI when coding",
+    description:
+      "You use AI coding assistants and you like them — this isn't about quitting. The real risk isn't using AI, it's using it passively: accepting output you don't understand. The signs you're over-relying, why it matters, and a concrete habit list to keep your edge while you keep shipping with AI.",
+  },
+  {
     slug: "should-you-still-learn-to-code-with-ai",
     category: "Career",
     title: "Should you still learn to code in the age of AI?",
