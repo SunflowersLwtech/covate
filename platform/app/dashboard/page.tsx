@@ -41,7 +41,7 @@ async function loadData(userId: string) {
   };
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children, signedIn = false }: { children: React.ReactNode; signedIn?: boolean }) {
   return (
     <div className="min-h-screen bg-deep text-primary">
       <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
@@ -53,7 +53,9 @@ function Shell({ children }: { children: React.ReactNode }) {
         <nav className="flex items-center gap-6 text-sm text-secondary">
           <a href={SITE} className="transition-colors hover:text-primary">Home</a>
           <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
-          <a href="/api/auth/logout" className="transition-colors hover:text-primary">Sign out</a>
+          {signedIn ? (
+            <a href="/api/auth/logout" className="transition-colors hover:text-primary">Sign out</a>
+          ) : null}
         </nav>
       </header>
       <main className="mx-auto max-w-5xl px-6 pb-20 pt-6">{children}</main>
@@ -61,7 +63,14 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SignIn({ configured }: { configured: boolean }) {
+const SIGN_IN_ERRORS: Record<string, string> = {
+  not_configured: "Sign-in is not available right now — this deployment is missing its GitHub credentials. We are on it.",
+  state_mismatch: "That sign-in link expired or was already used. Please try again.",
+  exchange_failed: "GitHub could not complete the sign-in. Please try again.",
+};
+
+function SignIn({ configured, error }: { configured: boolean; error?: string }) {
+  const message = error ? SIGN_IN_ERRORS[error] ?? "Sign-in failed. Please try again." : null;
   return (
     <Shell>
       <div className="mx-auto max-w-xl pt-16 text-center">
@@ -73,6 +82,14 @@ function SignIn({ configured }: { configured: boolean }) {
           Sign in to review every quiz Covate gave you on your own code, track your progress over time, and see the
           concepts you keep missing — turned into a personalized study plan.
         </p>
+        {message ? (
+          <p
+            role="alert"
+            className="mt-6 rounded-xl border border-border bg-surface/40 p-4 text-sm text-secondary"
+          >
+            {message}
+          </p>
+        ) : null}
         {configured ? (
           <a
             href="/api/auth/github"
@@ -106,22 +123,28 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const errorParam = (await searchParams).error;
+  const error = Array.isArray(errorParam) ? errorParam[0] : errorParam;
   // Signed-out (or unconfigured) → sign-in view.
   if (!authConfigured() || !process.env.DATABASE_URL) {
-    return <SignIn configured={authConfigured() && Boolean(process.env.DATABASE_URL)} />;
+    return <SignIn configured={authConfigured() && Boolean(process.env.DATABASE_URL)} error={error} />;
   }
   const jar = await cookies();
   const userId = await verifySession(jar.get(SESSION_COOKIE)?.value);
-  if (!userId) return <SignIn configured />;
+  if (!userId) return <SignIn configured error={error} />;
 
   let data: Awaited<ReturnType<typeof loadData>> | null = null;
   try {
     data = await loadData(userId);
   } catch {
-    return <SignIn configured />;
+    return <SignIn configured error={error} />;
   }
-  if (!data?.user) return <SignIn configured />;
+  if (!data?.user) return <SignIn configured error={error} />;
 
   const { user, sessions, topics } = data;
   const totalQ = sessions.reduce((n, s) => n + (s.question_count || 0), 0);
@@ -129,7 +152,7 @@ export default async function DashboardPage() {
   const accuracy = totalQ > 0 ? Math.round((totalC / totalQ) * 100) : 0;
 
   return (
-    <Shell>
+    <Shell signedIn>
       <div className="flex items-center gap-4">
         {user.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element
