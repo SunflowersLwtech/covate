@@ -78,7 +78,13 @@ export async function POST(req: Request) {
   `) as { id: string }[];
   const sessionId = sessRows[0].id;
 
-  // Replace this session's answers (idempotent re-sync).
+  // Replace this session's answers (idempotent re-sync). Remember the topics this
+  // session used to touch so their rollups get recomputed even if the answers changed.
+  const prevTopicRows = (await sql`
+    select distinct topic from quiz_answer where session_id = ${sessionId} and topic is not null
+  `) as { topic: string }[];
+  const touchedTopics = new Set<string>(prevTopicRows.map((r) => r.topic));
+
   await sql`delete from quiz_answer where session_id = ${sessionId}`;
   for (const a of answers) {
     if (!a?.question) continue;
@@ -90,17 +96,26 @@ export async function POST(req: Request) {
          ${a.correct_answer ?? null}, ${a.user_answer ?? null}, ${a.is_correct ?? null},
          ${a.explanation ?? null}, ${a.topic ?? null}, ${a.concept ?? null})
     `;
-    if (a.topic) {
-      await sql`
-        insert into topic_progress (user_id, topic, total_answered, total_correct, last_seen)
-        values (${userId}, ${a.topic}, 1, ${a.is_correct ? 1 : 0}, now())
-        on conflict (user_id, topic) do update set
-          total_answered = topic_progress.total_answered + 1,
-          total_correct = topic_progress.total_correct + ${a.is_correct ? 1 : 0},
-          last_seen = now()
-      `;
-    }
+    if (a.topic) touchedTopics.add(a.topic);
   }
+
+  // Recompute the rollup for every topic this sync touched, straight from quiz_answer.
+  // Incrementing here would double-count: the MCP client re-posts every stored session
+  // on each run, and the answers above are deleted-and-reinserted on a re-sync.
+  for (const topic of touchedTopics) {
+    await sql`
+      insert into topic_progress (user_id, topic, total_answered, total_correct, last_seen)
+      select ${userId}, ${topic}, count(*), count(*) filter (where is_correct), max(created_at)
+        from quiz_answer where user_id = ${userId} and topic = ${topic}
+      on conflict (user_id, topic) do update set
+        total_answered = excluded.total_answered,
+        total_correct = excluded.total_correct,
+        last_seen = excluded.last_seen
+    `;
+  }
+  // A topic can lose its last answer (edited quiz, removed session) — don't leave an
+  // empty row behind for the progress chart to render.
+  await sql`delete from topic_progress where user_id = ${userId} and total_answered = 0`;
 
   return Response.json({ ok: true, session_id: sessionId, answers: total, correct });
 }
