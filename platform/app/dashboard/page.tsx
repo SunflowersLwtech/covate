@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { authConfigured, SESSION_COOKIE, verifySession, webAuthConfigured } from "../lib/auth";
 import DeviceSignIn from "./DeviceSignIn";
+import SyncToken from "./SyncToken";
 import { db } from "../lib/db";
 import { GITHUB, SITE } from "../layout";
 
@@ -9,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Your learning ledger | Covate",
-  description: "Review every quiz Covate gave you, track your progress, and see the concepts you keep missing.",
+  description: "Review the learning sessions your Covate MCP has synced: each session's score, your running accuracy, and the topics you answer worst.",
   alternates: { canonical: "/dashboard" },
   robots: { index: false, follow: false },
 };
@@ -22,12 +23,12 @@ type SessionRow = {
   completed_at: string | null;
 };
 type TopicRow = { topic: string; total: number; correct: number };
-type UserRow = { name: string | null; github_login: string; avatar_url: string | null; plan: string; sync_token: string };
+type UserRow = { name: string | null; github_login: string; avatar_url: string | null };
 
 async function loadData(userId: string) {
   const sql = db();
   const [users, sessions, topics] = await Promise.all([
-    sql`select name, github_login, avatar_url, plan, sync_token from platform_user where id = ${userId}`,
+    sql`select name, github_login, avatar_url from platform_user where id = ${userId}`,
     sql`select project, change_summary, question_count, correct_count, completed_at
         from learning_session where user_id = ${userId}
         order by synced_at desc limit 20`,
@@ -76,13 +77,13 @@ function SignIn({ configured, error }: { configured: boolean; error?: string }) 
   return (
     <Shell>
       <div className="mx-auto max-w-xl pt-16 text-center">
-        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Learning platform</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Free · sign in with GitHub</p>
         <h1 className="mt-4 text-4xl font-semibold leading-[1.1] tracking-tight text-primary">
           Your <span className="text-brand">learning ledger</span>
         </h1>
         <p className="mt-5 text-lg leading-8 text-secondary">
-          Sign in to review every quiz Covate gave you on your own code, track your progress over time, and see the
-          concepts you keep missing — turned into a personalized study plan.
+          Sign in with GitHub — free, nothing to buy — and the sessions your Covate MCP syncs up land here: every
+          quiz you took on your own code, your running accuracy, and the topics you answer worst.
         </p>
         {message ? (
           <p
@@ -105,11 +106,9 @@ function SignIn({ configured, error }: { configured: boolean; error?: string }) 
           )
         ) : (
           <div className="mt-8 rounded-xl border border-border bg-surface/40 p-5 text-sm text-secondary">
-            The Learning Platform dashboard is in early access and not open for sign-in yet.{" "}
-            <a href={`${SITE}/#join`} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-              Join the waitlist
-            </a>{" "}
-            and we&apos;ll email your invite. The free open-source MCP is available now on{" "}
+            Sign-in is temporarily unavailable on this deployment — its GitHub credentials or database are not
+            configured, so no one can sign in right now (this is an outage, not a paywall; the ledger is free). The
+            free open-source MCP works offline and is available now on{" "}
             <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="text-accent underline underline-offset-4 hover:text-accent-soft">
               GitHub
             </a>.
@@ -166,7 +165,7 @@ export default async function DashboardPage({
         ) : null}
         <div>
           <h1 className="text-2xl font-semibold text-primary">{user.name ?? user.github_login}</h1>
-          <p className="font-mono text-xs text-dim">{user.plan === "paid" ? "Covate Plus" : "Free tier"} · @{user.github_login}</p>
+          <p className="font-mono text-xs text-dim">@{user.github_login}</p>
         </div>
       </div>
 
@@ -214,10 +213,17 @@ export default async function DashboardPage({
           </div>
         ) : (
           <div className="mt-4 rounded-xl border border-border bg-surface/40 p-5 text-sm text-secondary">
-            No sessions synced yet. Run <code className="rounded bg-deep px-1.5 py-0.5 font-mono text-accent">python -m covate.platform_sync</code> from a
-            project (with <code className="rounded bg-deep px-1.5 py-0.5 font-mono text-accent">COVATE_SYNC_TOKEN={user.sync_token}</code>) to push your local learning history here.
+            No sessions synced yet. From a project you have used Covate in, run{" "}
+            <code className="rounded bg-deep px-1.5 py-0.5 font-mono text-accent">COVATE_SYNC_URL=https://covate.org COVATE_SYNC_TOKEN=&lt;token&gt; python -m covate.platform_sync</code>{" "}
+            to push your local learning history here. Reveal your token in the Sync token section below.
           </div>
         )}
+      </section>
+
+      {/* Sync token — always reachable, not a one-time reveal */}
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold text-primary">Sync token</h2>
+        <SyncToken />
       </section>
     </Shell>
   );
