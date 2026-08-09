@@ -1,13 +1,13 @@
-"""Opt-in sync of local learning sessions to the Covate Learning Platform.
+"""Opt-in sync of local learning sessions to the hosted Covate learning ledger.
 
-The free MCP saves every learning_session locally (see storage/session_storage.py).
-This module uploads those records to the paid platform's ingestion API so they can be
-reviewed, tracked and turned into a personalized study plan. It is entirely opt-in:
+The MCP saves every learning_session locally (see storage/session_storage.py).
+This module uploads those records to the ledger's ingestion API so they can be reviewed
+in a browser. The ledger is free (GitHub sign-in, no paid tier). It is entirely opt-in:
 without a configured sync URL + token it does nothing, and the MCP is unaffected.
 
 Configure via environment:
-    COVATE_SYNC_URL    e.g. https://covate-platform.vercel.app
-    COVATE_SYNC_TOKEN  your per-user sync token from the platform dashboard
+    COVATE_SYNC_URL    https://covate.org
+    COVATE_SYNC_TOKEN  your per-user sync token (covate.org/dashboard -> Sync token)
 
 Usage (run inside a project you've used Covate in):
     COVATE_SYNC_URL=... COVATE_SYNC_TOKEN=... python -m covate.platform_sync [project_dir]

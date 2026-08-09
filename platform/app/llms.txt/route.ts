@@ -5,26 +5,30 @@ export const dynamic = "force-static";
 const BODY = `# Covate
 
 > Covate turns AI-assisted coding into real understanding. An open-source MCP tool quizzes
-> developers on their own code changes so they learn while they build; a paid cloud Learning
-> Platform remembers every session and turns it into a personalized programming-learning
-> experience. Open-core: the MCP is free and open-source (MIT); the Learning Platform is the
-> paid layer.
+> developers on their own code changes so they learn while they build; signing in with GitHub
+> at covate.org syncs those sessions into a learning ledger they can review in the browser.
+> Everything is free: the MCP is MIT-licensed, the ledger costs nothing, and there is no paid
+> tier, subscription or checkout anywhere on the site.
 
 ## What it is
 - Free, open-source MCP server (${GITHUB}): the \`learning_session\` tool generates blocking,
   interactive quizzes from your recent code changes; \`debug_search\` gives project-level debug
   memory. Runs locally, no account required.
-- Paid Learning Platform (${SITE}): opt-in cloud sync of your learning sessions, a review
-  dashboard, progress tracking, weak-topic analysis, and a personalized study plan with
-  spaced repetition.
+- Free learning ledger (${SITE}/dashboard): sign in with GitHub (device flow), reveal your sync
+  token in the dashboard's "Sync token" section, then run
+  \`COVATE_SYNC_URL=${SITE} COVATE_SYNC_TOKEN=<token> python -m covate.platform_sync\` from a project
+  to push your local learning sessions up. The ledger shows each synced session with its score, totals and running accuracy,
+  and the topics you answer worst. You can reveal or rotate your sync token there at any time.
+- Not built yet, so not offered: progress-over-time charts, spaced-repetition study plans,
+  team/org accounts, and any paid plan.
 
 ## Who it's for
 Developers who use AI coding assistants (Claude, Cursor, Copilot, etc.) and want to keep
 learning — and keep their skills sharp — instead of shipping code they don't understand.
 
 ## Status
-The open-source MCP is available now. The Learning Platform is in early access; join the
-waitlist at ${SITE}.
+Both halves are available now and free. The MCP installs from the repo; the learning ledger
+is live at ${SITE}/dashboard and opens with a GitHub sign-in. Nothing on the site can be purchased.
 
 ## Learn
 The Covate Learning Center (${SITE}/learn) — honest, practical guides on staying a strong developer

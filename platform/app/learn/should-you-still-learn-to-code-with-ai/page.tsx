@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/should-you-still-learn-to-code-with-ai";
 const URL = SITE + PATH;
@@ -43,7 +43,7 @@ const FAQ = [
   },
   {
     q: "How do I actually learn to code well while using AI — without it doing the learning for me?",
-    a: "This is the real risk: if you let the AI supply every answer, you get code without understanding, and your skills never develop. The fix is to stay an active participant. Use the AI as a tutor, not a vending machine — read what it writes, ask it why, predict what its code will do before you run it, and try to solve things yourself first. Above all, engage with each piece of generated code while the context is fresh: explain it back, quiz yourself on the concepts and edge cases, and revisit the ones you keep missing. That deliberate, active engagement is exactly what turns 'the AI wrote it' into 'I understand it.' It's also precisely what Covate is built to make automatic — it's a free, open-source MCP tool that watches your real code changes and quizzes you on them so you learn while you build, plus an optional learning platform that tracks your progress and re-teaches your weak spots. Learning to code in the age of AI isn't about avoiding AI; it's about using it in a way that makes you better, not just faster.",
+    a: "This is the real risk: if you let the AI supply every answer, you get code without understanding, and your skills never develop. The fix is to stay an active participant. Use the AI as a tutor, not a vending machine — read what it writes, ask it why, predict what its code will do before you run it, and try to solve things yourself first. Above all, engage with each piece of generated code while the context is fresh: explain it back, quiz yourself on the concepts and edge cases, and revisit the ones you keep missing. That deliberate, active engagement is exactly what turns 'the AI wrote it' into 'I understand it.' It's also precisely what Covate is built to make automatic — it's a free, open-source MCP tool that watches your real code changes and quizzes you on them so you learn while you build, plus a free learning ledger you sign into with GitHub, which keeps every synced session, your accuracy and the topics you answer worst. Learning to code in the age of AI isn't about avoiding AI; it's about using it in a way that makes you better, not just faster.",
   },
 ] as const;
 
@@ -179,21 +179,20 @@ export default function ShouldYouLearnToCode() {
               The real risk of learning to code with AI is letting it supply every answer, so you get code without
               understanding. Covate keeps you the active learner. It&apos;s a free, open-source MCP tool that plugs into
               your AI assistant (Claude, Cursor, Copilot and others), watches your real code changes, and quizzes you
-              on them — so you understand each change while the context is fresh, instead of just accepting it. The
-              optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              on them — so you understand each change while the context is fresh, instead of just accepting it. The free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              tracks your progress, analyzes your weak spots, and re-teaches them on a spaced schedule — turning
-              &ldquo;the AI wrote it&rdquo; into &ldquo;I understand it.&rdquo;
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
                 Get the free open-source MCP →
               </a>
             </div>
-            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.</p>
+            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
           {/* FAQ */}

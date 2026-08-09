@@ -32,19 +32,22 @@ A context-aware **Model Context Protocol (MCP)** server that acts as a learning 
 
 ---
 
-## ☁️ Covate Learning Platform (early access)
+## ☁️ Covate learning ledger (free)
 
-Covate is **open-core**. The MCP server in this repo is free and open-source (MIT) forever —
-run it locally, no account required. The optional **[Covate Learning Platform](https://covate-platform.vercel.app)**
-is the paid cloud layer that turns the learning moments Covate already captures into lasting growth:
+The MCP server in this repo is free and open-source (MIT) — run it locally, no account required.
+The optional hosted **[learning ledger](https://covate.org/dashboard)** is free too: sign in with
+GitHub, then run `COVATE_SYNC_URL=https://covate.org COVATE_SYNC_TOKEN=<your token> python -m
+covate.platform_sync` from a project to push your local sessions up and review them in a browser:
 
-- ☁️ **Sync** your learning sessions across every machine
-- 📊 **Review dashboard** of every past quiz and answer
-- 📈 **Progress tracking** and weak-topic analysis
-- 🎯 **Personalized study plan** with spaced repetition
+- ☁️ **Sync** your learning sessions from any machine
+- 📖 **Every synced session**, newest first, with its score
+- 📊 **Totals** — sessions, questions, correct answers, running accuracy
+- 🎯 **The topics you answer worst**, ranked
+- 🔑 **Your sync token** — reveal or rotate it whenever you want
 
-It's early access — **[join the waitlist →](https://covate-platform.vercel.app)**. The MCP stays fully
-functional without it.
+Not built yet, so not promised: progress-over-time charts, spaced-repetition study plans, team
+accounts. There is **no paid tier and nothing to buy** — the MCP works fully without the ledger,
+and the ledger costs nothing.
 
 ---
 

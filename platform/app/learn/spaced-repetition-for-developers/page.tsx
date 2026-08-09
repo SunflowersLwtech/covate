@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/spaced-repetition-for-developers";
 const URL = SITE + PATH;
@@ -43,7 +43,7 @@ const FAQ = [
   },
   {
     q: "How does Covate do spaced repetition for developers?",
-    a: "Covate is built to make this automatic, from your real code. The free, open-source MCP tool plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and generates short quizzes from your real diffs — so the material is your own work, captured the moment you learn it, no manual flashcard-making. Those learning sessions are saved, and the optional paid Covate Learning Platform turns them into exactly the spaced-repetition loop this article describes: it tracks which concepts you know versus keep missing, analyzes your weak topics, and builds a personalized study plan that re-quizzes you on the right things at the right intervals — bringing a concept back just before you'd forget it, and spacing out the ones you've mastered. In other words, it closes the loop between learning something while coding and actually remembering it weeks later, without you having to build or schedule anything by hand.",
+    a: "Covate is built to make this automatic, from your real code. The free, open-source MCP tool plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and generates short quizzes from your real diffs — so the material is your own work, captured the moment you learn it, no manual flashcard-making. Those learning sessions are saved, and if you sign in at covate.org with GitHub — free, no payment — the sync client pushes them into a learning ledger: every past session, your running accuracy, and the topics you keep getting wrong, so you know exactly what to bring back for review. Scheduling the repetition is still on you today; the ledger is what tells you what to schedule.",
   },
 ] as const;
 
@@ -181,25 +181,24 @@ export default function SpacedRepetition() {
 
           {/* Product CTA */}
           <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Automatic spaced repetition, from your real code — with Covate</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-primary">Repetition material from your real code — with Covate</h2>
             <p className="mt-4 text-secondary">
-              Covate makes this loop automatic. The free, open-source MCP tool plugs into your AI assistant (Claude,
+              Covate handles the tedious half of this loop — the material. The free, open-source MCP tool plugs into your AI assistant (Claude,
               Cursor, Copilot and others), watches your real code changes, and turns them into short quizzes — so the
-              material is your own work, captured the moment you learn it, with no manual flashcards. The optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              material is your own work, captured the moment you learn it, with no manual flashcards. The free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              turns those sessions into exactly the spaced-repetition loop above: it tracks what you know vs. keep
-              missing, analyzes weak topics, and builds a personalized study plan that re-quizzes you at the right
-              intervals — bringing a concept back just before you&apos;d forget it.
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
                 Get the free open-source MCP →
               </a>
             </div>
-            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.</p>
+            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
           {/* FAQ */}

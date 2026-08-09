@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/how-to-learn-from-ai-generated-code";
 const URL = SITE + PATH;
@@ -58,7 +58,7 @@ const FAQ = [
   },
   {
     q: "How does Covate help with this?",
-    a: "Covate automates exactly this loop. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot, and others), watches what actually changes in your codebase, and generates short, targeted quizzes from your real diffs — blocking further generation until you've answered, so you learn while the context is fresh instead of moving on. Every session is saved, and the optional paid Covate Learning Platform syncs those records to the cloud to give you a review dashboard, progress tracking, weak-topic analysis, and a personalized study plan with spaced repetition. In other words: it turns the 'quiz yourself on the diff' habit from something you have to remember to do into something that just happens as you code.",
+    a: "Covate automates exactly this loop. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot, and others), watches what actually changes in your codebase, and generates short, targeted quizzes from your real diffs — blocking further generation until you've answered, so you learn while the context is fresh instead of moving on. Every session is saved, and the sync client pushes them into your learning ledger on covate.org — free, no payment — where you can review every past session, your running accuracy, and the topics you keep getting wrong. In other words: it turns the 'quiz yourself on the diff' habit from something you have to remember to do into something that just happens as you code.",
   },
 ] as const;
 
@@ -133,7 +133,7 @@ export default function LearnFromAiCode() {
         </a>
         <nav className="flex items-center gap-6 text-sm text-secondary">
           <a href={SITE + "#how"} className="transition-colors hover:text-primary">How it works</a>
-          <a href={SITE + "#pricing"} className="hidden transition-colors hover:text-primary sm:inline">Open-core</a>
+          <a href={SITE + "#whats-here"} className="hidden transition-colors hover:text-primary sm:inline">What you get</a>
           <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
         </nav>
       </header>
@@ -229,15 +229,15 @@ export default function LearnFromAiCode() {
               into something that just happens as you code. It plugs into your AI assistant (Claude, Cursor,
               Copilot and others), watches what actually changes, and generates short, targeted quizzes from your
               real diffs — blocking further generation until you answer, so you learn while the context is fresh.
-              Every session is saved locally. The optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              Every session is saved locally. The free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              syncs those records to the cloud for a review dashboard, progress tracking, weak-topic analysis, and
-              a personalized study plan with spaced repetition.
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a
                 href={GITHUB}
                 target="_blank"
@@ -248,7 +248,7 @@ export default function LearnFromAiCode() {
               </a>
             </div>
             <p className="mt-4 font-mono text-[11px] text-dim">
-              The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.
+              The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.
             </p>
           </section>
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/how-to-avoid-over-relying-on-ai-when-coding";
 const URL = SITE + PATH;
@@ -76,7 +76,7 @@ const FAQ = [
   },
   {
     q: "How does Covate help me stay sharp while using AI?",
-    a: "Covate automates the single most important habit on this list — understanding each change before you move on — so it happens by default instead of only when you remember to. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes about the concepts, APIs, edge cases, and trade-offs in the change — blocking further generation until you answer. In other words, it forces the active mode this article is about, at the exact moment it matters: right after the code is generated, while the context is fresh, so you can't quietly slip into accepting things you don't understand. Every session is saved, and the optional paid Covate Learning Platform syncs them to the cloud for a review dashboard, progress tracking, weak-topic analysis, and a personalized study plan with spaced repetition — which is the active-recall habit, handled for you. The result is that using AI turns into a way to stay sharp and get better, instead of a slow drift toward dependence.",
+    a: "Covate automates the single most important habit on this list — understanding each change before you move on — so it happens by default instead of only when you remember to. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes about the concepts, APIs, edge cases, and trade-offs in the change — blocking further generation until you answer. In other words, it forces the active mode this article is about, at the exact moment it matters: right after the code is generated, while the context is fresh, so you can't quietly slip into accepting things you don't understand. Every session is saved, and the sync client pushes them into your learning ledger on covate.org — free, no payment — where you can review every past session, your running accuracy, and the topics you keep getting wrong — which is the active-recall habit, handled for you. The result is that using AI turns into a way to stay sharp and get better, instead of a slow drift toward dependence.",
   },
 ] as const;
 
@@ -278,20 +278,20 @@ export default function AvoidOverRelyingOnAi() {
               a free, open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others),
               watches what actually changes, and turns your real diffs into short, targeted quizzes about the concepts,
               edge cases, and trade-offs — blocking further generation until you answer, so you can&apos;t quietly slip
-              into accepting things you don&apos;t understand. Every session is saved; the optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              into accepting things you don&apos;t understand. Every session is saved; the free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              turns them into a review dashboard, progress tracking, weak-topic analysis, and a personalized study plan
-              with spaced repetition — the active-recall habit, handled for you.
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
                 Get the free open-source MCP →
               </a>
             </div>
-            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.</p>
+            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
           {/* FAQ */}

@@ -1,4 +1,4 @@
-// GitHub OAuth + signed-cookie session for the Covate Learning Platform dashboard.
+// GitHub OAuth + signed-cookie session for the Covate learning-ledger dashboard.
 // All env-gated: the app builds and deploys without these set; auth simply stays
 // "not configured" until DATABASE_URL + the GitHub OAuth app credentials + SESSION_SECRET
 // are wired into Vercel. Uses Web Crypto (Edge-compatible) — no extra dependencies.

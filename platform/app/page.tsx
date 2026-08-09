@@ -1,5 +1,5 @@
 import { FAQ, GITHUB, SITE } from "./layout";
-import { WaitlistForm } from "./WaitlistForm";
+import { SignInCta } from "./SignInCta";
 
 // Home-page-specific structured data (site-wide Organization/WebApplication live in layout).
 const homeLd = [
@@ -9,7 +9,7 @@ const homeLd = [
     "@id": SITE + "#article",
     headline: "Covate: turn AI-assisted coding into real understanding",
     description:
-      "Covate quizzes you on your own code changes so you actually learn while you build with AI, then a paid Learning Platform tracks your progress.",
+      "Covate quizzes you on your own code changes so you actually learn while you build with AI, then syncs every session into a free learning ledger you sign into with GitHub.",
     inLanguage: "en",
     datePublished: "2026-08-04",
     dateModified: "2026-08-04",
@@ -24,7 +24,7 @@ const homeLd = [
     "@id": SITE + "#breadcrumb",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Covate", item: SITE },
-      { "@type": "ListItem", position: 2, name: "Learning Platform", item: SITE },
+      { "@type": "ListItem", position: 2, name: "Learning ledger", item: SITE + "/dashboard" },
     ],
   },
   {
@@ -52,7 +52,7 @@ const STEPS = [
   {
     n: "03",
     title: "Watch your understanding compound",
-    body: "Every session is saved. With a Learning Platform account it syncs to the cloud, where you review past quizzes, track progress, see your weak topics, and get a personalized study plan that re-quizzes what you keep missing.",
+    body: "Every session is saved locally. Sign in with GitHub — free — and the sync client pushes them into your learning ledger, where you can read back each session, see your running accuracy, and find the topics you answer worst.",
   },
 ];
 
@@ -63,13 +63,17 @@ const FREE = [
   "Runs fully offline, no account, MIT-licensed",
 ];
 
-const PAID = [
-  "Cloud sync of every session across machines",
-  "Review dashboard: every past quiz + answer",
-  "Progress tracking + weak-topic analysis",
-  "Personalized study plan (spaced repetition)",
-  "Team/org learning (coming later)",
+const LEDGER = [
+  "Sign in with GitHub — free, no card, no waitlist",
+  "Your synced sessions, newest first, with per-session scores",
+  "Totals: sessions, questions, correct answers, accuracy",
+  "The topics you answer worst, ranked",
+  "Your sync token: reveal it or rotate it whenever you want",
 ];
+
+// Deliberately not listed: progress-over-time charts, spaced-repetition study plans,
+// team accounts. They are not built, so they are not sold or promised here.
+const NOT_YET = "No charts over time, no study planner, no teams yet — and nothing to buy.";
 
 export default function Home() {
   return (
@@ -87,7 +91,7 @@ export default function Home() {
         <nav className="flex items-center gap-6 text-sm text-secondary">
           <a href="/learn" className="transition-colors hover:text-primary">Learn</a>
           <a href="#how" className="transition-colors hover:text-primary">How it works</a>
-          <a href="#pricing" className="hidden transition-colors hover:text-primary sm:inline">Open-core</a>
+          <a href="#whats-here" className="hidden transition-colors hover:text-primary sm:inline">What you get</a>
           <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
         </nav>
       </header>
@@ -97,20 +101,21 @@ export default function Home() {
         <section className="hero-aurora bg-grid border-b border-border">
           <div className="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-16 text-center sm:pt-24">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-              Open-source MCP · learning platform
+              Open-source MCP · free learning ledger
             </p>
             <h1 className="mx-auto mt-5 max-w-2xl text-4xl font-semibold leading-[1.1] tracking-tight text-primary sm:text-6xl">
               Turn AI-assisted coding into <span className="text-brand">real understanding</span>.
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-secondary">
               When AI writes most of your code, it&rsquo;s easy to ship things you don&rsquo;t actually understand.
-              Covate quizzes you on your own changes so you learn while you build — then remembers every session
-              and turns it into a personalized learning plan.
+              Covate quizzes you on your own changes so you learn while you build — then, if you sign in with
+              GitHub, syncs every session into a learning ledger you can read back. It is free; there is nothing
+              to buy.
             </p>
             <div className="mt-9 flex flex-col items-center gap-3">
-              <WaitlistForm />
+              <SignInCta align="center" />
               <p className="font-mono text-xs text-dim">
-                The MCP tool is free &amp; open-source · the Learning Platform is early access
+                MIT-licensed MCP · free learning ledger · no paid tier
               </p>
             </div>
           </div>
@@ -147,13 +152,13 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Open-core split */}
-        <section id="pricing" className="border-b border-border">
+        {/* What actually exists today */}
+        <section id="whats-here" className="border-b border-border">
           <div className="mx-auto max-w-5xl px-6 py-16">
-            <h2 className="text-2xl font-semibold text-primary sm:text-3xl">Open-core, by design</h2>
+            <h2 className="text-2xl font-semibold text-primary sm:text-3xl">What you get, all of it free</h2>
             <p className="mt-4 max-w-2xl text-base leading-8 text-secondary">
-              The tool that helps you learn is free and open-source, forever. The cloud platform that turns those
-              learning moments into lasting, measurable growth is the paid layer.
+              Two halves, both free: an MIT-licensed MCP that runs on your machine, and a hosted learning ledger
+              you open by signing in with GitHub. There is no paid tier and no checkout anywhere on this site.
             </p>
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               <div className="rounded-xl border border-border bg-surface/50 p-7">
@@ -172,18 +177,19 @@ export default function Home() {
                 </a>
               </div>
               <div className="rounded-xl border border-accent/40 bg-accent/[0.06] p-7">
-                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">Paid · early access</p>
-                <h3 className="mt-3 text-xl font-semibold text-primary">The Learning Platform</h3>
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">Free · live now</p>
+                <h3 className="mt-3 text-xl font-semibold text-primary">The learning ledger</h3>
                 <ul className="mt-5 space-y-3 text-sm leading-6 text-secondary">
-                  {PAID.map((f) => (
+                  {LEDGER.map((f) => (
                     <li key={f} className="flex gap-3">
                       <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                       <span>{f}</span>
                     </li>
                   ))}
                 </ul>
-                <a href="#join" className="mt-6 inline-block font-mono text-xs text-accent underline underline-offset-4 hover:text-accent-soft">
-                  Join the waitlist -&gt;
+                <p className="mt-5 text-xs leading-6 text-dim">{NOT_YET}</p>
+                <a href="/dashboard" className="mt-4 inline-block font-mono text-xs text-accent underline underline-offset-4 hover:text-accent-soft">
+                  Sign in with GitHub -&gt;
                 </a>
               </div>
             </div>
@@ -214,10 +220,11 @@ export default function Home() {
               Learn from every change.
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-base leading-8 text-secondary">
-              Start with the free MCP today, and be first into the Learning Platform when it opens.
+              Install the open-source MCP, sign in with GitHub, and every session you run shows up in your
+              ledger. Free, today.
             </p>
             <div className="mt-8 flex flex-col items-center gap-3">
-              <WaitlistForm />
+              <SignInCta align="center" />
               <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
                 or install the open-source MCP now
               </a>

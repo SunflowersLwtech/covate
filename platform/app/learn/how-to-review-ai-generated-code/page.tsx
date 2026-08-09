@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/how-to-review-ai-generated-code";
 const URL = SITE + PATH;
@@ -76,7 +76,7 @@ const FAQ = [
   },
   {
     q: "How does Covate help me review and understand AI-generated code?",
-    a: "Covate builds the 'understand it before you merge it' step directly into your workflow. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes — asking you about the concepts, APIs, edge cases, and trade-offs in the change, and blocking further generation until you answer. In other words, it forces the exact review-and-understand check this article is about, at the exact moment it matters most: right after the code is generated, while the context is fresh. Every session is saved, and the optional paid Covate Learning Platform syncs them to the cloud for a review dashboard, progress tracking, weak-topic analysis, and a personalized study plan — so reviewing AI code turns into compounding understanding instead of a step you skip when you're busy.",
+    a: "Covate builds the 'understand it before you merge it' step directly into your workflow. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes — asking you about the concepts, APIs, edge cases, and trade-offs in the change, and blocking further generation until you answer. In other words, it forces the exact review-and-understand check this article is about, at the exact moment it matters most: right after the code is generated, while the context is fresh. Every session is saved, and the sync client pushes them into your learning ledger on covate.org — free, no payment — where you can review every past session, your running accuracy, and the topics you keep getting wrong — so reviewing AI code turns into compounding understanding instead of a step you skip when you're busy.",
   },
 ] as const;
 
@@ -200,19 +200,20 @@ export default function ReviewAiCode() {
               builds it in. It&apos;s a free, open-source MCP tool that plugs into your AI assistant (Claude, Cursor,
               Copilot and others), watches what actually changes, and turns your real diffs into short, targeted
               quizzes about the concepts, edge cases, and trade-offs — blocking further generation until you answer,
-              so you understand each change before it moves on. Every session is saved; the optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              so you understand each change before it moves on. Every session is saved; the free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              turns them into a review dashboard, progress tracking, and a personalized study plan.
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
                 Get the free open-source MCP →
               </a>
             </div>
-            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.</p>
+            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
           {/* FAQ */}

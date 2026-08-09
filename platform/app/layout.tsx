@@ -16,7 +16,7 @@ export const GITHUB = "https://github.com/SunflowersLwtech/covate";
 
 const TITLE = "Covate — turn AI-assisted coding into real understanding";
 const DESCRIPTION =
-  "Covate quizzes you on your own code changes so you actually learn while you build with AI — then the Learning Platform remembers every session, tracks your progress, and builds a personalized study plan. The MCP tool is free and open-source; the cloud learning platform is the paid layer.";
+  "Covate quizzes you on your own code changes so you actually learn while you build with AI. The MCP tool is free and open-source (MIT); sign in with GitHub and your sessions sync into a learning ledger where you can review every quiz, your accuracy, and the topics you keep getting wrong. Free — there is nothing to buy.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -26,14 +26,14 @@ export const metadata: Metadata = {
     "learn to code with AI",
     "AI coding learning tool",
     "understand AI-generated code",
-    "personalized programming learning platform",
+    "learning ledger for developers",
     "MCP learning server",
     "quiz on code changes",
-    "spaced repetition for programmers",
+    "sync MCP learning sessions",
     "developer skill tracking",
     "learn while coding with AI assistant",
     "avoid vibe coding skill decay",
-    "Covate learning platform",
+    "Covate learning ledger",
     "coding progress tracker",
   ],
   alternates: { canonical: SITE },
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
     url: SITE,
     title: TITLE,
     description:
-      "Learn from every change. Covate turns your AI-assisted coding into real, durable understanding — free open-source MCP quizzes plus a paid personalized learning platform.",
+      "Learn from every change. A free, open-source MCP quizzes you on your own diffs; sign in with GitHub and every session syncs into a free learning ledger you can review.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Covate — learn from every code change",
     description:
-      "Free open-source MCP that quizzes you on your own code changes, plus a personalized learning platform that tracks your growth.",
+      "Free open-source MCP that quizzes you on your own code changes, plus a free learning ledger — sign in with GitHub and review every synced session.",
   },
   robots: { index: true, follow: true },
 };
@@ -57,27 +57,27 @@ export const metadata: Metadata = {
 export const FAQ = [
   {
     q: "What is Covate?",
-    a: "Covate is an open-source learning sidecar for AI coding assistants. Its MCP tool, learning_session, watches your recent code changes and turns them into short, interactive quizzes that pause the AI until you've understood what just got built — so you learn while you ship instead of blindly accepting generated code. The Covate Learning Platform is the paid cloud layer that saves those learning moments and turns them into a personalized programming-learning experience.",
+    a: "Covate is an open-source learning sidecar for AI coding assistants. Its MCP tool, learning_session, watches your recent code changes and turns them into short, interactive quizzes that pause the AI until you've understood what just got built — so you learn while you ship instead of blindly accepting generated code. Sign in at covate.org with GitHub and the sync client pushes those sessions into a learning ledger you can review in the browser.",
   },
   {
     q: "How does it work?",
-    a: "You code with your AI assistant as usual. When you ask Covate to quiz you (or on your own schedule), it reads the recent changes and generates a few targeted questions about the concepts, APIs, and trade-offs involved, blocking further generation until you answer. Each session — the questions, your answers, the topics — is saved. With a Learning Platform account, those records sync to the cloud, where you can review them, see your progress over time, and get a personalized study plan.",
+    a: "You code with your AI assistant as usual. When you ask Covate to quiz you (or on your own schedule), it reads the recent changes and generates a few targeted questions about the concepts, APIs, and trade-offs involved, blocking further generation until you answer. Each session — the questions, your answers, the topics — is saved locally. If you sign in with GitHub and run the sync client with your sync token, those records land in your learning ledger on covate.org, where you can review every session, your running accuracy, and the topics you keep getting wrong.",
   },
   {
-    q: "Is the MCP tool really free?",
-    a: "Yes. The Covate MCP server is open-source (MIT) and free forever. It runs fully locally, needs no account, and is never crippled or paywalled — quizzes, debug memory, and local session history all work standalone. The paid Learning Platform is a separate, opt-in cloud layer for people who want cross-machine sync, review dashboards, progress tracking, and personalized study.",
+    q: "Is it really free?",
+    a: "Yes, all of it. The Covate MCP server is open-source (MIT), runs fully locally and needs no account. The learning ledger on covate.org is free too: sign in with GitHub, sync, review. There is no paid tier, no subscription and no checkout — nothing on this site can be bought.",
   },
   {
-    q: "What does the paid Learning Platform add?",
-    a: "It turns your local learning history into a personalized coding-learning platform: a review dashboard of every past quiz and answer, progress-over-time charts, weak-topic analysis, and a personalized study plan that re-quizzes the concepts you keep missing using spaced repetition. It syncs across all your machines and (later) supports teams. It's a subscription; a free tier keeps a limited history.",
+    q: "What does signing in add?",
+    a: "One thing, honestly described: your local learning sessions become reviewable in a browser. The ledger shows every synced session, how many questions you got right, your overall accuracy, and a ranked list of the topics you answer worst — plus your sync token, which you can reveal or rotate at any time. It is not a study planner: it does not schedule reviews or re-quiz you on a spaced-repetition timetable today.",
   },
   {
     q: "Why do I need this if the AI writes the code for me?",
-    a: "That's exactly the problem it solves. When an AI writes most of your code, it's easy to ship things you don't actually understand — and your own skills quietly erode. Covate keeps you in the loop: it makes sure you understand each change while you still remember the context, and the platform turns those checks into measurable, compounding learning. It's the difference between using AI to move faster and using AI to also get better.",
+    a: "That's exactly the problem it solves. When an AI writes most of your code, it's easy to ship things you don't actually understand — and your own skills quietly erode. Covate keeps you in the loop: it makes sure you understand each change while you still remember the context, and the ledger keeps a record so you can see which concepts you keep missing. It's the difference between using AI to move faster and using AI to also get better.",
   },
   {
-    q: "When can I use the platform, and what will it cost?",
-    a: "The open-source MCP is available now (install from the repo). The Learning Platform is in early access — join the waitlist and we'll email your invite when it opens. Pricing will be a simple developer-friendly subscription with a free tier; no charge to register interest.",
+    q: "What does it cost, and what's coming next?",
+    a: "Nothing. The MCP is available now from the repo, and the learning ledger is live and free — sign in with GitHub at covate.org/dashboard. Progress-over-time charts, spaced-repetition study plans and team accounts are ideas, not shipped features; when they exist we'll say so here, and if any of them ever becomes paid you'll see a price before you're asked for anything.",
   },
 ] as const;
 
@@ -87,25 +87,27 @@ const orgLd = {
   "@id": SITE + "#organization",
   name: "Covate",
   url: SITE,
-  description: "Covate is open-core developer-learning software: a free open-source MCP learning tool plus a paid personalized learning platform.",
+  description: "Covate is free developer-learning software: an open-source (MIT) MCP learning tool plus a free learning ledger you reach by signing in with GitHub.",
   parentOrganization: { "@type": "Organization", name: "DUOCODE TECHNOLOGY" },
 };
 
 const appLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "Covate Learning Platform",
+  name: "Covate learning ledger",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Web",
   description: DESCRIPTION,
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD", availability: "https://schema.org/PreOrder" },
+  // Free, and actually available today — not PreOrder, and not a priced tier.
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD", availability: "https://schema.org/InStock" },
   featureList: [
     "Open-source MCP that quizzes you on your own code changes",
     "Blocking learning sessions so you understand before you ship",
-    "Cloud sync of every learning session across machines",
-    "Review dashboard of past quizzes and answers",
-    "Progress tracking and weak-topic analysis",
-    "Personalized study plan with spaced repetition",
+    "Sign in with GitHub (device flow) — free, no payment",
+    "Sync your local learning sessions into a reviewable ledger",
+    "Per-session results, running accuracy, and worst-scoring topics",
+    "Reveal or rotate your sync token at any time",
   ],
 };
 

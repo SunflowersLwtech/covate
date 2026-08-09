@@ -1,5 +1,11 @@
 # Covate Learning Platform — Design (open-core)
 
+> **Status, 2026-08: this is a design document, not a description of the product.**
+> What actually ships today is free: GitHub sign-in, session sync, and a learning ledger
+> (sessions, totals, accuracy, worst topics, sync-token reveal/rotate). There is no billing
+> integration, no subscription, no paid tier, and nothing on covate.org can be purchased.
+> Everything below marked paid/Stripe/study-plan is unbuilt intent.
+
 > The paid, cloud side of Covate. The open-source MCP server (this repo, `src/covate/`)
 > stays free forever as the acquisition layer; the **Covate Learning Platform** is a paid
 > cloud web app that turns the learning records Covate already produces into a

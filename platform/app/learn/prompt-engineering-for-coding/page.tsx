@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/prompt-engineering-for-coding";
 const URL = SITE + PATH;
@@ -81,7 +81,7 @@ const FAQ = [
   },
   {
     q: "How does Covate help me code with AI?",
-    a: "Prompt engineering gets you good code faster; Covate makes sure you actually understand the code you're shipping. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes about the concepts, APIs, edge cases and trade-offs — blocking further generation until you can answer. In other words, no matter how good your prompt was, Covate checks that you can explain what you just generated, at the moment the context is fresh. The optional paid Covate Learning Platform then saves every session for a review dashboard, progress tracking and a personalized study plan — so better prompting turns into compounding understanding, not just faster shipping of code you don't follow.",
+    a: "Prompt engineering gets you good code faster; Covate makes sure you actually understand the code you're shipping. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes about the concepts, APIs, edge cases and trade-offs — blocking further generation until you can answer. In other words, no matter how good your prompt was, Covate checks that you can explain what you just generated, at the moment the context is fresh. The sync client then pushes them into your learning ledger on covate.org — free, no payment — where you can review every past session, your running accuracy, and the topics you keep getting wrong — so better prompting turns into compounding understanding, not just faster shipping of code you don't follow.",
   },
 ] as const;
 
@@ -207,19 +207,20 @@ export default function PromptEngineeringForCoding() {
               that check into your workflow. It&apos;s a free, open-source MCP tool that plugs into your
               AI assistant (Claude, Cursor, Copilot and others), watches what actually changes, and turns
               your real diffs into short, targeted quizzes about the concepts, edge cases and trade-offs —
-              blocking further generation until you can answer. Every session is saved; the optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              blocking further generation until you can answer. Every session is saved; the free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              turns them into a review dashboard, progress tracking, and a personalized study plan.
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
                 Get the free open-source MCP →
               </a>
             </div>
-            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.</p>
+            <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
           {/* FAQ */}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/does-ai-make-you-a-worse-programmer";
 const URL = SITE + PATH;
@@ -58,7 +58,7 @@ const FAQ = [
   },
   {
     q: "How does Covate help me stay sharp while using AI?",
-    a: "Covate is built for exactly this problem. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes — blocking further generation until you answer, so you're forced to understand each change while the context is fresh instead of passively accepting it. That single habit is the difference between AI making you worse and AI making you better. Every session is saved, and the optional paid Covate Learning Platform syncs them to the cloud to give you a review dashboard, progress tracking, weak-topic analysis, and a personalized study plan with spaced repetition — so 'staying sharp' becomes measurable and automatic rather than a thing you have to remember to do.",
+    a: "Covate is built for exactly this problem. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes — blocking further generation until you answer, so you're forced to understand each change while the context is fresh instead of passively accepting it. That single habit is the difference between AI making you worse and AI making you better. Every session is saved, and the sync client pushes them into your learning ledger on covate.org — free, no payment — where you can review every past session, your running accuracy, and the topics you keep getting wrong — so 'staying sharp' becomes measurable and automatic rather than a thing you have to remember to do.",
   },
 ] as const;
 
@@ -115,7 +115,7 @@ export default function DoesAiMakeYouWorse() {
         </a>
         <nav className="flex items-center gap-6 text-sm text-secondary">
           <a href={SITE + "#how"} className="transition-colors hover:text-primary">How it works</a>
-          <a href={SITE + "#pricing"} className="hidden transition-colors hover:text-primary sm:inline">Open-core</a>
+          <a href={SITE + "#whats-here"} className="hidden transition-colors hover:text-primary sm:inline">What you get</a>
           <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
         </nav>
       </header>
@@ -218,15 +218,15 @@ export default function DoesAiMakeYouWorse() {
               a free, open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others),
               watches what actually changes, and turns your real diffs into short, targeted quizzes — blocking
               further generation until you answer, so you understand each change while the context is fresh instead
-              of passively accepting it. Every session is saved locally, and the optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              of passively accepting it. Every session is saved locally, and the free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              syncs them to the cloud for a review dashboard, progress tracking, weak-topic analysis, and a
-              personalized study plan with spaced repetition.
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a
                 href={GITHUB}
                 target="_blank"
@@ -237,7 +237,7 @@ export default function DoesAiMakeYouWorse() {
               </a>
             </div>
             <p className="mt-4 font-mono text-[11px] text-dim">
-              The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.
+              The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.
             </p>
           </section>
 

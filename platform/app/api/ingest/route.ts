@@ -3,7 +3,7 @@ import { db } from "../../lib/db";
 // POST /api/ingest — the opt-in Covate MCP sync client posts one completed
 // learning_session here. Auth: `Authorization: Bearer <sync_token>` (the per-user
 // token from the dashboard). Idempotent on (user_id, client_id) so re-syncs don't
-// duplicate. This is the paid platform's ingestion path; the free MCP never calls it
+// duplicate. This is the hosted ledger's ingestion path; the MCP never calls it
 // unless the user has linked an account and configured the token.
 
 type IncomingAnswer = {

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { SITE, GITHUB } from "../layout";
-import { WaitlistForm } from "../WaitlistForm";
+import { SignInCta } from "../SignInCta";
 
 const PATH = "/learn";
 const URL = SITE + PATH;
 
 const TITLE = "Learning Center — Learn to Code With AI, Not Instead of It";
 const DESCRIPTION =
-  "The Covate Learning Center: honest, practical guides on staying a strong developer while you build with AI — how to learn from AI-generated code, review it, retain what you learn, and whether to still learn to code at all. Free to read; paired with the Covate MCP and Learning Platform that quiz you on your own code.";
+  "The Covate Learning Center: honest, practical guides on staying a strong developer while you build with AI — how to learn from AI-generated code, review it, retain what you learn, and whether to still learn to code at all. Free to read, like the Covate MCP that quizzes you on your own code and the learning ledger that keeps the results.";
 
 export const metadata: Metadata = {
   title: TITLE + " | Covate",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "how to review AI code",
     "spaced repetition for developers",
     "should you still learn to code",
-    "Covate learning platform",
+    "Covate learning ledger",
   ],
   alternates: { canonical: PATH },
   robots: { index: true, follow: true },
@@ -233,12 +233,12 @@ export default function LearnHub() {
               Every guide here points at the same idea: understanding is a habit, not a one-off. Covate
               turns that habit into a tool. It&rsquo;s an open-source MCP server that rides along with
               Claude, Cursor or Copilot, watches what actually changes in your codebase, and quizzes you
-              on it — blocking further generation until you can explain what you just shipped. The paid
-              Learning Platform then remembers every session, tracks your weak topics, and re-quizzes what
-              you keep missing on a spaced-repetition schedule.
+              on it — blocking further generation until you can explain what you just shipped. Sign in with GitHub
+              and every session syncs into a learning ledger: each quiz you took, your running accuracy, and the
+              topics you answer worst. Both halves are free — there is nothing to buy.
             </p>
             <div className="mt-8 flex flex-col items-start gap-3">
-              <WaitlistForm />
+              <SignInCta />
               <a
                 href={GITHUB}
                 target="_blank"

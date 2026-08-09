@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
-import { WaitlistForm } from "../../WaitlistForm";
+import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/what-is-vibe-coding";
 const URL = SITE + PATH;
@@ -86,7 +86,7 @@ const FAQ = [
   },
   {
     q: "How does Covate help you vibe code without losing your skills?",
-    a: "Covate lets you keep the speed of vibe coding while closing the one gap that makes it risky: shipping code you don't understand. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes — asking you about the concepts, APIs, edge cases, and trade-offs in the change, and blocking further generation until you answer. So you still 'see stuff, say stuff, run stuff' — but at the moments that matter, you're forced to actually understand what just entered your codebase, while the context is fresh, instead of passively accepting it. Every session is saved, and the optional paid Covate Learning Platform syncs them to the cloud for a review dashboard, progress tracking, weak-topic analysis, and a personalized study plan with spaced repetition. In other words, it turns vibe coding from a skill-decay trap into a way to move fast and get better at the same time.",
+    a: "Covate lets you keep the speed of vibe coding while closing the one gap that makes it risky: shipping code you don't understand. It's a free, open-source MCP tool that plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes in your codebase, and turns your real diffs into short, targeted quizzes — asking you about the concepts, APIs, edge cases, and trade-offs in the change, and blocking further generation until you answer. So you still 'see stuff, say stuff, run stuff' — but at the moments that matter, you're forced to actually understand what just entered your codebase, while the context is fresh, instead of passively accepting it. Every session is saved, and the sync client pushes them into your learning ledger on covate.org — free, no payment — where you can review every past session, your running accuracy, and the topics you keep getting wrong. In other words, it turns vibe coding from a skill-decay trap into a way to move fast and get better at the same time.",
   },
 ] as const;
 
@@ -143,7 +143,7 @@ export default function WhatIsVibeCoding() {
         </a>
         <nav className="flex items-center gap-6 text-sm text-secondary">
           <a href={SITE + "#how"} className="transition-colors hover:text-primary">How it works</a>
-          <a href={SITE + "#pricing"} className="hidden transition-colors hover:text-primary sm:inline">Open-core</a>
+          <a href={SITE + "#whats-here"} className="hidden transition-colors hover:text-primary sm:inline">What you get</a>
           <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
         </nav>
       </header>
@@ -275,15 +275,15 @@ export default function WhatIsVibeCoding() {
               actually changes, and turns your real diffs into short, targeted quizzes about the concepts, edge cases,
               and trade-offs — blocking further generation until you answer, so you understand each change while the
               context is fresh instead of passively accepting it. You still see stuff, say stuff, and run stuff — you
-              just don&apos;t forget the code exists. Every session is saved; the optional{" "}
-              <a href={SITE} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate Learning Platform
+              just don&apos;t forget the code exists. Every session is saved; the free{" "}
+              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+                Covate learning ledger
               </a>{" "}
-              turns them into a review dashboard, progress tracking, weak-topic analysis, and a personalized study plan
-              with spaced repetition.
+              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+              topics you keep getting wrong are there to review. Nothing to buy.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <WaitlistForm />
+              <SignInCta />
               <a
                 href={GITHUB}
                 target="_blank"
@@ -294,7 +294,7 @@ export default function WhatIsVibeCoding() {
               </a>
             </div>
             <p className="mt-4 font-mono text-[11px] text-dim">
-              The MCP is free and open-source (MIT), forever. The Learning Platform is the paid, opt-in layer.
+              The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.
             </p>
           </section>
 
