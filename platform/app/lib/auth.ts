@@ -11,10 +11,26 @@ const SESSION_SECRET = process.env.SESSION_SECRET;
 
 export const SESSION_COOKIE = "covate_session";
 export const OAUTH_STATE_COOKIE = "covate_oauth_state";
+export const DEVICE_CODE_COOKIE = "covate_device_code";
 
-/** Whether the GitHub OAuth login flow is fully configured (env present). */
-export function authConfigured(): boolean {
+/** The redirect-based web flow, which needs the app's client secret. */
+export function webAuthConfigured(): boolean {
   return Boolean(CLIENT_ID && CLIENT_SECRET && SESSION_SECRET);
+}
+
+/**
+ * The device flow, which needs no client secret — GitHub authenticates the user
+ * in their own browser and we only ever hold a public client id. For a tool whose
+ * users already live in a terminal this is not a downgrade, and it means sign-in
+ * does not sit behind a credential nobody can currently mint.
+ */
+export function deviceAuthConfigured(): boolean {
+  return Boolean(CLIENT_ID && SESSION_SECRET);
+}
+
+/** Whether a user can sign in at all, by either flow. */
+export function authConfigured(): boolean {
+  return webAuthConfigured() || deviceAuthConfigured();
 }
 
 const CALLBACK_URL = `${SITE}/api/auth/github/callback`;
@@ -55,8 +71,11 @@ export async function exchangeCodeForUser(code: string): Promise<GithubUser> {
   if (!tokenJson.access_token) {
     throw new Error(`GitHub token exchange failed: ${tokenJson.error ?? "no access_token"}`);
   }
-  const token = tokenJson.access_token;
+  return fetchGithubUser(tokenJson.access_token);
+}
 
+/** Ask GitHub who the access token belongs to. */
+export async function fetchGithubUser(token: string): Promise<GithubUser> {
   const userRes = await fetch("https://api.github.com/user", {
     headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "User-Agent": "covate" },
   });
@@ -80,6 +99,70 @@ export async function exchangeCodeForUser(code: string): Promise<GithubUser> {
   }
 
   return { id: user.id, login: user.login, email, name: user.name, avatar_url: user.avatar_url };
+}
+
+// --- Device flow (no client secret) ---
+
+export type DeviceCode = {
+  device_code: string;
+  user_code: string;
+  verification_uri: string;
+  expires_in: number;
+  interval: number;
+};
+
+/** Ask GitHub for a code the user types into github.com/login/device. */
+export async function startDeviceFlow(): Promise<DeviceCode> {
+  const res = await fetch("https://github.com/login/device/code", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ client_id: CLIENT_ID, scope: "read:user user:email" }),
+  });
+  const json = (await res.json()) as Partial<DeviceCode> & { error?: string };
+  if (!json.device_code || !json.user_code) {
+    throw new Error(`GitHub device code request failed: ${json.error ?? res.status}`);
+  }
+  return json as DeviceCode;
+}
+
+export type DevicePoll =
+  | { status: "authorized"; user: GithubUser }
+  | { status: "pending" }
+  | { status: "slow_down"; interval: number }
+  | { status: "expired" }
+  | { status: "denied" };
+
+/**
+ * Check whether the user has finished authorizing on GitHub yet.
+ *
+ * "Not yet" is the normal case, not an error — the caller polls. Only a genuinely
+ * terminal answer (expired, denied) ends the attempt.
+ */
+export async function pollDeviceFlow(deviceCode: string): Promise<DevicePoll> {
+  const res = await fetch("https://github.com/login/oauth/access_token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      client_id: CLIENT_ID,
+      device_code: deviceCode,
+      grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+    }),
+  });
+  const json = (await res.json()) as { access_token?: string; error?: string; interval?: number };
+  if (json.access_token) return { status: "authorized", user: await fetchGithubUser(json.access_token) };
+  switch (json.error) {
+    case "authorization_pending":
+      return { status: "pending" };
+    case "slow_down":
+      return { status: "slow_down", interval: json.interval ?? 10 };
+    case "expired_token":
+      return { status: "expired" };
+    case "access_denied":
+      return { status: "denied" };
+    default:
+      // An unknown error is not "keep polling forever" — treat it as terminal.
+      return { status: "expired" };
+  }
 }
 
 // --- Signed-cookie session (HMAC-SHA256 over the platform_user id) ---

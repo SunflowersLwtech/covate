@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { authConfigured, SESSION_COOKIE, verifySession } from "../lib/auth";
+import { authConfigured, SESSION_COOKIE, verifySession, webAuthConfigured } from "../lib/auth";
+import DeviceSignIn from "./DeviceSignIn";
 import { db } from "../lib/db";
 import { GITHUB, SITE } from "../layout";
 
@@ -70,6 +71,7 @@ const SIGN_IN_ERRORS: Record<string, string> = {
 };
 
 function SignIn({ configured, error }: { configured: boolean; error?: string }) {
+  const webConfigured = webAuthConfigured();
   const message = error ? SIGN_IN_ERRORS[error] ?? "Sign-in failed. Please try again." : null;
   return (
     <Shell>
@@ -91,12 +93,16 @@ function SignIn({ configured, error }: { configured: boolean; error?: string }) 
           </p>
         ) : null}
         {configured ? (
-          <a
-            href="/api/auth/github"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-deep transition hover:bg-accent-soft"
-          >
-            Continue with GitHub
-          </a>
+          webConfigured ? (
+            <a
+              href="/api/auth/github"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-deep transition hover:bg-accent-soft"
+            >
+              Continue with GitHub
+            </a>
+          ) : (
+            <DeviceSignIn />
+          )
         ) : (
           <div className="mt-8 rounded-xl border border-border bg-surface/40 p-5 text-sm text-secondary">
             The Learning Platform dashboard is in early access and not open for sign-in yet.{" "}
