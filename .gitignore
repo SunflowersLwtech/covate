@@ -96,4 +96,5 @@ node_modules/
 dev/
 
 # Windows temp files
-nul
+nul.loopx/
+.codex/goals/
