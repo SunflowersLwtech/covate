@@ -96,5 +96,9 @@ node_modules/
 dev/
 
 # Windows temp files
-nul.loopx/
-.codex/goals/
+
+# Agent working state. LoopX keeps its registry in .loopx and the goal files under
+# .codex hold in-progress notes; both are local scratch that happens to sit inside
+# the repo. Nothing there is committed today, and this keeps it that way.
+.loopx/
+.codex/
