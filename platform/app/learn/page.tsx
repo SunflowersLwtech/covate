@@ -161,6 +161,20 @@ const ARTICLES: readonly Article[] = [
     description:
       "Onboarding while an AI does most of the writing is dangerous unless something measures whether understanding is forming. How to pair the standard onboarding method with an MCP learning sidecar that quizzes you on your own changes — and an honest list of what it does not do.",
   },
+  {
+    slug: "how-to-learn-a-new-programming-language-with-ai",
+    category: "Skill retention",
+    title: "How to learn a new programming language with AI",
+    description:
+      "Learn a new language with AI by keeping the generation-to-comprehension ratio honest: AI explains, grades your idiom and tutors your reading of real code, while the load-bearing writing stays yours. A four-phase method — and the failure mode that quietly eats six weeks.",
+  },
+  {
+    slug: "how-to-debug-with-ai-without-losing-the-skill",
+    category: "Staying sharp",
+    title: "How to debug with AI without losing the skill",
+    description:
+      "Debugging with AI works when the AI is the second step, not the first: read the trace, commit to a hypothesis, then bring the assistant in with your reasoning attached. The five-step loop that keeps the diagnostic muscle alive — and the paste-first habit that dissolves it.",
+  },
 ];
 
 const collectionLd = {

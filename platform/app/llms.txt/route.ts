@@ -65,6 +65,10 @@ while you build with AI. Free to read. Current guides:
   — the four-question structure (what it does, why this approach, where it bites, how you verified), what a PR description needs, and what to say honestly when you don't know.
 - How to onboard to a repo with an MCP learning tool: ${SITE}/learn/onboard-to-a-repo-with-an-mcp-learning-tool
   — pairing the standard onboarding method with an MCP sidecar that quizzes you on your own changes, with debug memory and a synced ledger — and what it does not do.
+- How to learn a new programming language with AI: ${SITE}/learn/how-to-learn-a-new-programming-language-with-ai
+  — a four-phase method (syntax through your fingers, idiom checks on your own code, guided reading of real codebases, shipping with a review queue) that keeps the generation-to-comprehension ratio honest.
+- How to debug with AI without losing the skill: ${SITE}/learn/how-to-debug-with-ai-without-losing-the-skill
+  — the five-step loop (read the trace, commit to a hypothesis, consult with reasoning attached, verify causally, bank the lesson) and why paste-first quietly erodes the diagnostic skill.
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
