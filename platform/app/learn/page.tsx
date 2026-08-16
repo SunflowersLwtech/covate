@@ -175,6 +175,13 @@ const ARTICLES: readonly Article[] = [
     description:
       "Debugging with AI works when the AI is the second step, not the first: read the trace, commit to a hypothesis, then bring the assistant in with your reasoning attached. The five-step loop that keeps the diagnostic muscle alive — and the paste-first habit that dissolves it.",
   },
+  {
+    slug: "coding-interviews-in-the-age-of-ai",
+    category: "Career",
+    title: "Coding interviews in the age of AI: what to still practice",
+    description:
+      "Interviews are adapting to everyone having an assistant: less syntax recall, more explaining decisions, reading unfamiliar code, and debugging live. The five format shifts worth training for, what to keep drilling lightly, and how to answer \u201chow do you use AI?\u201d honestly.",
+  },
 ];
 
 const collectionLd = {

@@ -69,6 +69,8 @@ while you build with AI. Free to read. Current guides:
   — a four-phase method (syntax through your fingers, idiom checks on your own code, guided reading of real codebases, shipping with a review queue) that keeps the generation-to-comprehension ratio honest.
 - How to debug with AI without losing the skill: ${SITE}/learn/how-to-debug-with-ai-without-losing-the-skill
   — the five-step loop (read the trace, commit to a hypothesis, consult with reasoning attached, verify causally, bank the lesson) and why paste-first quietly erodes the diagnostic skill.
+- Coding interviews in the age of AI: what to still practice: ${SITE}/learn/coding-interviews-in-the-age-of-ai
+  — the five format shifts (explaining code, reading unfamiliar codebases, live debugging, lighter algorithm drilling, honest AI-use answers) and the practice regimen that serves both interviews and skill retention.
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
