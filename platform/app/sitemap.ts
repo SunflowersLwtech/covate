@@ -18,5 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: SITE + "/learn/when-to-write-code-by-hand-vs-let-ai", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/how-juniors-should-use-ai", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/keep-a-learning-ledger-from-your-commits", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/code-reading-routine-for-ai-heavy-teams", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/how-to-explain-ai-generated-code-in-a-code-review", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/onboard-to-a-repo-with-an-mcp-learning-tool", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
   ];
 }

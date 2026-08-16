@@ -59,6 +59,12 @@ while you build with AI. Free to read. Current guides:
   — the accept-first default and why it's invisible, six patterns that keep understanding mandatory, and the skills juniors should never delegate.
 - How to keep a learning ledger from your commits: ${SITE}/learn/keep-a-learning-ledger-from-your-commits
   — five levels of recording what your coding teaches you, ending with a ledger derived automatically from real diffs and quiz answers, plus the weekly review ritual.
+- A code reading routine for AI-heavy teams: ${SITE}/learn/code-reading-routine-for-ai-heavy-teams
+  — weekly changed-surface reading, diff-first standups, a rotating explainer role and one shared weak-spot list; about an hour per person per week.
+- How to explain AI-generated code in a code review: ${SITE}/learn/how-to-explain-ai-generated-code-in-a-code-review
+  — the four-question structure (what it does, why this approach, where it bites, how you verified), what a PR description needs, and what to say honestly when you don't know.
+- How to onboard to a repo with an MCP learning tool: ${SITE}/learn/onboard-to-a-repo-with-an-mcp-learning-tool
+  — pairing the standard onboarding method with an MCP sidecar that quizzes you on your own changes, with debug memory and a synced ledger — and what it does not do.
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.

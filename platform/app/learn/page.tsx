@@ -140,6 +140,27 @@ const ARTICLES: readonly Article[] = [
     description:
       "A learning ledger is a running record of what each coding session actually taught you — what changed, why, what you got quizzed on, what you keep getting wrong. Five levels of keeping the record, from commit-message discipline to a ledger that derives itself from your work, plus the weekly ritual that makes it pay off.",
   },
+  {
+    slug: "code-reading-routine-for-ai-heavy-teams",
+    category: "Code review",
+    title: "A code reading routine for AI-heavy teams",
+    description:
+      "When most merged code is AI-generated, reading has to become a scheduled routine instead of an occasional act: a weekly changed-surface review, diff-first standups, a rotating explainer role, and one shared weak-spot list. A concrete routine any team can run in about an hour a week.",
+  },
+  {
+    slug: "how-to-explain-ai-generated-code-in-a-code-review",
+    category: "Code review",
+    title: "How to explain AI-generated code in a code review",
+    description:
+      "\u201cThe AI wrote it\u201d ends the conversation and your credibility with it. The four-question structure for explaining generated changes — what it does, why this approach, where it bites, how you verified — plus what a PR description needs and what to say when you don\u2019t know.",
+  },
+  {
+    slug: "onboard-to-a-repo-with-an-mcp-learning-tool",
+    category: "Onboarding",
+    title: "How to onboard to a repo with an MCP learning tool",
+    description:
+      "Onboarding while an AI does most of the writing is dangerous unless something measures whether understanding is forming. How to pair the standard onboarding method with an MCP learning sidecar that quizzes you on your own changes — and an honest list of what it does not do.",
+  },
 ];
 
 const collectionLd = {
