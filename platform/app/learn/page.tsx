@@ -112,6 +112,34 @@ const ARTICLES: readonly Article[] = [
     description:
       "You learn a concept, use it once, and forget it a month later. Spaced repetition is the fix — the science of reviewing things right before you'd forget them. Here's how it works and how to apply it to programming without building flashcards by hand.",
   },
+  {
+    slug: "cant-code-without-ai-anymore",
+    category: "AI & skills",
+    title: "\u201cI can't code without AI anymore\u201d — what to actually do about it",
+    description:
+      "If writing code without an AI assistant now feels impossible, the fix is deliberate re-exposure, not quitting cold turkey: rebuild the skill of writing small pieces yourself, on a schedule, starting with code you already understand. How to diagnose what you actually lost — syntax, decomposition, debugging, or codebase knowledge — and rebuild each one.",
+  },
+  {
+    slug: "when-to-write-code-by-hand-vs-let-ai",
+    category: "Staying sharp",
+    title: "When to write code by hand vs. let AI write it",
+    description:
+      "Write it yourself when the goal is learning, the logic is tricky, or the code is central to your system; let AI write it when it's boilerplate, a well-understood pattern, or something you could trivially verify. A case-by-case decision framework based on one question: what does it cost later if you don't understand this now?",
+  },
+  {
+    slug: "how-juniors-should-use-ai",
+    category: "Career",
+    title: "How junior developers should use AI without stalling their growth",
+    description:
+      "Juniors can use AI safely by staying in the verification loop: ask for explanations and drafts, but personally trace, test, and rewrite enough code that understanding — not output — remains the unit of progress. The risky accept-first default, six safe patterns, and the skills you should never delegate.",
+  },
+  {
+    slug: "keep-a-learning-ledger-from-your-commits",
+    category: "Memory & retention",
+    title: "How to keep a learning ledger from your commits",
+    description:
+      "A learning ledger is a running record of what each coding session actually taught you — what changed, why, what you got quizzed on, what you keep getting wrong. Five levels of keeping the record, from commit-message discipline to a ledger that derives itself from your work, plus the weekly ritual that makes it pay off.",
+  },
 ];
 
 const collectionLd = {

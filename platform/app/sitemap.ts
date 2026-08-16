@@ -14,5 +14,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: SITE + "/learn/prompt-engineering-for-coding", lastModified: "2026-08-05", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/spaced-repetition-for-developers", lastModified: "2026-08-04", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/should-you-still-learn-to-code-with-ai", lastModified: "2026-08-04", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/cant-code-without-ai-anymore", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/when-to-write-code-by-hand-vs-let-ai", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/how-juniors-should-use-ai", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/keep-a-learning-ledger-from-your-commits", lastModified: "2026-08-16", changeFrequency: "monthly", priority: 0.8 },
   ];
 }

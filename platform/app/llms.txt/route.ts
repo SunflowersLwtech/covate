@@ -51,6 +51,14 @@ while you build with AI. Free to read. Current guides:
   — the forgetting curve and the spacing effect, and how to remember what you learn while coding without hand-building flashcards.
 - Should you still learn to code in the age of AI? ${SITE}/learn/should-you-still-learn-to-code-with-ai
   — yes, and what shifts: AI raises the abstraction, understanding/reviewing/judgment matter more, syntax matters less.
+- "I can't code without AI anymore" — what to actually do about it: ${SITE}/learn/cant-code-without-ai-anymore
+  — deliberate re-exposure instead of quitting cold turkey; diagnosing which of four skills you lost (syntax recall, decomposition, debugging, codebase knowledge) and rebuilding each with short daily practice.
+- When to write code by hand vs. let AI write it: ${SITE}/learn/when-to-write-code-by-hand-vs-let-ai
+  — a case-by-case framework: delegate boilerplate and trivially verifiable patterns, hand-write core logic and anything you'd debug at 2am, and use draft-then-rewrite in between.
+- How junior developers should use AI without stalling their growth: ${SITE}/learn/how-juniors-should-use-ai
+  — the accept-first default and why it's invisible, six patterns that keep understanding mandatory, and the skills juniors should never delegate.
+- How to keep a learning ledger from your commits: ${SITE}/learn/keep-a-learning-ledger-from-your-commits
+  — five levels of recording what your coding teaches you, ending with a ledger derived automatically from real diffs and quiz answers, plus the weekly review ritual.
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
