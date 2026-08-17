@@ -111,7 +111,16 @@ const appLd = {
   ],
 };
 
-// Only site-wide entities (Organization, WebApplication) are injected globally.
+const siteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Covate",
+  url: SITE,
+  inLanguage: "en",
+  publisher: { "@type": "Organization", name: "DUOCODE TECHNOLOGY" },
+};
+
+// Only site-wide entities (Organization, WebSite, WebApplication) are injected globally.
 // Page-specific structured data (Article / BreadcrumbList / FAQPage) is rendered by
 // each page itself, so a sub-page like /learn/* carries its OWN correct graph instead
 // of inheriting the home page's.
@@ -120,7 +129,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <head>
         <meta name="theme-color" content="#0a0e14" />
-        {[orgLd, appLd].map((ld, i) => (
+        {[orgLd, siteLd, appLd].map((ld, i) => (
           <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         ))}
       </head>
