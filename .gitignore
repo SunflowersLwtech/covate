@@ -102,3 +102,8 @@ dev/
 # the repo. Nothing there is committed today, and this keeps it that way.
 .loopx/
 .codex/
+
+# env files: cover every variant, keep the checked-in examples
+.env
+.env.*
+!**/.env.example
