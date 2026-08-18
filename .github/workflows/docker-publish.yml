@@ -11,6 +11,18 @@ on:
       - main
   workflow_dispatch:
 
+# A push to main publishes :latest to two registries. With no concurrency group,
+# two pushes in quick succession race and :latest ends up pointing at whichever
+# build finished last, which is not necessarily the newer commit — and the tag is
+# mutable, so nothing afterwards records that it went backwards. Publishing runs
+# are therefore serialized and never cancelled: an interrupted multi-arch push can
+# leave a manifest list referencing a blob it never finished uploading, and that
+# is worse than a redundant run. Pull-request runs push nothing, so a superseded
+# one is pure spend and gets discarded.
+concurrency:
+  group: covate-image-${{ github.event_name == 'pull_request' && github.ref || 'publish' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}

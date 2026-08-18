@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+# Six build jobs across three operating systems: a superseded run verifies a
+# commit nobody will ship. Safe to cancel — nothing here publishes anything.
+concurrency:
+  group: covate-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
