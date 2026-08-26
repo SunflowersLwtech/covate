@@ -53,12 +53,12 @@ account, so the free tool is never crippled.
     history + analytics + personalized study; team plans later).
   - **GEO landing**: server-rendered, JSON-LD + long-tail, same playbook as the other
     landing pages (my lane).
-- **Storage**: Postgres + (optional) pgvector for topic similarity — Neon free tier
-  (isolated, zero-cost, same choice as Plaza), one platform DB.
+- **Storage**: Postgres + (optional) pgvector for topic similarity — Supabase
+  (project `covate`, us-east-1, alongside the other DUOCODE products), one platform DB.
 
 ## Tech stack
 
-Next.js (App Router) + Vercel · Postgres (Neon) · Stripe · GitHub OAuth · Tailwind.
+Next.js (App Router) + Vercel · Postgres (Supabase) · Stripe · GitHub OAuth · Tailwind.
 All commits under the A identity (LiuWei), three-end consistent (local = GitHub = prod),
 rollback-able. Domain: covate.org (to be purchased).
 

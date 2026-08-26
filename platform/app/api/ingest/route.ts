@@ -61,12 +61,20 @@ export async function POST(req: Request) {
   const userId = users[0].id;
 
   // Idempotent upsert of the session.
+  //
+  // The `::text::` on the timestamps is load-bearing. The driver asks Postgres to
+  // describe each parameter and then applies its own serializer for the type that
+  // comes back: a timestamptz-described parameter is pushed through
+  // `new Date(x).toISOString()`, which silently truncates anything finer than a
+  // millisecond. Describing the parameter as text hands the client's string to
+  // Postgres untouched and lets Postgres do the parsing.
   const sessRows = (await sql`
     insert into learning_session
       (user_id, client_id, project, change_summary, question_count, correct_count, started_at, completed_at, synced_at)
     values
       (${userId}, ${body.client_id}, ${body.project ?? null}, ${body.change_summary ?? null},
-       ${total}, ${correct}, ${body.started_at ?? null}, ${body.completed_at ?? null}, now())
+       ${total}, ${correct}, ${body.started_at ?? null}::text::timestamptz,
+       ${body.completed_at ?? null}::text::timestamptz, now())
     on conflict (user_id, client_id) do update set
       project = excluded.project,
       change_summary = excluded.change_summary,
@@ -88,11 +96,14 @@ export async function POST(req: Request) {
   await sql`delete from quiz_answer where session_id = ${sessionId}`;
   for (const a of answers) {
     if (!a?.question) continue;
+    // `options` is already a JSON string, so it goes in as text and Postgres parses
+    // it — same reason as the timestamps above: a jsonb-described parameter would be
+    // JSON.stringify'd by the driver and land as a jsonb *string* of JSON.
     await sql`
       insert into quiz_answer
         (session_id, user_id, question, options, correct_answer, user_answer, is_correct, explanation, topic, concept)
       values
-        (${sessionId}, ${userId}, ${a.question}, ${JSON.stringify(a.options ?? null)},
+        (${sessionId}, ${userId}, ${a.question}, ${JSON.stringify(a.options ?? null)}::text::jsonb,
          ${a.correct_answer ?? null}, ${a.user_answer ?? null}, ${a.is_correct ?? null},
          ${a.explanation ?? null}, ${a.topic ?? null}, ${a.concept ?? null})
     `;

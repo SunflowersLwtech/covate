@@ -4,7 +4,7 @@
 -- syncs up (opt-in, per user). Everything is keyed to a platform_user so review,
 -- progress tracking and personalized study can be computed per developer.
 --
--- Target: Postgres (Neon free tier). pgvector is optional and only needed for
+-- Target: Postgres (Supabase, project `covate`). pgvector is optional and only needed for
 -- topic-similarity ("study concepts like the ones you keep missing"); guarded so the
 -- schema still applies without the extension.
 

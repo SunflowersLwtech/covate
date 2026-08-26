@@ -10,23 +10,25 @@
 //      credential is the sync_token this script prints, which authenticates
 //      against POST /api/ingest (the whole account-gated surface).
 //
-// Auth: DATABASE_URL in the environment (the Neon connection string; it is a
-// "sensitive" var on Vercel, so mint it from the Neon console or
-// `neonctl connection-string`). Never passed on argv.
+// Auth: DATABASE_URL in the environment (the Supabase transaction-pooler string; it
+// is a "sensitive" var on Vercel, so read it from the vault or the Supabase project
+// settings). Never passed on argv.
 //
 //   cd platform && DATABASE_URL=... node scripts/provision-accounts.mjs
 //
 // Re-running is safe: existing rows are left untouched and their tokens re-printed.
 
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
 const url = process.env.DATABASE_URL;
 if (!url) {
-  console.error("DATABASE_URL is not set. Mint one from the Neon console or `neonctl connection-string`.");
+  console.error("DATABASE_URL is not set. Read it from the vault (`venv get Supabase`) or the Supabase project's connection settings.");
   process.exit(1);
 }
 
-const sql = neon(url);
+// Same settings as the app (app/lib/db.ts): transaction pooling forbids prepared
+// statements, and Supabase's pooler presents a self-signed chain.
+const sql = postgres(url, { prepare: false, max: 1, ssl: "require" });
 
 const ACCOUNTS = [
   {
@@ -65,3 +67,6 @@ console.log(
     "\n    -H 'Content-Type: application/json' -d '{\"client_id\":\"agent-smoke-1\",\"project\":\"smoke\",\"answers\":[]}'" +
     "\n  → {\"ok\":true,...} proves token auth + DB writes; re-posting the same client_id must not duplicate.",
 );
+
+// A pooled TCP client keeps the process alive; the HTTP driver this replaced did not.
+await sql.end();
