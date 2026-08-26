@@ -81,6 +81,18 @@ export const FAQ = [
   },
 ] as const;
 
+// Off-site profiles that resolve "Covate" to one entity for an answer engine.
+// Every URL here returned HTTP 200 when checked on 2026-08-27, and that check is
+// the entry condition: a sameAs pointing at a profile that does not exist tells
+// a resolver the entity's own account of itself is wrong, which is worse than
+// listing nothing. (A LinkedIn company page was rejected for exactly that — 404.)
+export const SAME_AS = [
+  "https://github.com/SunflowersLwtech/covate",
+  "https://github.com/SunflowersLwtech",
+  "https://github.com/DuoCode2",
+  "https://duocodetech.com/",
+];
+
 const orgLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -89,6 +101,7 @@ const orgLd = {
   url: SITE,
   description: "Covate is free developer-learning software: an open-source (MIT) MCP learning tool plus a free learning ledger you reach by signing in with GitHub.",
   parentOrganization: { "@type": "Organization", name: "DUOCODE TECHNOLOGY" },
+  sameAs: SAME_AS,
 };
 
 const appLd = {
@@ -118,6 +131,7 @@ const siteLd = {
   url: SITE,
   inLanguage: "en",
   publisher: { "@type": "Organization", name: "DUOCODE TECHNOLOGY" },
+  sameAs: SAME_AS,
 };
 
 // Only site-wide entities (Organization, WebSite, WebApplication) are injected globally.

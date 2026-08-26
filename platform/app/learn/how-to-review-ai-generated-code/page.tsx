@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
+import { Evidence } from "../../_geo/Evidence";
 import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/how-to-review-ai-generated-code";
@@ -89,7 +90,7 @@ const ld = [
     description: DESCRIPTION,
     inLanguage: "en",
     datePublished: "2026-08-04",
-    dateModified: "2026-08-04",
+    dateModified: "2026-08-27",
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     author: { "@id": SITE + "#organization" },
     publisher: { "@id": SITE + "#organization" },
@@ -154,6 +155,15 @@ export default function ReviewAiCode() {
         </header>
 
         <article className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+          {/* Answer-first summary. This page has live impressions on the query it is
+              named after, and a retriever quoting it will quote the first passage under
+              the first question-shaped heading — so that passage is the whole answer,
+              not a lead-in to one. */}
+          <section className="rounded-2xl border border-border bg-surface/40 p-6">
+            <h2 className="text-lg font-semibold tracking-tight text-primary">How do you review code an AI wrote?</h2>
+            <p className="mt-3 text-sm leading-7 text-secondary">Cover the AI&rsquo;s explanation and read only the diff, then work through 6 checks: can you explain it; does it do only what you asked; are the edge cases and error paths handled; is input, auth and secret handling safe; does it fit your codebase; do the tests assert real behaviour? Review each change within minutes of generating it, while the diff is small.</p>
+          </section>
+
           <section>
             <p>
               AI coding assistants are genuinely good — but they produce <em>plausible</em> code, not
@@ -216,14 +226,33 @@ export default function ReviewAiCode() {
             <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
+          {/* Shared evidence layer: sourced research, the verification comparison,
+              the tool's own checkable numbers, and the source list. Kept in one
+              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+              across the 20 pages that quote them. */}
+          <Evidence
+            sources={[
+              {
+                href: "https://google.github.io/eng-practices/review/reviewer/looking-for.html",
+                label: "Google — What to look for in a code review",
+                note: "Google's public engineering-practices guide; the standard the 6 checks on this page are aligned to.",
+              },
+              {
+                href: "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests",
+                label: "GitHub Docs — Reviewing changes in pull requests",
+                note: "How to read a diff, request changes and leave line comments on the platform most of these reviews happen on.",
+              },
+            ]}
+          />
+
           {/* FAQ */}
           <section>
             <h2 className="text-2xl font-semibold tracking-tight text-primary">FAQ</h2>
             <div className="mt-4 divide-y divide-border border-y border-border">
               {FAQ.map((f) => (
                 <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none text-sm font-medium text-primary transition hover:text-accent">
-                    {f.q}
+                  <summary className="cursor-pointer list-none">
+                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
                   </summary>
                   <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
                 </details>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
+import { Evidence } from "../../_geo/Evidence";
 import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/how-to-explain-ai-generated-code-in-a-code-review";
@@ -80,7 +81,7 @@ const ld = [
     description: DESCRIPTION,
     inLanguage: "en",
     datePublished: "2026-08-16",
-    dateModified: "2026-08-16",
+    dateModified: "2026-08-27",
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     author: { "@id": SITE + "#organization" },
     publisher: { "@id": SITE + "#organization" },
@@ -144,6 +145,15 @@ export default function ExplainAiCode() {
         </header>
 
         <article className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+          {/* Answer-first summary. This page has live impressions on the query it is
+              named after, and a retriever quoting it will quote the first passage under
+              the first question-shaped heading — so that passage is the whole answer,
+              not a lead-in to one. */}
+          <section className="rounded-2xl border border-border bg-surface/40 p-6">
+            <h2 className="text-lg font-semibold tracking-tight text-primary">What do you say when a reviewer asks why AI-written code works this way?</h2>
+            <p className="mt-3 text-sm leading-7 text-secondary">Answer in three parts: what the change does, why this approach rather than the obvious alternative, and what you checked before opening the pull request. If you cannot give all three, say so and go read the diff &mdash; &ldquo;the AI wrote it&rdquo; is not an answer, and 45% of developers already report that debugging AI-generated code takes longer than debugging their own.</p>
+          </section>
+
           <section>
             <p>
               There&rsquo;s a specific silence that lands in a review when someone asks <em>why does this work this
@@ -208,14 +218,33 @@ export default function ExplainAiCode() {
             <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
+          {/* Shared evidence layer: sourced research, the verification comparison,
+              the tool's own checkable numbers, and the source list. Kept in one
+              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+              across the 20 pages that quote them. */}
+          <Evidence
+            sources={[
+              {
+                href: "https://google.github.io/eng-practices/review/",
+                label: "Google — Code Review Developer Guide",
+                note: "Covers both sides of the exchange: what a reviewer is looking for and what an author owes them.",
+              },
+              {
+                href: "https://git-scm.com/docs/git-log",
+                label: "Git — git-log documentation",
+                note: "The history you point a reviewer at when the question is why the code got this way.",
+              },
+            ]}
+          />
+
           {/* FAQ */}
           <section>
             <h2 className="text-2xl font-semibold tracking-tight text-primary">FAQ</h2>
             <div className="mt-4 divide-y divide-border border-y border-border">
               {FAQ.map((f) => (
                 <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none text-sm font-medium text-primary transition hover:text-accent">
-                    {f.q}
+                  <summary className="cursor-pointer list-none">
+                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
                   </summary>
                   <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
                 </details>

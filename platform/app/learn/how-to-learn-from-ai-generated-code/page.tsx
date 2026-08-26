@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
+import { Evidence } from "../../_geo/Evidence";
 import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/how-to-learn-from-ai-generated-code";
@@ -71,7 +72,7 @@ const ld = [
     description: DESCRIPTION,
     inLanguage: "en",
     datePublished: "2026-08-04",
-    dateModified: "2026-08-04",
+    dateModified: "2026-08-27",
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     author: { "@id": SITE + "#organization" },
     publisher: { "@id": SITE + "#organization" },
@@ -160,6 +161,15 @@ export default function LearnFromAiCode() {
         </header>
 
         <article className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+          {/* Answer-first summary. This page has live impressions on the query it is
+              named after, and a retriever quoting it will quote the first passage under
+              the first question-shaped heading — so that passage is the whole answer,
+              not a lead-in to one. */}
+          <section className="rounded-2xl border border-border bg-surface/40 p-6">
+            <h2 className="text-lg font-semibold tracking-tight text-primary">How do you actually understand code an AI generated?</h2>
+            <p className="mt-3 text-sm leading-7 text-secondary">Read the diff before the explanation, then close it and say out loud what each part does and why this approach over the obvious alternative. Anything you cannot say, look up in the language&rsquo;s official documentation rather than asking the AI again. Then change one line and predict what breaks &mdash; if the prediction is wrong, you had recognition, not understanding.</p>
+          </section>
+
           <section>
             <h2 className="text-2xl font-semibold tracking-tight text-primary">Why generated code doesn&apos;t stick</h2>
             <p className="mt-4">
@@ -252,14 +262,33 @@ export default function LearnFromAiCode() {
             </p>
           </section>
 
+          {/* Shared evidence layer: sourced research, the verification comparison,
+              the tool's own checkable numbers, and the source list. Kept in one
+              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+              across the 20 pages that quote them. */}
+          <Evidence
+            sources={[
+              {
+                href: "https://docs.python.org/3/tutorial/index.html",
+                label: "Python — The Python Tutorial (official documentation)",
+                note: "Look the construct up in the language's own reference instead of asking the assistant that just used it.",
+              },
+              {
+                href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+                label: "MDN Web Docs — JavaScript reference",
+                note: "The equivalent primary reference for JavaScript and the web platform.",
+              },
+            ]}
+          />
+
           {/* FAQ */}
           <section>
             <h2 className="text-2xl font-semibold tracking-tight text-primary">FAQ</h2>
             <div className="mt-4 divide-y divide-border border-y border-border">
               {FAQ.map((f) => (
                 <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none text-sm font-medium text-primary transition hover:text-accent">
-                    {f.q}
+                  <summary className="cursor-pointer list-none">
+                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
                   </summary>
                   <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
                 </details>

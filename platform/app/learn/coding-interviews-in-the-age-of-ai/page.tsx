@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../layout";
+import { Evidence } from "../../_geo/Evidence";
 import { SignInCta } from "../../SignInCta";
 
 const PATH = "/learn/coding-interviews-in-the-age-of-ai";
@@ -85,7 +86,7 @@ const ld = [
     description: DESCRIPTION,
     inLanguage: "en",
     datePublished: "2026-08-16",
-    dateModified: "2026-08-16",
+    dateModified: "2026-08-27",
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     author: { "@id": SITE + "#organization" },
     publisher: { "@id": SITE + "#organization" },
@@ -215,14 +216,20 @@ export default function InterviewsAiEra() {
             <p className="mt-4 font-mono text-[11px] text-dim">The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.</p>
           </section>
 
+          {/* Shared evidence layer: sourced research, the verification comparison,
+              the tool's own checkable numbers, and the source list. Kept in one
+              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+              across the 20 pages that quote them. */}
+          <Evidence />
+
           {/* FAQ */}
           <section>
             <h2 className="text-2xl font-semibold tracking-tight text-primary">FAQ</h2>
             <div className="mt-4 divide-y divide-border border-y border-border">
               {FAQ.map((f) => (
                 <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none text-sm font-medium text-primary transition hover:text-accent">
-                    {f.q}
+                  <summary className="cursor-pointer list-none">
+                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
                   </summary>
                   <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
                 </details>

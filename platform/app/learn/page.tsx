@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE, GITHUB } from "../layout";
+import { Evidence } from "../_geo/Evidence";
 import { SignInCta } from "../SignInCta";
 
 const PATH = "/learn";
@@ -193,6 +194,8 @@ const collectionLd = {
   description: DESCRIPTION,
   url: URL,
   inLanguage: "en",
+  datePublished: "2026-08-04",
+  dateModified: "2026-08-27",
   isPartOf: { "@id": SITE + "#website" },
   publisher: { "@id": SITE + "#organization" },
   mainEntity: {
@@ -287,6 +290,14 @@ export default function LearnHub() {
                 </a>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Shared evidence layer (app/_geo/Evidence.tsx) — same sourced figures the
+            guides quote, stated once. */}
+        <section className="border-b border-border">
+          <div className="mx-auto max-w-3xl space-y-14 px-6 py-16">
+            <Evidence />
           </div>
         </section>
 

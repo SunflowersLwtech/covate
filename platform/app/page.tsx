@@ -1,4 +1,5 @@
 import { FAQ, GITHUB, SITE } from "./layout";
+import { Evidence } from "./_geo/Evidence";
 import { SignInCta } from "./SignInCta";
 
 // Home-page-specific structured data (site-wide Organization/WebApplication live in layout).
@@ -12,7 +13,7 @@ const homeLd = [
       "Covate quizzes you on your own code changes so you actually learn while you build with AI, then syncs every session into a free learning ledger you sign into with GitHub.",
     inLanguage: "en",
     datePublished: "2026-08-04",
-    dateModified: "2026-08-04",
+    dateModified: "2026-08-27",
     mainEntityOfPage: { "@type": "WebPage", "@id": SITE },
     author: { "@id": SITE + "#organization" },
     publisher: { "@id": SITE + "#organization" },
@@ -196,6 +197,15 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Evidence: the verification comparison, the published research behind the
+            claims on this page, and the tool's own checkable numbers. Shared with
+            every /learn page from app/_geo/Evidence.tsx so a figure is stated once. */}
+        <section className="border-b border-border">
+          <div className="mx-auto max-w-3xl space-y-14 px-6 py-16">
+            <Evidence />
+          </div>
+        </section>
+
         {/* FAQ */}
         <section className="border-b border-border">
           <div className="mx-auto max-w-3xl px-6 py-16">
@@ -203,8 +213,8 @@ export default function Home() {
             <div className="mt-8 divide-y divide-border border-y border-border">
               {FAQ.map((f) => (
                 <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none text-sm font-medium text-primary transition hover:text-accent">
-                    {f.q}
+                  <summary className="cursor-pointer list-none">
+                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
                   </summary>
                   <p className="mt-3 text-sm leading-7 text-secondary">{f.a}</p>
                 </details>
