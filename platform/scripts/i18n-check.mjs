@@ -98,7 +98,7 @@ if (offenders.length) {
 }
 const stale = [...exempt.keys()].filter((p) => !sources.some((s) => relative(root, s) === p));
 for (const s of stale) console.warn(`⚠ stale exemption (file gone): ${s}`);
-console.log(`✓ CJK hardcode red line: ${offenders.length} offenders, ${exemptedHits.length} exempted file(s), ${stale.length} stale exemption(s)`);
+if (!offenders.length) console.log(`✓ CJK hardcode red line: 0 offenders, ${exemptedHits.length} exempted file(s), ${stale.length} stale exemption(s)`);
 
 // ---- 3. every t("key") resolves ----
 const enFlat = new Map();
