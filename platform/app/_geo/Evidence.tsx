@@ -122,22 +122,22 @@ export async function VerificationTable() {
         <table className="w-full min-w-[45rem] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-border text-xs uppercase tracking-wider text-dim">
-              <th scope="col" className="py-3 pr-4 font-medium">{t("headers.way")}</th>
-              <th scope="col" className="py-3 pr-4 font-medium">{t("headers.proves")}</th>
-              <th scope="col" className="py-3 pr-4 font-medium">{t("headers.stops")}</th>
-              <th scope="col" className="py-3 pr-4 font-medium">{t("headers.person")}</th>
-              <th scope="col" className="py-3 pr-4 font-medium">{t("headers.record")}</th>
+              <th scope="col" className="py-3 pr-3 font-medium">{t("headers.way")}</th>
+              <th scope="col" className="py-3 pr-3 font-medium">{t("headers.proves")}</th>
+              <th scope="col" className="py-3 pr-3 font-medium">{t("headers.stops")}</th>
+              <th scope="col" className="py-3 pr-3 font-medium">{t("headers.person")}</th>
+              <th scope="col" className="py-3 pr-3 font-medium">{t("headers.record")}</th>
               <th scope="col" className="py-3 font-medium">{t("headers.cost")}</th>
             </tr>
           </thead>
           <tbody className="text-secondary">
             {rows.map((r, i) => (
               <tr key={r.way} className={i < rows.length - 1 ? "border-b border-border/60" : undefined}>
-                <td className="py-3 pr-4 text-primary">{r.way}</td>
-                <td className="py-3 pr-4">{r.proves}</td>
-                <td className="py-3 pr-4">{r.stops}</td>
-                <td className="py-3 pr-4">{r.person}</td>
-                <td className="py-3 pr-4">{r.record}</td>
+                <td className="py-3 pr-3 text-primary">{r.way}</td>
+                <td className="py-3 pr-3">{r.proves}</td>
+                <td className="py-3 pr-3">{r.stops}</td>
+                <td className="py-3 pr-3">{r.person}</td>
+                <td className="py-3 pr-3">{r.record}</td>
                 <td className="py-3">{r.cost}</td>
               </tr>
             ))}
