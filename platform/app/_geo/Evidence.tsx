@@ -119,7 +119,7 @@ export async function VerificationTable() {
       <h2 className={H2}>{t("title")}</h2>
       <p className={P}>{t("intro")}</p>
       <div className="mt-6 overflow-x-auto">
-        <table className="w-full min-w-[46rem] border-collapse text-left text-sm">
+        <table className="w-full min-w-[45rem] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-border text-xs uppercase tracking-wider text-dim">
               <th scope="col" className="py-3 pr-4 font-medium">{t("headers.way")}</th>
