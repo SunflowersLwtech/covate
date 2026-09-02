@@ -7,7 +7,7 @@ import {
   signSession,
 } from "../../../../lib/auth";
 import { upsertPlatformUser } from "../../../../lib/users";
-import { SITE } from "../../../../layout";
+import { SITE } from "../../../../lib/site";
 
 export const dynamic = "force-dynamic";
 

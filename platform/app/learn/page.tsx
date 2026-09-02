@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { SITE, GITHUB } from "../layout";
+import { GITHUB, SITE } from "../lib/site";
 import { Evidence } from "../_geo/Evidence";
 import { SignInCta } from "../SignInCta";
+import { NAV, SiteHeader } from "../_components/SiteHeader";
+import { SiteFooter } from "../_components/SiteFooter";
+import { Breadcrumb } from "../_components/Breadcrumb";
 
 const PATH = "/learn";
 const URL = SITE + PATH;
@@ -226,28 +229,13 @@ export default function LearnHub() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* Nav */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <a href={SITE} className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Covate" width={26} height={26} className="rounded-md" />
-          covate<span className="text-accent">.</span>
-        </a>
-        <nav className="flex items-center gap-6 text-sm text-secondary">
-          <a href="/learn" className="text-primary transition-colors">Learn</a>
-          <a href={SITE + "#how"} className="hidden transition-colors hover:text-primary sm:inline">How it works</a>
-          <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
-        </nav>
-      </header>
+      <SiteHeader items={NAV.hub} />
 
       <main>
         {/* Hero */}
         <section className="hero-aurora bg-grid border-b border-border">
           <div className="relative z-10 mx-auto max-w-3xl px-6 pb-16 pt-16 text-center sm:pt-20">
-            <nav aria-label="Breadcrumb" className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-              <a href={SITE} className="transition-colors hover:text-accent">Covate</a>
-              <span aria-hidden="true"> / </span>
-              <span className="text-secondary">Learning Center</span>
-            </nav>
+            <Breadcrumb current="Learning Center" />
             <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
               Learning Center
             </p>
@@ -333,16 +321,7 @@ export default function LearnHub() {
         </section>
       </main>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-xs text-dim sm:flex-row">
-          <span className="font-mono">covate<span className="text-accent">.</span> — a DUOCODE TECHNOLOGY product</span>
-          <div className="flex gap-5">
-            <a href="/learn" className="hover:text-secondary">Learn</a>
-            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-secondary">GitHub</a>
-            <a href={SITE} className="hover:text-secondary">Home</a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { githubAuthorizeUrl, OAUTH_STATE_COOKIE, webAuthConfigured } from "../../../lib/auth";
-import { SITE } from "../../../layout";
+import { SITE } from "../../../lib/site";
 
 export const dynamic = "force-dynamic";
 

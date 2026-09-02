@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { GITHUB, SITE } from "../../layout";
+import { GITHUB, SITE } from "../../lib/site";
 import { Evidence } from "../../_geo/Evidence";
 import { SignInCta } from "../../SignInCta";
+import { NAV, SiteHeader } from "../../_components/SiteHeader";
+import { Breadcrumb } from "../../_components/Breadcrumb";
+import { ArticleBackLink } from "../../_components/ArticleBackLink";
 
 const PATH = "/learn/how-juniors-should-use-ai";
 const URL = SITE + PATH;
@@ -123,24 +126,10 @@ export default function JuniorsAi() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }} />
       ))}
 
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <a href={SITE} className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Covate" width={26} height={26} className="rounded-md" />
-          covate<span className="text-accent">.</span>
-        </a>
-        <nav className="flex items-center gap-6 text-sm text-secondary">
-          <a href={SITE + "#how"} className="transition-colors hover:text-primary">How it works</a>
-          <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
-        </nav>
-      </header>
+      <SiteHeader items={NAV.articleA} />
 
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
-        <nav aria-label="Breadcrumb" className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-          <a href={SITE} className="transition-colors hover:text-accent">Covate</a>
-          <span aria-hidden> / </span>
-          <span className="text-secondary">Learn</span>
-        </nav>
+        <Breadcrumb current="Learn" />
 
         <header className="border-b border-border pb-8 pt-6">
           <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
@@ -274,9 +263,7 @@ export default function JuniorsAi() {
           </section>
         </article>
 
-        <div className="mt-12 border-t border-border pt-6 font-mono text-xs text-dim">
-          <a href={SITE} className="hover:text-secondary">← Back to Covate</a>
-        </div>
+        <ArticleBackLink href={SITE} label="← Back to Covate" />
       </main>
     </div>
   );

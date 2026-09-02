@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { GITHUB, SITE } from "../../layout";
+import { GITHUB, SITE } from "../../lib/site";
 import { Evidence } from "../../_geo/Evidence";
 import { SignInCta } from "../../SignInCta";
+import { NAV, SiteHeader } from "../../_components/SiteHeader";
+import { Breadcrumb } from "../../_components/Breadcrumb";
+import { ArticleBackLink } from "../../_components/ArticleBackLink";
 
 const PATH = "/learn/prompt-engineering-for-coding";
 const URL = SITE + PATH;
@@ -126,25 +129,10 @@ export default function PromptEngineeringForCoding() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }} />
       ))}
 
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <a href={SITE} className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Covate" width={26} height={26} className="rounded-md" />
-          covate<span className="text-accent">.</span>
-        </a>
-        <nav className="flex items-center gap-6 text-sm text-secondary">
-          <a href="/learn" className="transition-colors hover:text-primary">Learn</a>
-          <a href={SITE + "#how"} className="hidden transition-colors hover:text-primary sm:inline">How it works</a>
-          <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
-        </nav>
-      </header>
+      <SiteHeader items={NAV.articleC} />
 
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
-        <nav aria-label="Breadcrumb" className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-          <a href={SITE} className="transition-colors hover:text-accent">Covate</a>
-          <span aria-hidden> / </span>
-          <a href="/learn" className="transition-colors hover:text-accent">Learning Center</a>
-        </nav>
+        <Breadcrumb current="Learning Center" currentHref="/learn" />
 
         <header className="border-b border-border pb-8 pt-6">
           <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
@@ -262,9 +250,7 @@ export default function PromptEngineeringForCoding() {
           </section>
         </article>
 
-        <div className="mt-12 border-t border-border pt-6 font-mono text-xs text-dim">
-          <a href="/learn" className="hover:text-secondary">← Back to the Learning Center</a>
-        </div>
+        <ArticleBackLink href="/learn" label="← Back to the Learning Center" />
       </main>
     </div>
   );

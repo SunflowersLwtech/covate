@@ -1,4 +1,4 @@
-import { SITE, GITHUB } from "../layout";
+import { GITHUB, SITE } from "../lib/site";
 
 export const dynamic = "force-static";
 

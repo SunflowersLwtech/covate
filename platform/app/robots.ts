@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE } from "./layout";
+import { SITE } from "./lib/site";
 
 // Every AI and search crawler the portfolio cares about, named explicitly.
 // `User-Agent: *` already allows them, but the GEO audit checks for the names:

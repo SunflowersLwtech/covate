@@ -3,7 +3,7 @@
 // "not configured" until DATABASE_URL + the GitHub OAuth app credentials + SESSION_SECRET
 // are wired into Vercel. Uses Web Crypto (Edge-compatible) — no extra dependencies.
 
-import { SITE } from "../layout";
+import { SITE } from "./site";
 
 const CLIENT_ID = process.env.GITHUB_OAUTH_CLIENT_ID;
 const CLIENT_SECRET = process.env.GITHUB_OAUTH_CLIENT_SECRET;

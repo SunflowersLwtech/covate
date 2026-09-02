@@ -4,7 +4,8 @@ import { authConfigured, SESSION_COOKIE, verifySession, webAuthConfigured } from
 import DeviceSignIn from "./DeviceSignIn";
 import SyncToken from "./SyncToken";
 import { db } from "../lib/db";
-import { GITHUB, SITE } from "../layout";
+import { GITHUB } from "../lib/site";
+import { NAV, SIGN_OUT, SiteHeader } from "../_components/SiteHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -46,20 +47,7 @@ async function loadData(userId: string) {
 function Shell({ children, signedIn = false }: { children: React.ReactNode; signedIn?: boolean }) {
   return (
     <div className="min-h-screen bg-deep text-primary">
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-        <a href={SITE} className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Covate" width={26} height={26} className="rounded-md" />
-          covate<span className="text-accent">.</span>
-        </a>
-        <nav className="flex items-center gap-6 text-sm text-secondary">
-          <a href={SITE} className="transition-colors hover:text-primary">Home</a>
-          <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
-          {signedIn ? (
-            <a href="/api/auth/logout" className="transition-colors hover:text-primary">Sign out</a>
-          ) : null}
-        </nav>
-      </header>
+      <SiteHeader items={signedIn ? [...NAV.dashboard, SIGN_OUT] : NAV.dashboard} width="5xl" />
       <main className="mx-auto max-w-5xl px-6 pb-20 pt-6">{children}</main>
     </div>
   );

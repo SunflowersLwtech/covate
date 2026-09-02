@@ -10,9 +10,7 @@ const GA_ID = "G-M3EQXS08MM";
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
-// Live custom domain (covate.org, on Cloudflare DNS → Vercel). The vercel.app URL still serves.
-export const SITE = "https://covate.org";
-export const GITHUB = "https://github.com/SunflowersLwtech/covate";
+import { SITE } from "./lib/site";
 
 const TITLE = "Covate — turn AI-assisted coding into real understanding";
 const DESCRIPTION =

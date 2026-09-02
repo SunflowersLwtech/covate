@@ -1,6 +1,9 @@
-import { FAQ, GITHUB, SITE } from "./layout";
+import { FAQ } from "./layout";
+import { GITHUB, SITE } from "./lib/site";
 import { Evidence } from "./_geo/Evidence";
 import { SignInCta } from "./SignInCta";
+import { NAV, SiteHeader } from "./_components/SiteHeader";
+import { SiteFooter } from "./_components/SiteFooter";
 
 // Home-page-specific structured data (site-wide Organization/WebApplication live in layout).
 const homeLd = [
@@ -83,19 +86,7 @@ export default function Home() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       ))}
       {/* Nav */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <span className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Covate" width={26} height={26} className="rounded-md" />
-          covate<span className="text-accent">.</span>
-        </span>
-        <nav className="flex items-center gap-6 text-sm text-secondary">
-          <a href="/learn" className="transition-colors hover:text-primary">Learn</a>
-          <a href="#how" className="transition-colors hover:text-primary">How it works</a>
-          <a href="#whats-here" className="hidden transition-colors hover:text-primary sm:inline">What you get</a>
-          <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">GitHub</a>
-        </nav>
-      </header>
+      <SiteHeader items={NAV.home} logoLink={false} />
 
       <main>
         {/* Hero */}
@@ -243,16 +234,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-xs text-dim sm:flex-row">
-          <span className="font-mono">covate<span className="text-accent">.</span> — a DUOCODE TECHNOLOGY product</span>
-          <div className="flex gap-5">
-            <a href="/learn" className="hover:text-secondary">Learn</a>
-            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-secondary">GitHub</a>
-            <a href={SITE} className="hover:text-secondary">Home</a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
