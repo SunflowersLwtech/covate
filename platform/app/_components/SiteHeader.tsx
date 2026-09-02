@@ -1,10 +1,13 @@
+import { getTranslations } from "next-intl/server";
 import { GITHUB, SITE } from "../lib/site";
+import { LocaleSwitcher } from "./LocaleSwitcher";
 
 // The one site header. Every page used to inline its own copy of this markup
-// (22 copies, six slightly different nav lists); the presets below are those
-// lists, so a page picks one instead of re-typing the header.
+// (22 copies, six slightly different nav lists); the presets below are the three
+// lists that survived, so a page picks one instead of re-typing the header.
+export type NavKey = "learn" | "howItWorks" | "whatYouGet" | "github" | "home" | "signOut";
 export type NavItem = {
-  label: string;
+  key: NavKey;
   href: string;
   className: string;
   external?: boolean;
@@ -12,35 +15,25 @@ export type NavItem = {
 
 const LINK = "transition-colors hover:text-primary";
 const LINK_SM = "hidden transition-colors hover:text-primary sm:inline";
-const GH: NavItem = { label: "GitHub", href: GITHUB, className: LINK, external: true };
+const GH: NavItem = { key: "github", href: GITHUB, className: LINK, external: true };
 
 export const NAV = {
   home: [
-    { label: "Learn", href: "/learn", className: LINK },
-    { label: "How it works", href: "#how", className: LINK },
-    { label: "What you get", href: "#whats-here", className: LINK_SM },
+    { key: "learn", href: "/learn", className: LINK },
+    { key: "howItWorks", href: "#how", className: LINK },
+    { key: "whatYouGet", href: "#whats-here", className: LINK_SM },
     GH,
   ],
-  hub: [
-    { label: "Learn", href: "/learn", className: "text-primary transition-colors" },
-    { label: "How it works", href: SITE + "#how", className: LINK_SM },
+  // The Learning Center hub and every article in it: "Learn" is the current section.
+  learn: [
+    { key: "learn", href: "/learn", className: "text-primary transition-colors" },
+    { key: "howItWorks", href: SITE + "#how", className: LINK_SM },
     GH,
   ],
-  articleA: [{ label: "How it works", href: SITE + "#how", className: LINK }, GH],
-  articleB: [
-    { label: "How it works", href: SITE + "#how", className: LINK },
-    { label: "What you get", href: SITE + "#whats-here", className: LINK_SM },
-    GH,
-  ],
-  articleC: [
-    { label: "Learn", href: "/learn", className: LINK },
-    { label: "How it works", href: SITE + "#how", className: LINK_SM },
-    GH,
-  ],
-  dashboard: [{ label: "Home", href: SITE, className: LINK }, GH],
+  dashboard: [{ key: "home", href: SITE, className: LINK }, GH],
 } satisfies Record<string, NavItem[]>;
 
-export const SIGN_OUT: NavItem = { label: "Sign out", href: "/api/auth/logout", className: LINK };
+export const SIGN_OUT: NavItem = { key: "signOut", href: "/api/auth/logout", className: LINK };
 
 const LOGO_CLASS = "flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-primary";
 
@@ -54,7 +47,7 @@ function Logo() {
   );
 }
 
-export function SiteHeader({
+export async function SiteHeader({
   items,
   width = "6xl",
   logoLink = true,
@@ -65,6 +58,7 @@ export function SiteHeader({
   /** On the home page the logo is not a link to itself. */
   logoLink?: boolean;
 }) {
+  const t = await getTranslations("common.nav");
   const shell =
     width === "5xl"
       ? "mx-auto flex max-w-5xl items-center justify-between px-6 py-5"
@@ -83,15 +77,16 @@ export function SiteHeader({
       <nav className="flex items-center gap-6 text-sm text-secondary">
         {items.map((it) =>
           it.external ? (
-            <a key={it.label} href={it.href} target="_blank" rel="noopener noreferrer" className={it.className}>
-              {it.label}
+            <a key={it.key} href={it.href} target="_blank" rel="noopener noreferrer" className={it.className}>
+              {t(it.key)}
             </a>
           ) : (
-            <a key={it.label} href={it.href} className={it.className}>
-              {it.label}
+            <a key={it.key} href={it.href} className={it.className}>
+              {t(it.key)}
             </a>
           ),
         )}
+        <LocaleSwitcher />
       </nav>
     </header>
   );

@@ -1,0 +1,8 @@
+{
+  "files": [
+    {
+      "path": "app/llms-full.txt/route.ts",
+      "reason": "answer-engine output, not UI: llms-full.txt carries a deliberate Chinese product summary alongside the English one so assistants can quote either"
+    }
+  ]
+}

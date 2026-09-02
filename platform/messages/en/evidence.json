@@ -1,0 +1,114 @@
+{
+  "research": {
+    "title": "What does the research say about AI-written code?",
+    "intro": "Four primary sources, each linked below, and every figure quoted from the source rather than summarised second-hand. They disagree with each other in useful ways.",
+    "faster": {
+      "q": "Does AI actually make developers faster?",
+      "a": "Not always. In a 2025 randomized controlled trial, 16 experienced open-source developers predicted AI would cut task time by 24% and afterwards believed it had saved 20%. Measured, the same 246 tasks took 19% longer with AI than without. <link>METR, arXiv:2507.09089</link>"
+    },
+    "speedup": {
+      "q": "Why do other studies show a large speed-up?",
+      "a": "Because they measure different work. A 2023 controlled experiment found developers with GitHub Copilot finished a self-contained HTTP-server task 55.8% faster. That is greenfield code; the 2025 trial used mature repositories the developers already knew well. <link>arXiv:2302.06590</link>"
+    },
+    "trust": {
+      "q": "How much do developers trust what AI writes?",
+      "a": "Less every year. In the 2025 Stack Overflow Developer Survey, 84% of respondents use or plan to use AI tools, up from 76% in 2024 — yet 46% distrust the accuracy of the output against 33% who trust it, and only 3% highly trust it. Favourable sentiment fell from over 70% in 2023 and 2024 to 60%. <link>Stack Overflow, 2025</link>"
+    },
+    "wrong": {
+      "q": "Where does AI-generated code actually go wrong?",
+      "a": "The same survey ranks the frustrations: 66% cite “AI solutions that are almost right, but not quite”, 45% say debugging AI-generated code takes longer, 20% report losing confidence in their own problem-solving, and 16.3% say it is hard to understand how or why the code works."
+    },
+    "secure": {
+      "q": "Is AI-assisted code less secure?",
+      "a": "In a Stanford user study, participants with an AI assistant wrote significantly less secure code than those without — and were more likely to believe their code was secure. Read every generated diff that touches input, auth or secrets against the <owasp>OWASP Top 10</owasp> and the <cwe>CWE Top 25</cwe>. <paper>arXiv:2211.03622</paper>"
+    }
+  },
+  "table": {
+    "title": "How can you check that you actually understood the code?",
+    "intro": "Five things people do after an AI writes a change, compared on what each one actually proves rather than on how thorough it feels.",
+    "headers": {
+      "way": "Way to check",
+      "proves": "What it proves",
+      "stops": "Stops the AI mid-flow?",
+      "person": "Needs another person?",
+      "record": "Leaves a record?",
+      "cost": "Cost"
+    },
+    "rows": [
+      {
+        "way": "Read the diff yourself",
+        "proves": "Nothing you can check later — recognising code reads as understanding it",
+        "stops": "No",
+        "person": "No",
+        "record": "No",
+        "cost": "Free"
+      },
+      {
+        "way": "Ask the AI to explain it",
+        "proves": "That the AI can produce an explanation, not that you followed it",
+        "stops": "No",
+        "person": "No",
+        "record": "In the chat log only",
+        "cost": "Free"
+      },
+      {
+        "way": "Human code review on the pull request",
+        "proves": "A second person's reading — 45% of developers say reviewing and debugging AI code takes longer",
+        "stops": "No — it happens after the code exists",
+        "person": "Yes",
+        "record": "Yes, review comments",
+        "cost": "A reviewer's time"
+      },
+      {
+        "way": "Write tests for the change",
+        "proves": "The behaviour you thought of; AI-written tests can pass tautologically",
+        "stops": "No",
+        "person": "No",
+        "record": "Yes, the test suite",
+        "cost": "Free"
+      },
+      {
+        "way": "Answer questions on your own diff (Covate)",
+        "proves": "Whether you can answer 3 questions about the change you just accepted",
+        "stops": "Yes — the tool returns HALT_GENERATION until you answer",
+        "person": "No",
+        "record": "Yes, the learning ledger",
+        "cost": "Free, MIT"
+      }
+    ],
+    "note": "The 45% figure is from the 2025 Stack Overflow Developer Survey; the Covate row is read from this repository's source, not estimated."
+  },
+  "facts": {
+    "title": "What exactly does Covate install and do?",
+    "intro": "Everything below is read from the open-source repository, so you can check each number against the code before you install anything.",
+    "tools": {
+      "q": "What does the MCP server actually add?",
+      "a": "4 tools: <code>learning_session</code> (quizzes you on recent changes), <code>debug_search</code> and <code>debug_record</code> (a per-project debugging memory), and <code>term_get</code> (concept lookups across 10 domains). It needs Python 3.11+, binds to 127.0.0.1, and is MIT-licensed."
+    },
+    "session": {
+      "q": "How long does one learning session take?",
+      "a": "A session defaults to 3 questions with 4 options each, generated from 7 change-type templates and aimed at 5 focus areas — logic, security, performance, architecture and syntax. The default cap is 10 minutes, configurable from 1 minute to 2 hours."
+    },
+    "where": {
+      "q": "Where do the sessions end up?",
+      "a": "On your machine first: the server keeps the 100 most recent sessions per project, and the quiz UI ships in 3 languages. Signing in with GitHub and running the sync client pushes them into the learning ledger, which is free — there is no paid tier anywhere on this site."
+    },
+    "assistant": {
+      "q": "Does it work with my assistant?",
+      "a": "If your assistant speaks the Model Context Protocol, yes — Claude, Cursor, Copilot and the rest all load MCP servers the same way, described in the <link>2025-06-18 specification</link>."
+    }
+  },
+  "sources": {
+    "title": "Sources",
+    "intro": "Every figure on this page comes from one of these, or from the Covate repository itself. Each link was checked on 27 August 2026.",
+    "notes": [
+      "The protocol Covate implements. Defines how a tool is exposed to an AI assistant and how a call returns.",
+      "Randomized controlled trial, 16 developers, 246 tasks. Source of the 19% slowdown and the 20% / 24% self-estimates.",
+      "Source of the 84% adoption, 46% distrust, 66% “almost right” and 45% debugging figures.",
+      "Google Cloud’s annual study; finds AI amplifies an organisation’s existing strengths and weaknesses rather than replacing them.",
+      "The 10 web-application risk categories to read a generated diff against before merging it.",
+      "MITRE’s ranked list of the 25 weakness classes that cause the most real damage.",
+      "The diff Covate reads is an ordinary git diff; the official flags for narrowing it are here."
+    ]
+  }
+}

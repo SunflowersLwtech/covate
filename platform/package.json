@@ -4,11 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "node scripts/i18n-check.mjs && next build",
+    "start": "next start",
+    "i18n:check": "node scripts/i18n-check.mjs",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "npm run i18n:check && npm run typecheck"
   },
   "dependencies": {
     "next": "^16.2.10",
+    "next-intl": "^4.14.2",
     "postgres": "^3.4.9",
     "react": "19.2.3",
     "react-dom": "19.2.3"

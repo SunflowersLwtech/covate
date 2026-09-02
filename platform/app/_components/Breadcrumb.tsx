@@ -1,16 +1,17 @@
+import { getTranslations } from "next-intl/server";
 import { SITE } from "../lib/site";
 
-// "Covate / <current>" — the current crumb is a link when it has somewhere to go
-// (an article pointing back at the Learning Center) and plain text on the hub itself.
-export function Breadcrumb({ current, currentHref }: { current: string; currentHref?: string }) {
+// "Covate / Learning Center" — a link back to the hub from an article, plain text on the hub itself.
+export async function Breadcrumb({ link = false }: { link?: boolean }) {
+  const t = await getTranslations("common.breadcrumb");
   return (
     <nav aria-label="Breadcrumb" className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-      <a href={SITE} className="transition-colors hover:text-accent">Covate</a>
+      <a href={SITE} className="transition-colors hover:text-accent">{t("home")}</a>
       <span aria-hidden> / </span>
-      {currentHref ? (
-        <a href={currentHref} className="transition-colors hover:text-accent">{current}</a>
+      {link ? (
+        <a href="/learn" className="transition-colors hover:text-accent">{t("learningCenter")}</a>
       ) : (
-        <span className="text-secondary">{current}</span>
+        <span className="text-secondary">{t("learningCenter")}</span>
       )}
     </nav>
   );

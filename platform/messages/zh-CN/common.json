@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "learn": "学习",
+    "howItWorks": "工作原理",
+    "whatYouGet": "你将获得",
+    "github": "GitHub",
+    "home": "首页",
+    "signOut": "退出登录"
+  },
+  "locale": {
+    "switchLabel": "切换语言",
+    "other": "English"
+  },
+  "footer": {
+    "tagline": " — DUOCODE TECHNOLOGY 出品",
+    "learn": "学习",
+    "github": "GitHub",
+    "home": "首页"
+  },
+  "breadcrumb": {
+    "home": "Covate",
+    "learningCenter": "学习中心"
+  },
+  "back": {
+    "learningCenter": "← 返回学习中心"
+  },
+  "signInCta": {
+    "button": "使用 GitHub 登录",
+    "note": "免费 · 无需信用卡，无需排队"
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "这个地址下什么都没有。",
+    "body": "页面可能已经移动，或者链接输错了。站内所有内容都可以从首页和学习中心找到。",
+    "home": "返回 Covate",
+    "learn": "打开学习中心"
+  }
+}

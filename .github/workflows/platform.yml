@@ -1,0 +1,37 @@
+name: Platform
+
+# The Next.js site in platform/. Not a deploy: covate.org ships by `vercel deploy
+# --prebuilt` from a local build. This is the gate that build has to pass anyway —
+# locale parity, the CJK hardcode red line, key resolution, typecheck, build.
+on:
+  push:
+    branches: [main]
+    paths: ["platform/**", ".github/workflows/platform.yml"]
+  pull_request:
+    branches: [main]
+    paths: ["platform/**", ".github/workflows/platform.yml"]
+
+concurrency:
+  group: covate-platform-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - run: npm ci
+      - name: i18n red lines (locale parity, CJK hardcode, key resolution)
+        run: npm run i18n:check
+      - name: Build (prerenders every page in every locale)
+        run: npx next build
+      - name: Typecheck
+        run: npx tsc --noEmit

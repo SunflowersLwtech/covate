@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "title": "Covate — turn AI-assisted coding into real understanding",
+    "description": "Covate quizzes you on your own code changes so you actually learn while you build with AI. The MCP tool is free and open-source (MIT); sign in with GitHub and your sessions sync into a learning ledger where you can review every quiz, your accuracy, and the topics you keep getting wrong. Free — there is nothing to buy.",
+    "ogDescription": "Learn from every change. A free, open-source MCP quizzes you on your own diffs; sign in with GitHub and every session syncs into a free learning ledger you can review.",
+    "twitterTitle": "Covate — learn from every code change",
+    "twitterDescription": "Free open-source MCP that quizzes you on your own code changes, plus a free learning ledger — sign in with GitHub and review every synced session."
+  },
+  "hero": {
+    "eyebrow": "Open-source MCP · free learning ledger",
+    "title": "Turn AI-assisted coding into <brand>real understanding</brand>.",
+    "body": "When AI writes most of your code, it’s easy to ship things you don’t actually understand. Covate quizzes you on your own changes so you learn while you build — then, if you sign in with GitHub, syncs every session into a learning ledger you can read back. It is free; there is nothing to buy.",
+    "fineprint": "MIT-licensed MCP · free learning ledger · no paid tier"
+  },
+  "problem": {
+    "title": "“It works… but could you explain it?”",
+    "body": "The faster AI writes your code, the quieter your own skills erode. You accept a diff, it passes the tests, you move on — and six months later you couldn’t rebuild it from scratch. Covate is the antidote: a lightweight loop that checks your understanding at the exact moment you still have the context, so using AI makes you <em>faster and better</em>, not just faster."
+  },
+  "how": {
+    "title": "How it works",
+    "steps": [
+      {
+        "n": "01",
+        "title": "Code with your AI assistant",
+        "body": "Keep using Claude, Cursor, Copilot — whatever you already use. Covate rides along as an MCP server, watching what actually changes in your codebase."
+      },
+      {
+        "n": "02",
+        "title": "Get quizzed on what just changed",
+        "body": "Ask Covate to quiz you (or set a cadence) and it turns the recent diff into a few sharp questions about the concepts, APIs and trade-offs — blocking further generation until you answer. You learn while the context is fresh."
+      },
+      {
+        "n": "03",
+        "title": "Watch your understanding compound",
+        "body": "Every session is saved locally. Sign in with GitHub — free — and the sync client pushes them into your learning ledger, where you can read back each session, see your running accuracy, and find the topics you answer worst."
+      }
+    ]
+  },
+  "whatsHere": {
+    "title": "What you get, all of it free",
+    "body": "Two halves, both free: an MIT-licensed MCP that runs on your machine, and a hosted learning ledger you open by signing in with GitHub. There is no paid tier and no checkout anywhere on this site.",
+    "mcp": {
+      "eyebrow": "Free · open-source",
+      "title": "The Covate MCP",
+      "items": [
+        "learning_session: quizzes from your real code changes",
+        "debug_search: project-level debug memory (RAG)",
+        "Local session history + local quiz WebUI",
+        "Runs fully offline, no account, MIT-licensed"
+      ],
+      "install": "Install from GitHub ->"
+    },
+    "ledger": {
+      "eyebrow": "Free · live now",
+      "title": "The learning ledger",
+      "items": [
+        "Sign in with GitHub — free, no card, no waitlist",
+        "Your synced sessions, newest first, with per-session scores",
+        "Totals: sessions, questions, correct answers, accuracy",
+        "The topics you answer worst, ranked",
+        "Your sync token: reveal it or rotate it whenever you want"
+      ],
+      "notYet": "No charts over time, no study planner, no teams yet — and nothing to buy.",
+      "signIn": "Sign in with GitHub ->"
+    }
+  },
+  "faq": {
+    "title": "Questions",
+    "items": [
+      {
+        "q": "What is Covate?",
+        "a": "Covate is an open-source learning sidecar for AI coding assistants. Its MCP tool, learning_session, watches your recent code changes and turns them into short, interactive quizzes that pause the AI until you've understood what just got built — so you learn while you ship instead of blindly accepting generated code. Sign in at covate.org with GitHub and the sync client pushes those sessions into a learning ledger you can review in the browser."
+      },
+      {
+        "q": "How does it work?",
+        "a": "You code with your AI assistant as usual. When you ask Covate to quiz you (or on your own schedule), it reads the recent changes and generates a few targeted questions about the concepts, APIs, and trade-offs involved, blocking further generation until you answer. Each session — the questions, your answers, the topics — is saved locally. If you sign in with GitHub and run the sync client with your sync token, those records land in your learning ledger on covate.org, where you can review every session, your running accuracy, and the topics you keep getting wrong."
+      },
+      {
+        "q": "Is it really free?",
+        "a": "Yes, all of it. The Covate MCP server is open-source (MIT), runs fully locally and needs no account. The learning ledger on covate.org is free too: sign in with GitHub, sync, review. There is no paid tier, no subscription and no checkout — nothing on this site can be bought."
+      },
+      {
+        "q": "What does signing in add?",
+        "a": "One thing, honestly described: your local learning sessions become reviewable in a browser. The ledger shows every synced session, how many questions you got right, your overall accuracy, and a ranked list of the topics you answer worst — plus your sync token, which you can reveal or rotate at any time. It is not a study planner: it does not schedule reviews or re-quiz you on a spaced-repetition timetable today."
+      },
+      {
+        "q": "Why do I need this if the AI writes the code for me?",
+        "a": "That's exactly the problem it solves. When an AI writes most of your code, it's easy to ship things you don't actually understand — and your own skills quietly erode. Covate keeps you in the loop: it makes sure you understand each change while you still remember the context, and the ledger keeps a record so you can see which concepts you keep missing. It's the difference between using AI to move faster and using AI to also get better."
+      },
+      {
+        "q": "What does it cost, and what's coming next?",
+        "a": "Nothing. The MCP is available now from the repo, and the learning ledger is live and free — sign in with GitHub at covate.org/dashboard. Progress-over-time charts, spaced-repetition study plans and team accounts are ideas, not shipped features; when they exist we'll say so here, and if any of them ever becomes paid you'll see a price before you're asked for anything."
+      }
+    ]
+  },
+  "final": {
+    "title": "Learn from every change.",
+    "body": "Install the open-source MCP, sign in with GitHub, and every session you run shows up in your ledger. Free, today.",
+    "install": "or install the open-source MCP now"
+  },
+  "ld": {
+    "headline": "Covate: turn AI-assisted coding into real understanding",
+    "description": "Covate quizzes you on your own code changes so you actually learn while you build with AI, then syncs every session into a free learning ledger you sign into with GitHub.",
+    "about": "learning to program while coding with AI assistants",
+    "breadcrumbLedger": "Learning ledger"
+  }
+}

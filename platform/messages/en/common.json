@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "learn": "Learn",
+    "howItWorks": "How it works",
+    "whatYouGet": "What you get",
+    "github": "GitHub",
+    "home": "Home",
+    "signOut": "Sign out"
+  },
+  "locale": {
+    "switchLabel": "Switch language",
+    "other": "中文"
+  },
+  "footer": {
+    "tagline": " — a DUOCODE TECHNOLOGY product",
+    "learn": "Learn",
+    "github": "GitHub",
+    "home": "Home"
+  },
+  "breadcrumb": {
+    "home": "Covate",
+    "learningCenter": "Learning Center"
+  },
+  "back": {
+    "learningCenter": "← Back to the Learning Center"
+  },
+  "signInCta": {
+    "button": "Sign in with GitHub",
+    "note": "Free · no card, no waitlist"
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "There is nothing at this address.",
+    "body": "The page may have moved, or the link was mistyped. Everything on the site is reachable from the home page and the Learning Center.",
+    "home": "Back to Covate",
+    "learn": "Open the Learning Center"
+  }
+}

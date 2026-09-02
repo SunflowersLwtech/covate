@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "title": "你的学习台账 | Covate",
+    "description": "回看你的 Covate MCP 同步上来的学习会话：每次会话的得分、你的累计正确率，以及你答得最差的主题。"
+  },
+  "signIn": {
+    "eyebrow": "免费 · 使用 GitHub 登录",
+    "title": "你的<brand>学习台账</brand>",
+    "body": "用 GitHub 登录——免费，没有任何需要购买的东西——你的 Covate MCP 同步上来的会话会出现在这里：你就自己代码做过的每一次测验、你的累计正确率，以及你答得最差的主题。",
+    "continue": "使用 GitHub 继续",
+    "unavailable": "这个部署上的登录暂时不可用——它的 GitHub 凭据或数据库尚未配置，所以目前没人能登录（这是故障，不是付费墙；台账是免费的）。免费开源的 MCP 可以离线工作，现在就可以在 <link>GitHub</link> 上获取。"
+  },
+  "errors": {
+    "not_configured": "登录目前不可用——这个部署缺少 GitHub 凭据。我们正在处理。",
+    "bad_state": "这个登录链接已过期或已被使用。请重试。",
+    "login_failed": "GitHub 未能完成登录。请重试。",
+    "generic": "登录失败。请重试。"
+  },
+  "stats": {
+    "sessions": "会话",
+    "questions": "题目",
+    "correct": "答对",
+    "accuracy": "正确率"
+  },
+  "topics": {
+    "title": "需要重温的概念",
+    "empty": "还没有主题数据——用 MCP 考考自己，结果就会出现在这里。"
+  },
+  "sessions": {
+    "title": "最近的学习会话",
+    "fallbackName": "会话",
+    "empty": "还没有同步任何会话。在一个你用过 Covate 的项目里运行 <code>COVATE_SYNC_URL=https://covate.org COVATE_SYNC_TOKEN={placeholder} python -m covate.platform_sync</code>，把本地的学习历史推送到这里。你的令牌可以在下方「同步令牌」一节查看。"
+  },
+  "syncToken": {
+    "title": "同步令牌",
+    "intro": "MCP 同步客户端用这个令牌进行身份验证。在一个你用过 Covate 的项目里运行 <code>COVATE_SYNC_URL=https://covate.org COVATE_SYNC_TOKEN={placeholder} python -m covate.platform_sync</code> 它相当于密码：任何持有它的东西都可以往你的台账里写入会话。",
+    "copy": "复制",
+    "copied": "已复制",
+    "fetching": "获取中…",
+    "refresh": "刷新",
+    "show": "显示我的同步令牌",
+    "rotateConfirm": "轮换会让仍在使用旧令牌的客户端失效。确定吗？",
+    "rotating": "轮换中…",
+    "rotateYes": "是的，轮换",
+    "cancel": "取消",
+    "rotate": "轮换令牌",
+    "genericError": "出了点问题",
+    "copyError": "无法复制——请选中令牌后手动复制。"
+  },
+  "device": {
+    "unreachable": "无法连接 GitHub。请重试。",
+    "denied": "登录请求在 GitHub 上被拒绝。",
+    "expired": "这个代码已过期。重新开始，只需要片刻。",
+    "enterCode": "在 <link>github.com/login/device</link> 输入这个代码，然后回到这里——本页会自动完成登录。",
+    "waiting": "等待 GitHub…",
+    "contacting": "正在联系 GitHub…",
+    "continue": "使用 GitHub 继续"
+  }
+}

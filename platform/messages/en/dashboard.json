@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "title": "Your learning ledger | Covate",
+    "description": "Review the learning sessions your Covate MCP has synced: each session's score, your running accuracy, and the topics you answer worst."
+  },
+  "signIn": {
+    "eyebrow": "Free · sign in with GitHub",
+    "title": "Your <brand>learning ledger</brand>",
+    "body": "Sign in with GitHub — free, nothing to buy — and the sessions your Covate MCP syncs up land here: every quiz you took on your own code, your running accuracy, and the topics you answer worst.",
+    "continue": "Continue with GitHub",
+    "unavailable": "Sign-in is temporarily unavailable on this deployment — its GitHub credentials or database are not configured, so no one can sign in right now (this is an outage, not a paywall; the ledger is free). The free open-source MCP works offline and is available now on <link>GitHub</link>."
+  },
+  "errors": {
+    "not_configured": "Sign-in is not available right now — this deployment is missing its GitHub credentials. We are on it.",
+    "bad_state": "That sign-in link expired or was already used. Please try again.",
+    "login_failed": "GitHub could not complete the sign-in. Please try again.",
+    "generic": "Sign-in failed. Please try again."
+  },
+  "stats": {
+    "sessions": "Sessions",
+    "questions": "Questions",
+    "correct": "Correct",
+    "accuracy": "Accuracy"
+  },
+  "topics": {
+    "title": "Concepts to revisit",
+    "empty": "No topic data yet — quiz yourself with the MCP and it'll show up here."
+  },
+  "sessions": {
+    "title": "Recent learning sessions",
+    "fallbackName": "Session",
+    "empty": "No sessions synced yet. From a project you have used Covate in, run <code>COVATE_SYNC_URL=https://covate.org COVATE_SYNC_TOKEN={placeholder} python -m covate.platform_sync</code> to push your local learning history here. Reveal your token in the Sync token section below."
+  },
+  "syncToken": {
+    "title": "Sync token",
+    "intro": "The MCP sync client authenticates with this token. From a project you have used Covate in, run <code>COVATE_SYNC_URL=https://covate.org COVATE_SYNC_TOKEN={placeholder} python -m covate.platform_sync</code> It is a password: anything holding it can write sessions to your ledger.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "fetching": "Fetching…",
+    "refresh": "Refresh",
+    "show": "Show my sync token",
+    "rotateConfirm": "Rotating breaks any client still using the old token. Sure?",
+    "rotating": "Rotating…",
+    "rotateYes": "Yes, rotate it",
+    "cancel": "Cancel",
+    "rotate": "Rotate token",
+    "genericError": "Something went wrong",
+    "copyError": "Could not copy — select the token and copy it manually."
+  },
+  "device": {
+    "unreachable": "Could not reach GitHub. Please try again.",
+    "denied": "Sign-in was declined on GitHub.",
+    "expired": "That code expired. Start again and it will only take a moment.",
+    "enterCode": "Enter this code on <link>github.com/login/device</link>, then come back here — this page signs you in on its own.",
+    "waiting": "Waiting for GitHub…",
+    "contacting": "Contacting GitHub…",
+    "continue": "Continue with GitHub"
+  }
+}

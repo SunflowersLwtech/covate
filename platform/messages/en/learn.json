@@ -1,0 +1,25 @@
+{
+  "hub": {
+    "eyebrow": "Learning Center",
+    "title": "Learn to code <brand>with</brand> AI — not instead of it.",
+    "body": "Honest, practical guides on staying a strong developer while you build with AI: how to learn from generated code, review it, remember what you learn, and where to point your skills next. Free to read — and paired with the Covate tool that quizzes you on your own code so the learning actually sticks.",
+    "guides": "Guides",
+    "count": "{count} articles",
+    "read": "Read →",
+    "englishOnly": "These guides are currently published in English only.",
+    "habit": {
+      "eyebrow": "Reading is step one",
+      "title": "The habit behind the guides",
+      "body": "Every guide here points at the same idea: understanding is a habit, not a one-off. Covate turns that habit into a tool. It’s an open-source MCP server that rides along with Claude, Cursor or Copilot, watches what actually changes in your codebase, and quizzes you on it — blocking further generation until you can explain what you just shipped. Sign in with GitHub and every session syncs into a learning ledger: each quiz you took, your running accuracy, and the topics you answer worst. Both halves are free — there is nothing to buy.",
+      "install": "or install the free, open-source MCP now"
+    }
+  },
+  "article": {
+    "byline": "By the Covate team · Updated {date, date, long}",
+    "englishOnly": "This guide is currently published in English only.",
+    "faq": "FAQ",
+    "related": "Related",
+    "getMcp": "Get the free open-source MCP →",
+    "finePrint": "The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy."
+  }
+}
