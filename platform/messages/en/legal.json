@@ -2,13 +2,17 @@
   "privacy": {
     "meta": {
       "title": "Privacy Policy | Covate",
-      "description": "What covate.org collects, why, and what happens to it: the GitHub profile you sign in with, the learning sessions you choose to sync, four first-party cookies and one analytics script. Operated by DUOCODE TECHNOLOGY under Malaysia's PDPA 2010."
+      "description": "What covate.org collects, why, and what happens to it: the GitHub profile you sign in with, the learning sessions you choose to sync, four first-party cookies and one self-hosted, cookieless analytics script. Operated by DUOCODE TECHNOLOGY under Malaysia's PDPA 2010."
     },
     "breadcrumb": "Privacy",
     "eyebrow": "Legal",
     "title": "Privacy Policy",
     "updated": "Last updated 3 September 2026",
     "intro": "The short version: Covate stores the GitHub profile you sign in with, plus the learning sessions you deliberately choose to upload. It never uploads your source code, never sends you email, and never sells your data. The detail is below.",
+    "languages": {
+      "note": "This notice is published in English, in Chinese, and — as section 7(2) of Malaysia's Personal Data Protection Act 2010 requires — in Bahasa Malaysia. The three say the same thing; if they ever differ, the English version prevails.",
+      "linkLabel": "Notis Privasi (Bahasa Malaysia) →"
+    },
     "seeAlso": "Read the Terms of Service →",
     "sections": [
       {
@@ -62,13 +66,16 @@
           "covate_oauth_state — a one-off random value that stops the GitHub sign-in from being forged. HTTP-only, ten minutes.",
           "covate_device_code — during a device-flow sign-in, the code we are exchanging with GitHub on your behalf. HTTP-only, dropped once the sign-in finishes or expires."
         ],
-        "footnote": ""
+        "footnote": "These four are the only cookies this site sets, and nothing else here writes to your browser's storage. Until 3 September 2026 Google Analytics set cookies of its own alongside them; it has been removed, and those cookies are no longer set."
       },
       {
         "heading": "Analytics",
         "paragraphs": [
-          "Every page on this site loads Google Analytics 4 (measurement ID G-M3EQXS08MM). Google receives which page you viewed, basic browser and device information, and your IP address, and sets its own cookies in your browser; what Google does with that is governed by Google's own privacy policy. We use it for one thing: seeing which pages get read.",
-          "The site does not currently show a cookie banner and has no in-page opt-out. If you would rather not be measured, block the script with your browser's settings or a content blocker, or use Google's own Analytics opt-out browser add-on."
+          "We measure which pages get read, using Umami — open-source analytics software that we run ourselves, on our own server in Singapore, into a database only we can reach. Nothing from this site goes to Google, or to any other analytics or advertising company: the Google Analytics tag that used to load on every page was removed on 3 September 2026.",
+          "The script sets no cookie and stores nothing in your browser. It sends us the address and title of the page you are on, the address you arrived from, your screen size and your browser's language; link-tracking parameters carried in the address, such as utm_source or gclid, are recorded as fields of their own. From the request itself our server works out your browser, operating system and device type, and an approximate location — country, region and city — from your IP address.",
+          "Your IP address is not stored in the analytics database: there is no column for one, anywhere in it. It is used only in the moment, to derive a visitor identifier — a one-way hash of the request, your IP address and browser among its inputs, salted with a secret that only our server holds. That identifier cannot be turned back into your IP address, but it is pseudonymous rather than anonymous: while you stay on the same network and browser, later visits are counted as the same visitor, and we have seen that hold for weeks at a time. It is shared with nobody.",
+          "This software can also record what a visitor does on screen and build heatmaps from it. Both are switched off for covate.org and have never been on: none of your keystrokes, mouse movements or screen contents are captured.",
+          "Because none of this stores anything on your device, there is nothing here for a cookie banner to ask your consent for — you do not see one because none is needed, not because we left it out. If you would rather not be counted at all, block the script with your browser or a content blocker, or set umami.disabled to 1 in this site's local storage; the tracker checks that flag before it sends anything."
         ],
         "bullets": [],
         "footnote": ""
@@ -76,7 +83,8 @@
       {
         "heading": "Hosting and server logs",
         "paragraphs": [
-          "The site and its API run on Vercel; the database is Postgres hosted on Supabase. Serving you a page necessarily means the hosting provider handles the request, including the IP address it came from, and both providers keep their own operational logs under their own policies. Covate itself writes no request logs and stores no IP addresses in its database."
+          "The site and its API run on Vercel; the database is Postgres hosted on Supabase. Serving you a page necessarily means the hosting provider handles the request, including the IP address it came from, and both providers keep their own operational logs under their own policies. Covate itself writes no request logs and stores no IP addresses in its database.",
+          "The analytics script is served from a third machine, our own, rented from Amazon Web Services in Singapore. Its web server keeps ordinary access logs, and — as any web server's do — those record the IP address of each request for the script and each measurement it sends back. Those logs are ours and nobody else's, we keep them to run the machine, and we do not join them to the analytics data."
         ],
         "bullets": [],
         "footnote": ""
@@ -110,7 +118,7 @@
           "GitHub — sign-in and the profile fields listed above",
           "Vercel — hosting for the website and its API",
           "Supabase — the Postgres database your account and learning records live in",
-          "Google — website analytics"
+          "Amazon Web Services — the Singapore server our own analytics software and its database run on"
         ],
         "footnote": "These providers operate outside Malaysia, so your data is stored and processed outside Malaysia; by using Covate you consent to that transfer. Apart from them, we disclose personal data to nobody, unless a Malaysian authority or court lawfully requires it of us."
       },

@@ -15,7 +15,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: t("meta.title"),
     description: t("meta.description"),
-    alternates: { canonical: PATH },
+    // The Bahasa Malaysia notice PDPA s.7(2) requires is a route of its own, because
+    // "ms" is not one of the site's two UI locales; declare it as this page's other
+    // language version rather than leaving it as an orphan.
+    alternates: { canonical: PATH, languages: { "ms-MY": "/privacy/ms" } },
     robots: { index: true, follow: true },
     openGraph: {
       type: "website",
@@ -74,6 +77,7 @@ export default async function PrivacyPage() {
         breadcrumb={t("breadcrumb")}
         sections={t.raw("sections") as LegalSection[]}
         seeAlso={{ href: "/terms", label: t("seeAlso") }}
+        languageNote={{ text: t("languages.note"), href: "/privacy/ms", linkLabel: t("languages.linkLabel") }}
       />
     </>
   );

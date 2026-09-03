@@ -22,6 +22,8 @@ export function LegalDoc({
   breadcrumb,
   sections,
   seeAlso,
+  languageNote,
+  lang,
 }: {
   eyebrow: string;
   title: string;
@@ -30,12 +32,18 @@ export function LegalDoc({
   breadcrumb: string;
   sections: LegalSection[];
   seeAlso: { href: string; label: string };
+  /** Which other language versions exist and which one prevails — PDPA s.7(2). */
+  languageNote?: { text: string; href: string; linkLabel: string };
+  /** BCP-47 tag for the document itself. The header and footer around it stay in
+      the visitor's chosen site language, so the tag belongs on <main>, not <html>:
+      /privacy/ms is a Malay document rendered inside an English or Chinese shell. */
+  lang?: string;
 }) {
   return (
     <div className="min-h-screen bg-deep text-primary">
       <SiteHeader items={NAV.legal} />
 
-      <main>
+      <main lang={lang}>
         <section className="border-b border-border">
           <div className="mx-auto max-w-3xl px-6 pb-12 pt-8">
             <Breadcrumb current={breadcrumb} />
@@ -45,6 +53,17 @@ export function LegalDoc({
             </h1>
             <p className="mt-4 font-mono text-xs text-dim">{updated}</p>
             <p className="mt-6 text-lg leading-8 text-secondary">{intro}</p>
+            {languageNote ? (
+              <p className="mt-6 rounded-xl border border-border bg-surface/40 p-4 text-sm leading-7 text-secondary">
+                {languageNote.text}{" "}
+                <a
+                  href={languageNote.href}
+                  className="text-accent underline underline-offset-4 hover:text-accent-soft"
+                >
+                  {languageNote.linkLabel}
+                </a>
+              </p>
+            ) : null}
           </div>
         </section>
 

@@ -25,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: SITE + "/learn/how-to-debug-with-ai-without-losing-the-skill", lastModified: "2026-08-27", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/coding-interviews-in-the-age-of-ai", lastModified: "2026-08-27", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/privacy", lastModified: "2026-09-03", changeFrequency: "yearly", priority: 0.3 },
+    { url: SITE + "/privacy/ms", lastModified: "2026-09-03", changeFrequency: "yearly", priority: 0.3 },
     { url: SITE + "/terms", lastModified: "2026-09-03", changeFrequency: "yearly", priority: 0.3 },
   ];
 }

@@ -8,10 +8,6 @@ import "../globals.css";
 import { isLocale, LOCALES } from "../i18n/messages";
 import { SITE } from "../lib/site";
 
-// Shared cross-product GA4 (distinguished by hostname in reports), matching the
-// other DUOCODE products so covate.org has usage/traffic monitoring too.
-const GA_ID = "G-M3EQXS08MM";
-
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
@@ -143,16 +139,17 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={{ common: messages.common, dashboard: messages.dashboard }}>
           {children}
         </NextIntlClientProvider>
+        {/* The only analytics on this site: Umami, self-hosted on our own server,
+            replacing the shared GA4 tag that used to sit here. It sets no cookie
+            and writes nothing to the visitor's browser, so covate.org needs no
+            consent banner — which is what the privacy policy now says. The
+            tracker derives its collector endpoint from its own src by swapping
+            /script.js for /api/send, so no data-host-url is needed here. */}
         <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
+          defer
+          src="https://fluentdojo.com/umami/script.js"
+          data-website-id="18334797-f828-4567-9415-c3af0b5325c0"
         />
-        <Script id="ga4" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_ID}');`}
-        </Script>
       </body>
     </html>
   );
