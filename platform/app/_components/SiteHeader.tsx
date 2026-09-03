@@ -31,6 +31,8 @@ export const NAV = {
     GH,
   ],
   dashboard: [{ key: "home", href: SITE, className: LINK }, GH],
+  // Privacy / Terms: no section of their own to highlight, so just the ways out.
+  legal: [{ key: "learn", href: "/learn", className: LINK }, { key: "home", href: SITE, className: LINK }, GH],
 } satisfies Record<string, NavItem[]>;
 
 export const SIGN_OUT: NavItem = { key: "signOut", href: "/api/auth/logout", className: LINK };

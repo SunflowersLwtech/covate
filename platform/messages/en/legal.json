@@ -1,0 +1,322 @@
+{
+  "privacy": {
+    "meta": {
+      "title": "Privacy Policy | Covate",
+      "description": "What covate.org collects, why, and what happens to it: the GitHub profile you sign in with, the learning sessions you choose to sync, four first-party cookies and one analytics script. Operated by DUOCODE TECHNOLOGY under Malaysia's PDPA 2010."
+    },
+    "breadcrumb": "Privacy",
+    "eyebrow": "Legal",
+    "title": "Privacy Policy",
+    "updated": "Last updated 3 September 2026",
+    "intro": "The short version: Covate stores the GitHub profile you sign in with, plus the learning sessions you deliberately choose to upload. It never uploads your source code, never sends you email, and never sells your data. The detail is below.",
+    "seeAlso": "Read the Terms of Service →",
+    "sections": [
+      {
+        "heading": "Who we are, and what this covers",
+        "paragraphs": [
+          "Covate is operated by DUOCODE TECHNOLOGY, a sole proprietorship registered in Malaysia under registration number LA0087244-A. In this policy \"we\", \"us\" and \"Covate\" mean DUOCODE TECHNOLOGY.",
+          "This policy covers the covate.org website, the Learning Center articles, and the learning ledger you reach by signing in at covate.org/dashboard. The Covate MCP server is a separate thing: it is open-source software that runs on your own machine, keeps its learning sessions in local storage there, and sends us nothing at all unless you deliberately configure the sync described further down."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "What we collect when you sign in",
+        "paragraphs": [
+          "Signing in is done through GitHub. We ask GitHub for two permissions only — read:user and user:email — which is enough to know who you are and to have an address to reach you at. We never see your GitHub password, and we do not ask for, and cannot obtain, access to your repositories.",
+          "From that sign-in we keep one record for your account:"
+        ],
+        "bullets": [
+          "your numeric GitHub user ID — the key your history is tied to, so renaming your GitHub account does not lose it",
+          "your GitHub username",
+          "your display name and the web address of your GitHub avatar image (we store the link, not a copy of the picture)",
+          "one email address: the public email on your GitHub profile or, if you have not set one, a verified address on your GitHub account — your primary one where GitHub tells us which it is. If GitHub gives us no address, we store none.",
+          "a sync token — a random secret generated for your account, which the sync client uses to upload sessions; you can reveal it or replace it in the dashboard at any time",
+          "a plan field, which reads \"free\" for every account, and the times the record was created and last updated"
+        ],
+        "footnote": "We do not keep the GitHub access token after sign-in. It is used once, to read the profile fields above, and then discarded."
+      },
+      {
+        "heading": "Learning data you choose to sync",
+        "paragraphs": [
+          "Your ledger stays empty until you put your sync token into the Covate sync client and run it. Nothing is uploaded before that, and turning it off is a matter of removing the token — or rotating it in the dashboard, which stops the old one working immediately.",
+          "When you do sync, each learning session reaches us as:"
+        ],
+        "bullets": [
+          "an identifier your local copy already gave the session, so re-syncing updates that session instead of duplicating it",
+          "the name of the project folder — the folder's name only, not the path to it on your machine",
+          "the short summary of the code change the quiz was about",
+          "how many questions the session had, how many you answered correctly, and when it started and finished",
+          "for every question: the question text, the answer options, the correct answer, the answer you gave, whether it was right, the explanation, and the topic and concept labels"
+        ],
+        "footnote": "That question, explanation and summary text is written by the MCP on your own machine, from your recent code changes — so it can describe, and may quote, parts of the code you were working on. Please weigh that before syncing work you are not free to share. What the sync client does not send is the code itself: no files, no diffs, no repository contents, no directory paths. From the answers we also keep a running per-topic tally — how many you answered, how many were right, when the topic was last seen — which is what the dashboard's weakest-topics list is built from."
+      },
+      {
+        "heading": "Cookies",
+        "paragraphs": [
+          "Covate sets four cookies of its own. None of them are advertising cookies."
+        ],
+        "bullets": [
+          "covate_locale — the language you picked, so the site keeps serving it. Readable by the page, kept for a year.",
+          "covate_session — your signed-in session: your account identifier plus a signature we verify on every request. HTTP-only, kept for 30 days, cleared when you sign out.",
+          "covate_oauth_state — a one-off random value that stops the GitHub sign-in from being forged. HTTP-only, ten minutes.",
+          "covate_device_code — during a device-flow sign-in, the code we are exchanging with GitHub on your behalf. HTTP-only, dropped once the sign-in finishes or expires."
+        ],
+        "footnote": ""
+      },
+      {
+        "heading": "Analytics",
+        "paragraphs": [
+          "Every page on this site loads Google Analytics 4 (measurement ID G-M3EQXS08MM). Google receives which page you viewed, basic browser and device information, and your IP address, and sets its own cookies in your browser; what Google does with that is governed by Google's own privacy policy. We use it for one thing: seeing which pages get read.",
+          "The site does not currently show a cookie banner and has no in-page opt-out. If you would rather not be measured, block the script with your browser's settings or a content blocker, or use Google's own Analytics opt-out browser add-on."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Hosting and server logs",
+        "paragraphs": [
+          "The site and its API run on Vercel; the database is Postgres hosted on Supabase. Serving you a page necessarily means the hosting provider handles the request, including the IP address it came from, and both providers keep their own operational logs under their own policies. Covate itself writes no request logs and stores no IP addresses in its database."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "What we do not do",
+        "paragraphs": [],
+        "bullets": [
+          "We do not sell, rent or trade personal data.",
+          "We take no payment details, because nothing here is for sale: there is no paid plan, no subscription and no checkout anywhere on the site.",
+          "We do not use your synced learning data to train machine-learning models.",
+          "We run no advertising and carry no ad-network trackers.",
+          "The site sends no email at all — no marketing, no notifications. Your address is stored to identify your account and so that we can reply if you write to us."
+        ],
+        "footnote": ""
+      },
+      {
+        "heading": "Why we process it, and on what basis",
+        "paragraphs": [
+          "We process the data above to authenticate you, to show you your own learning ledger, and to keep the service running and free from abuse. Under Malaysia's Personal Data Protection Act 2010 we rely on your consent — given when you sign in, and again when you choose to configure the sync — and on the processing being necessary for the service you asked us to perform. You can withdraw that consent at any time; see \"Your rights\" below."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Who else handles your data",
+        "paragraphs": [
+          "We use a small number of service providers, each for one purpose:"
+        ],
+        "bullets": [
+          "GitHub — sign-in and the profile fields listed above",
+          "Vercel — hosting for the website and its API",
+          "Supabase — the Postgres database your account and learning records live in",
+          "Google — website analytics"
+        ],
+        "footnote": "These providers operate outside Malaysia, so your data is stored and processed outside Malaysia; by using Covate you consent to that transfer. Apart from them, we disclose personal data to nobody, unless a Malaysian authority or court lawfully requires it of us."
+      },
+      {
+        "heading": "How long we keep it",
+        "paragraphs": [
+          "We keep your account and your synced learning records until you ask us to delete them, or until Covate is shut down. We have not set a fixed retention schedule, and we would rather say so than publish one we do not actually enforce.",
+          "Deleting your account deletes everything attached to it: your sessions, every answer, and the per-topic tallies go with it."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Your rights",
+        "paragraphs": [
+          "Malaysia's Personal Data Protection Act 2010 gives you the right to ask what personal data we hold about you, to have it corrected, to withdraw your consent, and to limit how it is processed. Write to duocodetechu@gmail.com — from the email address on your GitHub account, or telling us your GitHub username — and we will answer within 21 days, as the Act requires."
+        ],
+        "bullets": [
+          "Get a copy — we will send you what we hold, in a form you can read and re-use.",
+          "Correct it — nearly all of it comes from GitHub, so correcting it there and signing in again refreshes your name, username, avatar and email here.",
+          "Delete it — the dashboard has no delete button yet, so ask us by email and we will remove the account and everything attached to it.",
+          "Stop syncing — take the sync token out of your MCP configuration, or rotate it in the dashboard, which invalidates the old one straight away. Sessions already uploaded stay until you ask us to delete them.",
+          "Complain — if we have not put something right, you can complain to the Personal Data Protection Commissioner (Jabatan Perlindungan Data Peribadi) in Malaysia."
+        ],
+        "footnote": ""
+      },
+      {
+        "heading": "Security",
+        "paragraphs": [
+          "Your session cookie is HTTP-only, sent only over HTTPS, and carries a signature we verify on every request, so it cannot be edited into somebody else's account. The connection to the database is encrypted.",
+          "Your sync token is a password in every practical sense: whoever holds it can upload sessions into your ledger. It is never printed into the page's HTML — the dashboard fetches it only for a signed-in session — and it cannot be used to read or rotate itself. If you think it has leaked, rotate it in the dashboard.",
+          "No service can promise perfect security, and we are not going to pretend otherwise."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Children",
+        "paragraphs": [
+          "Covate is a tool for working developers and is not directed at children. We do not knowingly collect personal data from anyone under 18 without the consent of a parent or guardian, as Malaysian law requires. If you believe a child has given us data, write to us and we will delete it."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Changes to this policy",
+        "paragraphs": [
+          "If this policy changes, we will update it here and change the date at the top. A material change will be described in the change itself, not slipped in quietly."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Contact",
+        "paragraphs": [
+          "DUOCODE TECHNOLOGY (registration no. LA0087244-A), Malaysia. Email duocodetechu@gmail.com — that is the address for privacy questions, data access requests and deletions."
+        ],
+        "bullets": [],
+        "footnote": ""
+      }
+    ]
+  },
+  "terms": {
+    "meta": {
+      "title": "Terms of Service | Covate",
+      "description": "The terms for using covate.org and its free learning ledger: no paid plan and no payment details, a GitHub account to sign in, what you may and may not upload, no warranty, and Malaysian governing law. Operated by DUOCODE TECHNOLOGY."
+    },
+    "breadcrumb": "Terms",
+    "eyebrow": "Legal",
+    "title": "Terms of Service",
+    "updated": "Last updated 3 September 2026",
+    "intro": "The short version: Covate is free, it is provided as it is, and you can stop using it whenever you like. What follows is the detail.",
+    "seeAlso": "Read the Privacy Policy →",
+    "sections": [
+      {
+        "heading": "These terms",
+        "paragraphs": [
+          "These terms are the agreement between you and DUOCODE TECHNOLOGY, a sole proprietorship registered in Malaysia under registration number LA0087244-A (\"we\", \"us\"). They cover the covate.org website, the Learning Center articles, and the learning ledger you reach by signing in. Using the site means accepting them; if you do not accept them, please do not use it.",
+          "The Covate MCP server is separate. It is open-source software published under the MIT licence, and your use of it is governed by that licence rather than by these terms. These terms start to apply the moment it talks to covate.org."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "The service is free",
+        "paragraphs": [
+          "Covate costs nothing. There is no paid plan, no subscription, no trial and no checkout anywhere on this site, and we collect no payment details. If that ever changes, paid features would be something you opt into, and these terms and the privacy policy would be updated before they existed."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Your account",
+        "paragraphs": [],
+        "bullets": [
+          "Signing in requires a GitHub account, and your use of GitHub remains subject to GitHub's own terms.",
+          "An account is for one person. Please do not share it.",
+          "You are responsible for what happens under your account, and for keeping your sync token secret. If it leaks, rotate it in the dashboard — that invalidates the old one immediately.",
+          "You may stop using Covate at any time. Signing out clears the session; email us if you also want the account and its data deleted."
+        ],
+        "footnote": ""
+      },
+      {
+        "heading": "Acceptable use",
+        "paragraphs": [
+          "Do not:"
+        ],
+        "bullets": [
+          "upload material you have no right to upload — including code, summaries or quiz text covered by an employer's or client's confidentiality obligations, and personal data about other people",
+          "use a sync token that is not yours, or try to obtain one",
+          "attack, overload, probe or otherwise interfere with the service or the systems it runs on, or try to reach data that is not yours",
+          "use Covate to break any law that applies to you",
+          "scrape or republish the Learning Center wholesale — quoting it with attribution and a link is welcome"
+        ],
+        "footnote": "Because your learning sessions are generated from your own code, decide before you sync whether that content is yours to share. Covate cannot make that judgement for you."
+      },
+      {
+        "heading": "Your content",
+        "paragraphs": [
+          "What you sync stays yours. You give us permission to store it, process it and show it back to you — that is what the ledger is — and nothing beyond that. We do not use it to train machine-learning models, and we do not sell it or hand it to anyone other than the service providers named in the privacy policy."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Availability",
+        "paragraphs": [
+          "Covate is offered as it is and as it happens to be available. We promise no level of uptime, and we may change, suspend or discontinue any part of it — the hosted ledger included — at any time, with or without notice. Data may be lost when that happens.",
+          "The MCP keeps your learning sessions on your own machine, which is where the sync client reads them from. The ledger is a second copy, not the only record; please treat it that way."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "The Learning Center",
+        "paragraphs": [
+          "The guides are general information, written to be useful. They are not professional advice, acting on them is your decision, and we may add to, edit or remove them."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Intellectual property",
+        "paragraphs": [
+          "The site's text, design, logo and the Covate name belong to DUOCODE TECHNOLOGY. The Covate MCP server's source code is published under the MIT licence and may be used on those terms."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Suspension and termination",
+        "paragraphs": [
+          "We may suspend or remove an account that breaks these terms or puts the service or its other users at risk. Where it is reasonable to do so, we will tell you why."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "No warranty",
+        "paragraphs": [
+          "Covate is provided \"as is\" and \"as available\", without warranties of any kind, express or implied, including any implied warranty of merchantability, fitness for a particular purpose, accuracy or non-infringement.",
+          "In particular: the quiz questions, answers and explanations are generated by the MCP on your machine from your own code. We do not warrant that any of them are correct, and you should judge them on their merits."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Limitation of liability",
+        "paragraphs": [
+          "To the fullest extent Malaysian law permits, we are not liable for indirect, incidental, special or consequential loss, for lost profits or business, or for lost or corrupted data arising from your use of Covate. Because the service is provided free of charge, our total liability to you for any claim relating to it is limited to RM100. Nothing here limits liability that cannot lawfully be limited."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Indemnity",
+        "paragraphs": [
+          "If someone brings a claim against us because of content you uploaded, or because you used Covate in breach of these terms, you agree to cover the reasonable costs of dealing with it."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Governing law",
+        "paragraphs": [
+          "These terms are governed by the laws of Malaysia, and the courts of Malaysia have exclusive jurisdiction over any dispute arising out of them or out of your use of Covate."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Changes to these terms",
+        "paragraphs": [
+          "We may update these terms; the date at the top says when we last did. Continuing to use Covate after a change means you accept the updated terms."
+        ],
+        "bullets": [],
+        "footnote": ""
+      },
+      {
+        "heading": "Contact",
+        "paragraphs": [
+          "DUOCODE TECHNOLOGY (registration no. LA0087244-A), Malaysia. Email duocodetechu@gmail.com."
+        ],
+        "bullets": [],
+        "footnote": ""
+      }
+    ]
+  }
+}
