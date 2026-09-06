@@ -144,12 +144,52 @@ export default async function RootLayout({
             and writes nothing to the visitor's browser, so covate.org needs no
             consent banner — which is what the privacy policy now says. The
             tracker derives its collector endpoint from its own src by swapping
-            /script.js for /api/send, so no data-host-url is needed here. */}
-        <Script
-          defer
-          src="https://fluentdojo.com/umami/script.js"
-          data-website-id="18334797-f828-4567-9415-c3af0b5325c0"
-        />
+            /script.js for /api/send, so no data-host-url is needed here.
+
+            Two independent gates keep non-production traffic out of the
+            production website-id, because the id itself carries no notion of
+            where it is allowed to fire.
+
+            VERCEL_ENV is the build-time gate: `next dev` and preview deploys
+            never render the tag at all. This layout is prerendered
+            (generateStaticParams above), so the decision is baked in at build
+            time — and covate.org is built locally with `vercel build --prod`
+            and shipped with `vercel deploy --prebuilt`, where the Vercel CLI
+            sets VERCEL_ENV=production for that build.
+
+            data-domains is the runtime gate, inside the tracker itself: even a
+            production bundle stays silent unless location.hostname is listed,
+            so a prod build opened from anywhere but the real host reports
+            nothing. Neither gate replaces the other — a correctly guarded
+            emitter pointed at the wrong collector is still wrong, and that is
+            the shape of the problem this closes.
+
+            www is listed because it is a production host today (it 308s to the
+            apex). An out-of-date list fails by losing data silently, so change
+            it together with the domain.
+
+            Adding a subdomain means changing TWO places: this attribute and the
+            server-side hostname allowlist (an Umami BEFORE INSERT trigger), and the two
+            use different rules.
+
+            data-domains is exact string equality: location.hostname must appear here
+            verbatim. The tracker contains no wildcard, endsWith or RegExp matching, so
+            "*.covate.org" would only ever match a literal host of that name. The
+            server-side trigger lowercases, strips "www." and accepts subdomains. A
+            subdomain added there but not here is accepted by the collector and never
+            sent by the browser, so it goes silently uncollected.
+
+            Prefer giving a new subdomain its own website-id over widening either list.
+            A staging host reporting into the production id is the failure this gate
+            exists to prevent. */}
+        {process.env.VERCEL_ENV === "production" ? (
+          <Script
+            defer
+            src="https://fluentdojo.com/umami/script.js"
+            data-website-id="18334797-f828-4567-9415-c3af0b5325c0"
+            data-domains="covate.org,www.covate.org"
+          />
+        ) : null}
       </body>
     </html>
   );
