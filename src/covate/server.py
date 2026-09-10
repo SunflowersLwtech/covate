@@ -408,9 +408,11 @@ async def learning_session(
     """Interactive quiz card about a specific change. Call ONLY when user says 'quiz me' or 'test me'.
 
     You MUST pass `summary` (what changed and why). Pass `quizzes` too whenever you can —
-    questions you write about the real diff beat the built-in templates. Without either,
-    the tool reads the repository's most recent change; if that says nothing either it
-    REFUSES instead of guessing. Blocks until the user is done.
+    questions you write about the real diff beat the built-in templates. Pass `reasoning`
+    (goal/trigger/mechanism/alternatives/risks) when you know it: omit it and the card
+    shows an empty reasoning panel rather than invented reasoning. Without a usable
+    summary the tool reads the repository's most recent change; if that says nothing
+    either it REFUSES instead of guessing. Blocks until the user is done.
     """
     debug_log(f"learning_session called: project={project_directory}, timeout={timeout}")
 
