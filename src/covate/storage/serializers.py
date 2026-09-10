@@ -7,6 +7,7 @@ Handles sessions, debug records, and metadata.
 """
 
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -77,14 +78,36 @@ def save_json_file(
     file_path = Path(file_path)
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(
-            data,
-            f,
-            cls=DateTimeEncoder,
-            ensure_ascii=False,
-            indent=2 if pretty else None,
-        )
+    # Write to a sibling temp file, then rename over the target.
+    #
+    # `open(path, "w")` truncates the file before the first byte is written, so an
+    # interrupted save (crash, full disk, an encoder error partway through a large
+    # record) used to leave the user's session ledger or debug index zero-length or
+    # half-written. The loaders swallow a JSONDecodeError and return an empty
+    # structure, and the next save then writes that empty structure over what was
+    # left — silent, permanent loss of data the user cannot see going.
+    #
+    # os.replace is atomic on POSIX and on Windows, on the same filesystem: readers
+    # see either the whole old file or the whole new one, never a partial write.
+    tmp_path = file_path.with_name(f"{file_path.name}.tmp-{os.getpid()}")
+    try:
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(
+                data,
+                f,
+                cls=DateTimeEncoder,
+                ensure_ascii=False,
+                indent=2 if pretty else None,
+            )
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, file_path)
+    except BaseException:
+        try:
+            tmp_path.unlink()
+        except OSError:
+            pass
+        raise
 
     debug_log(f"Saved JSON file: {file_path}")
 
