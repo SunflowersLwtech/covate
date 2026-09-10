@@ -542,9 +542,13 @@ async def debug_search(
 
     except Exception as e:
         debug_log(f"debug_search error: {e}")
+        # A failed search used to be byte-identical to a successful search that found
+        # nothing, so a broken or unreadable index read to the agent as "this project
+        # has no debug history" — forever, and silently. Say which one it was.
         return {
             "results": [],
             "count": 0,
+            "error": f"debug history could not be searched: {type(e).__name__}: {str(e)[:200]}",
         }
 
 

@@ -77,10 +77,16 @@ class DebugIndexManager:
         }
 
     def _save_index(self) -> None:
-        """Save the index to file (compact mode for token savings)."""
+        """Save the index to file (compact mode for token savings).
+
+        Goes through save_json_file so the write is atomic: a direct `open(w)` here
+        truncated the index before writing, and _load_index turns a truncated index
+        into an empty one without telling anybody.
+        """
+        from .serializers import save_json_file
+
         self._index["updated_at"] = datetime.now().isoformat()
-        with open(self.index_file, "w", encoding="utf-8") as f:
-            json.dump(self._index, f, ensure_ascii=False)
+        save_json_file(self.index_file, self._index)
 
     # Synonym mappings for debug-related terms
     SYNONYMS = {
