@@ -70,7 +70,14 @@ class LearningSession:
         self.session_id = session_id
         self.project_directory = project_directory
         self.summary = summary
-        self.reasoning = reasoning or self._generate_default_reasoning(summary)
+        # No fabricated fallback. A "Reasoning Insights (5-Why)" panel filled with
+        # boilerplate about the quiz ("Trigger: User requested learning session",
+        # "Alternative: Could review code directly without quiz") reads to the user as
+        # analysis of their code change, and is indistinguishable from reasoning the
+        # agent actually supplied. When there is none, the card renders its own
+        # `reasoning.noData` empty state instead — which is translated in all locales
+        # and was unreachable for as long as this fallback existed.
+        self.reasoning = reasoning
         self.quizzes = quizzes or []
         self.focus_areas = list(focus_areas) if focus_areas else ["logic"]
         self.terms = terms or []
@@ -97,16 +104,6 @@ class LearningSession:
 
         debug_log(f"Learning session {self.session_id} initialized")
 
-
-    def _generate_default_reasoning(self, summary: str) -> dict[str, Any]:
-        """Generate default reasoning structure."""
-        return {
-            "goal": f"Understanding: {summary[:100]}...",
-            "trigger": "User requested learning session",
-            "mechanism": "Code changes and their implications",
-            "alternatives": "Could review code directly without quiz",
-            "risks": "May miss important implementation details"
-        }
 
     async def wait_for_completion(self, timeout: int = 600) -> dict[str, Any]:
         """

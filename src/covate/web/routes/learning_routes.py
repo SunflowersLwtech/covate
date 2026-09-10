@@ -50,7 +50,10 @@ class SessionDataResponse(BaseModel):
     session_id: str
     project_directory: str
     summary: str
-    reasoning: dict[str, Any]
+    # Optional: a session whose caller supplied no reasoning must still load. It used to
+    # be required, which meant the only thing keeping this endpoint from 500-ing was the
+    # fabricated 5-Why fallback in LearningSession.
+    reasoning: dict[str, Any] | None = None
     quizzes: list[dict[str, Any]]
     focus_areas: list[str]
     terms: list[dict[str, Any]] = []
