@@ -8,6 +8,8 @@ the user completes the learning card.
 """
 
 import os
+import shutil
+import subprocess
 import sys
 from typing import Annotated, Any, Literal
 
@@ -88,9 +90,15 @@ def _validate_quizzes(quizzes: list[dict[str, Any]]) -> None:
                 raise ValueError(f"Quiz {i} missing required key: {key}")
 
 
-def _detect_change_type(summary: str) -> str:
-    """Detect the type of change based on summary keywords."""
-    summary_lower = summary.lower()
+def _detect_change_type(summary: str) -> str | None:
+    """Detect the type of change from keywords in `summary`.
+
+    Returns None when the text carries no signal at all. It deliberately does NOT
+    fall back to "feature": that fallback made every unknown change come back as
+    "New feature", which is a confident wrong answer rather than an absent one.
+    Callers must resolve None (read the repository, or refuse) instead of guessing.
+    """
+    summary_lower = (summary or "").lower()
 
     # Check for bug fix indicators
     if any(kw in summary_lower for kw in ["fix", "bug", "issue", "error", "crash", "repair", "patch", "resolve"]):
@@ -116,14 +124,16 @@ def _detect_change_type(summary: str) -> str:
     if any(kw in summary_lower for kw in ["test", "spec", "coverage", "assert", "mock"]):
         return "test"
 
-    # Default to new feature
-    return "feature"
+    # No signal. Say so — do not guess "feature".
+    return None
 
 
-def _generate_default_quizzes(summary: str) -> list[dict[str, Any]]:
-    """Generate default quiz questions based on summary content analysis."""
-    change_type = _detect_change_type(summary)
+def _generate_default_quizzes(change_type: str) -> list[dict[str, Any]]:
+    """Generate default quiz questions for an ALREADY-RESOLVED change type.
 
+    `change_type` must come from `_resolve_change_context`, which is the only place
+    allowed to decide what kind of change this is (and to refuse when it cannot tell).
+    """
     # Quiz templates based on change type
     quiz_templates = {
         "bugfix": [
@@ -268,20 +278,147 @@ def _generate_default_quizzes(summary: str) -> list[dict[str, Any]]:
         ],
     }
 
-    return quiz_templates.get(change_type, quiz_templates["feature"])
+    if change_type not in quiz_templates:
+        # Unknown types used to silently fall back to the "feature" deck, which asserts
+        # "this appears to be a new feature". Refuse instead of asserting.
+        raise InsufficientContextError(f"No quiz template for change type {change_type!r}")
+    return quiz_templates[change_type]
+
+
+class InsufficientContextError(ValueError):
+    """Raised when there is nothing to build a learning card from.
+
+    The learning card must never be assembled out of nothing: a card whose questions
+    were invented from a placeholder summary teaches the user a wrong answer about
+    their own code. When neither the caller's summary nor the repository's most recent
+    change says what changed, the tool refuses and says what it needs.
+    """
+
+
+def _read_recent_change(project_directory: str) -> dict[str, str] | None:
+    """Read the project's most recent change from git.
+
+    This is the "reads your diff" half of the product promise: the tool looks at the
+    repository itself instead of trusting whatever narration the caller passed in.
+
+    Returns {"headline": <one line>, "text": <headline + body + changed paths>} or None
+    when the directory is not a git work tree, git is unavailable, or the repo is empty.
+    """
+    git = shutil.which("git")
+    if not git:
+        debug_log("_read_recent_change: git not on PATH")
+        return None
+
+    def _git(*args: str) -> str | None:
+        try:
+            proc = subprocess.run(
+                [git, "-C", project_directory, *args],
+                capture_output=True,
+                text=True,
+                timeout=10,
+                check=False,
+            )
+        except (OSError, subprocess.SubprocessError) as e:
+            debug_log(f"_read_recent_change: git {args[0]} failed: {e}")
+            return None
+        if proc.returncode != 0:
+            return None
+        return proc.stdout
+
+    if _git("rev-parse", "--git-dir") is None:
+        return None
+
+    parts: list[str] = []
+    headline = ""
+
+    # Uncommitted work first: it is the change the user is most likely being quizzed on.
+    working = _git("diff", "--name-only", "HEAD") or ""
+    working_files = [line for line in working.splitlines() if line.strip()]
+
+    message = _git("log", "-1", "--pretty=%s%n%b")
+    if message is not None and message.strip():
+        lines = [line for line in message.splitlines() if line.strip()]
+        headline = lines[0] if lines else ""
+        parts.append(message)
+
+    committed = _git("show", "--name-only", "--pretty=format:", "HEAD") or ""
+    parts.extend(line for line in committed.splitlines() if line.strip())
+    parts.extend(working_files)
+
+    text = "\n".join(p for p in parts if p.strip())
+    if not text.strip():
+        return None
+
+    if working_files and headline:
+        headline = f"{headline} (plus {len(working_files)} uncommitted file(s))"
+    elif working_files:
+        headline = f"{len(working_files)} uncommitted file(s)"
+
+    return {"headline": headline.strip(), "text": text}
+
+
+def _resolve_change_context(summary: str, project_directory: str) -> tuple[str, str]:
+    """Decide what kind of change this is, and what the card should show as its summary.
+
+    Order: the caller's own summary, then the repository's most recent change (the diff).
+    Raises InsufficientContextError when neither says anything — the tool refuses to
+    invent a change type rather than answering from nothing.
+    """
+    change_type = _detect_change_type(summary)
+    if change_type is not None:
+        return change_type, summary
+
+    recent = _read_recent_change(project_directory)
+    if recent is not None:
+        change_type = _detect_change_type(recent["text"])
+        if change_type is not None:
+            # Show the user the evidence the questions were actually built from,
+            # so a derived classification is never presented as if the agent said it.
+            evidence = f"Most recent change in this repository: {recent['headline']}"
+            summary_for_ui = f"{summary.strip()}\n\n{evidence}" if summary.strip() else evidence
+            return change_type, summary_for_ui
+
+    raise InsufficientContextError(
+        "learning_session has nothing to build questions from: the `summary` argument "
+        "does not say what changed, and no recognisable change was found in "
+        f"{project_directory!r}. Call again with a `summary` describing the change you "
+        "just made, and ideally an explicit `quizzes` list. Refusing rather than "
+        "inventing a quiz about code that was never read."
+    )
 
 
 @mcp.tool()
 async def learning_session(
+    summary: Annotated[
+        str,
+        Field(
+            description=(
+                "REQUIRED. What actually changed and why, in the user's own terms — this is "
+                "what the card and its questions are built from. Never a placeholder like "
+                "'task complete'; the tool refuses when it cannot tell what changed."
+            )
+        ),
+    ],
     project_directory: str = ".",
-    summary: str = "I have completed the requested task.",
     reasoning: dict[str, Any] | None = None,
     quizzes: list[dict[str, Any]] | None = None,
     focus_areas: list[Literal["logic", "security", "performance", "architecture", "syntax"]] | None = None,
     timeout: Annotated[int, Field(ge=60, le=7200)] = 600,
 ) -> dict[str, Any]:
-    """Interactive quiz card. Call ONLY when user says 'quiz me' or 'test me'. Blocks until done."""
+    """Interactive quiz card about a specific change. Call ONLY when user says 'quiz me' or 'test me'.
+
+    You MUST pass `summary` (what changed and why). Pass `quizzes` too whenever you can —
+    questions you write about the real diff beat the built-in templates. Without either,
+    the tool reads the repository's most recent change; if that says nothing either it
+    REFUSES instead of guessing. Blocks until the user is done.
+    """
     debug_log(f"learning_session called: project={project_directory}, timeout={timeout}")
+
+    # Ensure project directory exists — resolved BEFORE reading the repository below,
+    # so the diff we read is the one the card will claim to be about.
+    if not os.path.exists(project_directory):
+        project_directory = os.getcwd()
+    project_directory = os.path.abspath(project_directory)
 
     # Validate and set defaults
     if reasoning:
@@ -290,15 +427,19 @@ async def learning_session(
     if quizzes:
         _validate_quizzes(quizzes)
     else:
-        quizzes = _generate_default_quizzes(summary)
+        try:
+            change_type, summary = _resolve_change_context(summary, project_directory)
+        except InsufficientContextError as e:
+            debug_log(f"learning_session refused: {e}")
+            # No HALT_GENERATION: the agent should retry with real content, not fall silent.
+            return {
+                "status": "insufficient_context",
+                "error": str(e),
+            }
+        quizzes = _generate_default_quizzes(change_type)
 
     if focus_areas is None:
         focus_areas = ["logic"]
-
-    # Ensure project directory exists
-    if not os.path.exists(project_directory):
-        project_directory = os.getcwd()
-    project_directory = os.path.abspath(project_directory)
 
     try:
         # Import and launch the Web UI

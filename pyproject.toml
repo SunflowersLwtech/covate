@@ -45,6 +45,8 @@ packages = ["src/covate"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# Run against src/ without requiring an editable install.
+pythonpath = ["src"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
