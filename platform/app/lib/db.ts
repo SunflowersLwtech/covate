@@ -22,7 +22,8 @@ export function db() {
     idle_timeout: 20,
     connect_timeout: 10,
     // Encrypt, but don't verify: Supabase's pooler presents a self-signed chain.
-    ssl: "require",
+    // DATABASE_SSL=disable is set only by scripts/dev.sh for the local Postgres.
+    ssl: process.env.DATABASE_SSL === "disable" ? false : "require",
   });
   return _sql;
 }

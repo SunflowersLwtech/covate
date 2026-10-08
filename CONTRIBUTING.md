@@ -132,6 +132,25 @@ ruff check src/
 
 ---
 
+### Platform (covate.org) locally
+
+The Next.js app in `platform/` runs on a local Postgres 17 with synthetic data. Nothing it
+runs touches the production database.
+
+```bash
+scripts/dev.sh up        # Postgres in Docker, schema + seed on first run, next dev on :3000
+scripts/dev.sh down      # stop both; data is kept
+scripts/dev.sh reset     # rebuild the database from schema + seed
+scripts/check.sh         # the CI gates for the paths you changed (--full: all of them)
+```
+
+Node 24 (`platform/.nvmrc`) matches Vercel and CI. Sign-in on `/dashboard` uses GitHub's
+device flow, which needs no callback URL and no client secret: put the public OAuth client
+id in `~/.config/duocode/covate-devenv.env` as `GITHUB_OAUTH_CLIENT_ID`. The "sign in with
+GitHub" button needs `GITHUB_OAUTH_CLIENT_SECRET` as well, and a GitHub OAuth App with
+`http://localhost:3000/api/auth/github/callback` registered. Without them it reports
+`not_configured`, which is the intended result.
+
 ## Making Changes
 
 ### Branch Naming Convention
