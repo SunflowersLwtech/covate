@@ -27,8 +27,8 @@ PG_USER="covate"
 PG_DB="covate"
 PG_PASSWORD="covate-local"
 STATE="${COVATE_DEVENV_STATE:-$HOME/.local/state/covate-devenv}"
-PIDFILE="$STATE/next.pid"
-LOGFILE="$STATE/next.log"
+PIDFILE="$STATE/next-$PORT.pid"
+LOGFILE="$STATE/next-$PORT.log"
 LOCK_HASH="$STATE/npm-lock.sha256"
 ENV_FILE="$HOME/.config/duocode/covate-devenv.env"
 
@@ -107,14 +107,17 @@ next_running() {
   [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null
 }
 
+port_free_or_die() {
+  if ! next_running && curl -s -o /dev/null "http://127.0.0.1:$PORT/" 2>/dev/null; then
+    die "port $PORT is taken by something else; set COVATE_DEV_PORT"
+  fi
+}
+
 next_up() {
   mkdir -p "$STATE"
   if next_running; then
     log "next dev already running (pid $(cat "$PIDFILE"))"
     return
-  fi
-  if curl -s -o /dev/null "http://127.0.0.1:$PORT/" 2>/dev/null; then
-    die "port $PORT is taken by something else; set COVATE_DEV_PORT"
   fi
   log "starting next dev on http://localhost:$PORT (log: $LOGFILE)"
   # Own process group, so `down` also stops the autoreloader's children.
@@ -143,18 +146,20 @@ next_up() {
 }
 
 next_down() {
-  if [ -f "$PIDFILE" ]; then
-    local pid
-    pid="$(cat "$PIDFILE")"
+  # Every instance this script started, whatever port it was started on.
+  local f pid i
+  for f in "$STATE"/next-*.pid; do
+    [ -f "$f" ] || continue
+    pid="$(cat "$f")"
     if kill -0 "$pid" 2>/dev/null; then
       kill -TERM -- "-$pid" 2>/dev/null || kill -TERM "$pid" 2>/dev/null || true
-      local i=0
+      i=0
       while kill -0 "$pid" 2>/dev/null && [ "$i" -lt 10 ]; do sleep 1; i=$((i + 1)); done
       kill -KILL -- "-$pid" 2>/dev/null || true
-      log "stopped next dev (pid $pid)"
+      log "stopped next dev ($(basename "$f" .pid), pid $pid)"
     fi
-    rm -f "$PIDFILE"
-  fi
+    rm -f "$f"
+  done
 }
 
 pg_down() {
@@ -166,6 +171,7 @@ pg_down() {
 
 cmd_up() {
   load_env_file
+  port_free_or_die
   pg_up
   deps_sync
   next_up
@@ -193,7 +199,16 @@ cmd_psql() {
 }
 
 cmd_status() {
-  if next_running; then log "next dev: running (pid $(cat "$PIDFILE"))"; else log "next dev: stopped"; fi
+  local f
+  for f in "$STATE"/next-*.pid; do
+    [ -f "$f" ] || continue
+    if kill -0 "$(cat "$f")" 2>/dev/null; then
+      log "next dev: running ($(basename "$f" .pid), pid $(cat "$f"))"
+    else
+      log "next dev: stale pidfile $(basename "$f" .pid)"
+    fi
+  done
+  ls "$STATE"/next-*.pid >/dev/null 2>&1 || log "next dev: stopped"
   if pg_running; then log "postgres: running ($PG_CONTAINER, 127.0.0.1:$PG_PORT)"; else log "postgres: stopped"; fi
 }
 
