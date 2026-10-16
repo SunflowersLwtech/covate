@@ -8,7 +8,8 @@ import { LegalDoc, type LegalSection } from "../../_components/LegalDoc";
 // to /privacy with the cookie set.
 const PATH = "/privacy";
 const URL = SITE + PATH;
-const UPDATED = "2026-09-03";
+const PUBLISHED = "2026-09-03";
+const UPDATED = "2026-10-16";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("legal.privacy");
@@ -48,7 +49,7 @@ export default async function PrivacyPage() {
     description: t("meta.description"),
     url: URL,
     inLanguage: locale,
-    datePublished: UPDATED,
+    datePublished: PUBLISHED,
     dateModified: UPDATED,
     isPartOf: { "@id": SITE + "#website" },
     publisher: { "@id": SITE + "#organization" },
