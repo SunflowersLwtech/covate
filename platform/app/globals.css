@@ -30,6 +30,11 @@
 .hero-aurora {
   position: relative;
   isolation: isolate;
+  /* The glow below reaches 5% past each side. Without this the page scrolled
+     sideways at every width (about 40px at 1280, 12px at 390). clip, not
+     hidden: hidden would make the block a scroll container and cut off the glow
+     that rises above the hero. */
+  overflow-x: clip;
 }
 .hero-aurora::before {
   content: "";
