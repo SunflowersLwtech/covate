@@ -5,6 +5,18 @@ import { db } from "../../lib/db";
 // token from the dashboard). Idempotent on (user_id, client_id) so re-syncs don't
 // duplicate. This is the hosted ledger's ingestion path; the MCP never calls it
 // unless the user has linked an account and configured the token.
+//
+// Ceilings. Every answer is its own insert, so without them one token could post
+// an arbitrarily large session, or post forever, and keep the (metered) database
+// busy the whole time:
+//   - the body is at most 256 KB, checked before anything touches the database;
+//   - a session carries at most 200 answers;
+//   - a token gets at most 240 requests per clock hour. `covate.platform_sync`
+//     re-posts up to 200 stored sessions on every run, so the ceiling sits above
+//     one full run rather than at the 60/hour first proposed for it.
+const MAX_BODY_BYTES = 256 * 1024;
+const MAX_ANSWERS = 200;
+const MAX_REQUESTS_PER_HOUR = 240;
 
 type IncomingAnswer = {
   question: string;
@@ -36,15 +48,29 @@ export async function POST(req: Request) {
   const token = bearer(req);
   if (!token) return Response.json({ error: "missing sync token" }, { status: 401 });
 
+  const tooLarge = Response.json({ error: `body too large (max ${MAX_BODY_BYTES} bytes)` }, { status: 413 });
+  if (Number(req.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) return tooLarge;
+  let raw: string;
+  try {
+    raw = await req.text();
+  } catch {
+    return Response.json({ error: "unreadable body" }, { status: 400 });
+  }
+  // The header is optional (chunked uploads omit it), so the bytes are counted too.
+  if (Buffer.byteLength(raw, "utf8") > MAX_BODY_BYTES) return tooLarge;
+
   let body: IncomingSession;
   try {
-    body = (await req.json()) as IncomingSession;
+    body = JSON.parse(raw) as IncomingSession;
   } catch {
     return Response.json({ error: "invalid JSON" }, { status: 400 });
   }
   if (!body?.client_id) return Response.json({ error: "client_id required" }, { status: 400 });
 
   const answers = Array.isArray(body.answers) ? body.answers : [];
+  if (answers.length > MAX_ANSWERS) {
+    return Response.json({ error: `too many answers (max ${MAX_ANSWERS})` }, { status: 413 });
+  }
   const total = answers.length;
   const correct = answers.filter((a) => a.is_correct === true).length;
 
@@ -59,6 +85,25 @@ export async function POST(req: Request) {
   const users = (await sql`select id from platform_user where sync_token = ${token} limit 1`) as { id: string }[];
   if (users.length === 0) return Response.json({ error: "invalid sync token" }, { status: 403 });
   const userId = users[0].id;
+
+  // Count this request against the token's hour before doing any work for it.
+  const windowRows = (await sql`
+    insert into ingest_window (user_id, window_start, requests)
+    values (${userId}, date_trunc('hour', now()), 1)
+    on conflict (user_id, window_start) do update set requests = ingest_window.requests + 1
+    returning requests
+  `) as { requests: number }[];
+  const requests = windowRows[0].requests;
+  if (requests === 1) {
+    await sql`delete from ingest_window where user_id = ${userId} and window_start < date_trunc('hour', now())`;
+  }
+  if (requests > MAX_REQUESTS_PER_HOUR) {
+    const retryAfter = 3600 - (Math.floor(Date.now() / 1000) % 3600);
+    return Response.json(
+      { error: `rate limit: at most ${MAX_REQUESTS_PER_HOUR} syncs per hour` },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } },
+    );
+  }
 
   // Idempotent upsert of the session.
   //

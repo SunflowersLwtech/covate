@@ -73,6 +73,17 @@ create table if not exists topic_progress (
   primary key (user_id, topic)
 );
 
+-- ── Ingest rate window (one row per user per clock hour) ──────────────────────
+-- POST /api/ingest bumps this counter for every authenticated request and refuses
+-- once it passes the hourly ceiling, so a single sync token cannot keep the
+-- database busy without end. Rows for past hours are deleted as a new hour starts.
+create table if not exists ingest_window (
+  user_id       uuid not null references platform_user(id) on delete cascade,
+  window_start  timestamptz not null,
+  requests      int not null default 0,
+  primary key (user_id, window_start)
+);
+
 -- ── Indexes for the review dashboard + progress queries ────────────────────────
 create index if not exists idx_session_user_time   on learning_session (user_id, completed_at desc);
 create index if not exists idx_answer_session       on quiz_answer (session_id);
