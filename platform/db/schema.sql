@@ -4,7 +4,7 @@
 -- syncs up (opt-in, per user). Everything is keyed to a platform_user so review,
 -- progress tracking and personalized study can be computed per developer.
 --
--- Target: Postgres (Supabase, project `covate`). pgvector is optional and only needed for
+-- Target: Postgres (Neon, project `covate`, us-east-1). pgvector is optional and only needed for
 -- topic-similarity ("study concepts like the ones you keep missing"); guarded so the
 -- schema still applies without the extension.
 
@@ -71,6 +71,17 @@ create table if not exists topic_progress (
   -- next_review drives spaced repetition (step 4); null = not scheduled yet.
   next_review   timestamptz,
   primary key (user_id, topic)
+);
+
+-- ── Ingest rate window (one row per user per clock hour) ──────────────────────
+-- POST /api/ingest bumps this counter for every authenticated request and refuses
+-- once it passes the hourly ceiling, so a single sync token cannot keep the
+-- database busy without end. Rows for past hours are deleted as a new hour starts.
+create table if not exists ingest_window (
+  user_id       uuid not null references platform_user(id) on delete cascade,
+  window_start  timestamptz not null,
+  requests      int not null default 0,
+  primary key (user_id, window_start)
 );
 
 -- ── Indexes for the review dashboard + progress queries ────────────────────────

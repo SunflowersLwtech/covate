@@ -7,7 +7,7 @@
     "breadcrumb": "Privacy",
     "eyebrow": "Legal",
     "title": "Privacy Policy",
-    "updated": "Last updated 3 September 2026",
+    "updated": "Last updated 16 October 2026",
     "intro": "The short version: Covate stores the GitHub profile you sign in with, plus the learning sessions you deliberately choose to upload. It never uploads your source code, never sends you email, and never sells your data. The detail is below.",
     "languages": {
       "note": "This notice is published in English, in Chinese, and — as section 7(2) of Malaysia's Personal Data Protection Act 2010 requires — in Bahasa Malaysia. The three say the same thing; if they ever differ, the English version prevails.",
@@ -83,7 +83,7 @@
       {
         "heading": "Hosting and server logs",
         "paragraphs": [
-          "The site and its API run on Vercel; the database is Postgres hosted on Supabase. Serving you a page necessarily means the hosting provider handles the request, including the IP address it came from, and both providers keep their own operational logs under their own policies. Covate itself writes no request logs and stores no IP addresses in its database.",
+          "The site and its API run on Vercel; the database is Postgres hosted on Neon. Serving you a page necessarily means the hosting provider handles the request, including the IP address it came from, and both providers keep their own operational logs under their own policies. Covate itself writes no request logs and stores no IP addresses in its database.",
           "The analytics script is served from a third machine, our own, rented from Amazon Web Services in Singapore. Its web server keeps ordinary access logs, and — as any web server's do — those record the IP address of each request for the script and each measurement it sends back. Those logs are ours and nobody else's, we keep them to run the machine, and we do not join them to the analytics data."
         ],
         "bullets": [],
@@ -117,7 +117,8 @@
         "bullets": [
           "GitHub — sign-in and the profile fields listed above",
           "Vercel — hosting for the website and its API",
-          "Supabase — the Postgres database your account and learning records live in",
+          "Neon — the Postgres database your account and learning records live in",
+          "Supabase — hosted the database until 16 October 2026; accounts and learning records created before that date were not moved to Neon and remain in that Supabase project, which is now paused",
           "Amazon Web Services — the Singapore server our own analytics software and its database run on"
         ],
         "footnote": "These providers operate outside Malaysia, so your data is stored and processed outside Malaysia; by using Covate you consent to that transfer. Apart from them, we disclose personal data to nobody, unless a Malaysian authority or court lawfully requires it of us."
