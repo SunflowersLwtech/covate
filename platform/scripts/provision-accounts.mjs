@@ -10,9 +10,9 @@
 //      credential is the sync_token this script prints, which authenticates
 //      against POST /api/ingest (the whole account-gated surface).
 //
-// Auth: DATABASE_URL in the environment (the Supabase transaction-pooler string; it
-// is a "sensitive" var on Vercel, so read it from the vault or the Supabase project
-// settings). Never passed on argv.
+// Auth: DATABASE_URL in the environment (the Neon connection string; it is a
+// "sensitive" var on Vercel, so read it from the vault: `venv get "Neon Covate"`).
+// Never passed on argv.
 //
 //   cd platform && DATABASE_URL=... node scripts/provision-accounts.mjs
 //
@@ -22,13 +22,14 @@ import postgres from "postgres";
 
 const url = process.env.DATABASE_URL;
 if (!url) {
-  console.error("DATABASE_URL is not set. Read it from the vault (`venv get Supabase`) or the Supabase project's connection settings.");
+  console.error("DATABASE_URL is not set. Read it from the vault (`venv get \"Neon Covate\"`) or the Neon project's connection settings.");
   process.exit(1);
 }
 
-// Same settings as the app (app/lib/db.ts): transaction pooling forbids prepared
-// statements, and Supabase's pooler presents a self-signed chain.
-const sql = postgres(url, { prepare: false, max: 1, ssl: "require" });
+// Same settings as the app (app/lib/db.ts): no prepared statements, because the
+// pooler is in transaction mode, and a verified TLS chain, because Neon's
+// certificate comes from a public CA.
+const sql = postgres(url, { prepare: false, max: 1, ssl: "verify-full" });
 
 const ACCOUNTS = [
   {

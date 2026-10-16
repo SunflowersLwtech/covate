@@ -24,7 +24,7 @@ export const MS = {
   breadcrumb: "Notis Privasi",
   eyebrow: "Perundangan",
   title: "Notis Privasi",
-  updated: "Kemas kini terakhir 3 September 2026",
+  updated: "Kemas kini terakhir 16 Oktober 2026",
   intro:
     "Versi ringkas: Covate menyimpan profil GitHub yang anda gunakan untuk log masuk, serta sesi pembelajaran yang anda sendiri pilih untuk dimuat naik. Ia tidak pernah memuat naik kod sumber anda, tidak pernah menghantar e-mel kepada anda, dan tidak pernah menjual data anda. Butirannya ada di bawah.",
   languageNote: {
@@ -104,7 +104,7 @@ export const MS = {
     {
       heading: "Pengehosan dan log pelayan",
       paragraphs: [
-        "Laman ini dan APInya berjalan di Vercel; pangkalan datanya ialah Postgres yang dihoskan di Supabase. Menyajikan satu halaman kepada anda semestinya bermakna penyedia pengehosan mengendalikan permintaan itu, termasuk alamat IP tempat ia datang, dan kedua-dua penyedia menyimpan log operasi masing-masing di bawah dasar mereka sendiri. Covate sendiri tidak menulis log permintaan dan tidak menyimpan sebarang alamat IP dalam pangkalan datanya.",
+        "Laman ini dan APInya berjalan di Vercel; pangkalan datanya ialah Postgres yang dihoskan di Neon. Menyajikan satu halaman kepada anda semestinya bermakna penyedia pengehosan mengendalikan permintaan itu, termasuk alamat IP tempat ia datang, dan kedua-dua penyedia menyimpan log operasi masing-masing di bawah dasar mereka sendiri. Covate sendiri tidak menulis log permintaan dan tidak menyimpan sebarang alamat IP dalam pangkalan datanya.",
         "Skrip analitik itu disajikan dari sebuah mesin ketiga, milik kami sendiri, yang disewa daripada Amazon Web Services di Singapura. Pelayan webnya menyimpan log akses biasa dan — sebagaimana log mana-mana pelayan web — log itu merekodkan alamat IP bagi setiap permintaan skrip tersebut dan setiap ukuran yang dihantarnya kembali. Log itu milik kami dan bukan milik sesiapa lain, kami menyimpannya untuk mengendalikan mesin tersebut, dan kami tidak menggabungkannya dengan data analitik.",
       ],
       bullets: [],
@@ -136,7 +136,8 @@ export const MS = {
       bullets: [
         "GitHub — log masuk dan medan profil yang disenaraikan di atas",
         "Vercel — pengehosan bagi laman web dan APInya",
-        "Supabase — pangkalan data Postgres tempat akaun dan rekod pembelajaran anda berada",
+        "Neon — pangkalan data Postgres tempat akaun dan rekod pembelajaran anda berada",
+        "Supabase — menghoskan pangkalan data sehingga 16 Oktober 2026; akaun dan rekod pembelajaran yang dicipta sebelum tarikh itu tidak dipindahkan ke Neon dan kekal dalam projek Supabase tersebut, yang kini dijeda",
         "Amazon Web Services — pelayan di Singapura tempat perisian analitik kami sendiri dan pangkalan datanya berjalan",
       ],
       footnote:
