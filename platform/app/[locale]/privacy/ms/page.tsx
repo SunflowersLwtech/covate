@@ -21,7 +21,8 @@ import { MS } from "./content";
 // "ms" is the ISO 639-1 code for Malay. ("bm" is Bambara, not Bahasa Malaysia.)
 const PATH = "/privacy/ms";
 const URL = SITE + PATH;
-const UPDATED = "2026-09-03";
+const PUBLISHED = "2026-09-03";
+const UPDATED = "2026-10-16";
 
 export function generateMetadata(): Metadata {
   return {
@@ -55,7 +56,7 @@ export default function PrivacyMsPage() {
     description: MS.meta.description,
     url: URL,
     inLanguage: "ms",
-    datePublished: UPDATED,
+    datePublished: PUBLISHED,
     dateModified: UPDATED,
     isPartOf: { "@id": SITE + "#website" },
     publisher: { "@id": SITE + "#organization" },
