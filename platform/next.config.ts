@@ -18,6 +18,11 @@ function gitSha(): string {
 const withNextIntl = createNextIntlPlugin("./app/i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  // Hand proxy.ts the request URL as the server saw it. By default Next renames loopback
+  // hosts to localhost in it (and again in the rewrite it returns), while its router
+  // compares rewrites with the raw bound host: under `next start -H 127.0.0.1` every
+  // locale rewrite counted as external and looped through proxy.ts as 307s.
+  skipProxyUrlNormalize: true,
   env: {
     COVATE_BUILD_SHA: gitSha(),
     COVATE_BUILT_AT: new Date().toISOString(),

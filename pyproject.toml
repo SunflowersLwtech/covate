@@ -51,6 +51,8 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
 asyncio_default_fixture_loop_scope = "function"
+# A tool that waits on something that never comes must fail the test, not stall CI.
+timeout = 30
 
 [tool.ruff]
 line-length = 120
