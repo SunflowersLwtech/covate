@@ -7,6 +7,7 @@
     "build": "node scripts/i18n-check.mjs && next build",
     "start": "next start",
     "i18n:check": "node scripts/i18n-check.mjs",
+    "test:proxy": "node --import tsx --test proxy.test.ts",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "npm run i18n:check && npm run typecheck"
   },
@@ -23,6 +24,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
