@@ -2,8 +2,13 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { NextRequest, type NextResponse } from "next/server";
+import nextConfig from "./next.config";
 import { config, proxy } from "./proxy";
 import { LOCALE_COOKIE, LOCALES } from "./app/i18n/messages";
+
+// `next build` turns skipProxyUrlNormalize into this define; NextRequest reads it when
+// constructed. Mirror the real config so the tests see the URL the proxy sees.
+if (nextConfig.skipProxyUrlNormalize) process.env.__NEXT_NO_MIDDLEWARE_URL_NORMALIZE = "true";
 
 const ORIGIN = "http://localhost:3000";
 
@@ -23,17 +28,20 @@ function assertRewrite(res: NextResponse, expectedPath: string, origin = ORIGIN)
   assert.equal(res.headers.get("location"), null, "a rewrite must not also redirect");
   const target = rewriteTarget(res);
   assert.ok(target, "expected a rewrite");
-  // Same-origin rewrites are served internally without re-entering the proxy;
-  // a different origin would make Next fetch it as an external URL.
+  // Next serves the rewrite internally only if its origin matches the URL the router
+  // built from the raw bound host; any other origin is proxied as an external URL,
+  // comes back through the proxy as /<locale>/..., and is redirected: a 307 loop.
   assert.equal(target.origin, origin);
   assert.equal(target.pathname + target.search, expectedPath);
   assert.equal(res.cookies.get(LOCALE_COOKIE), undefined, "a rewrite must not touch the cookie");
 }
 
-function assertRedirect(res: NextResponse, expectedPath: string, locale: string) {
+function assertRedirect(res: NextResponse, expectedPath: string, locale: string, origin = ORIGIN) {
   assert.equal(res.status, 307);
   assert.equal(rewriteTarget(res), null, "a redirect must not also rewrite");
-  const location = new URL(res.headers.get("location")!, ORIGIN);
+  const location = new URL(res.headers.get("location")!, origin);
+  // Same host as the request, or the cookie just set would not travel with the visitor.
+  assert.equal(location.origin, origin);
   assert.equal(location.pathname + location.search, expectedPath);
   const cookie = res.cookies.get(LOCALE_COOKIE);
   assert.ok(cookie, "the redirect must remember the locale");
@@ -70,11 +78,21 @@ describe("proxy: canonical (unprefixed) paths are rewritten, never redirected", 
     assertRewrite(proxy(request("/english")), "/en/english");
   });
 
-  it("the rewrite stays on the request's own origin, whatever host it arrived on", () => {
-    for (const origin of ["http://127.0.0.1:3000", "http://localhost:3100", "https://covate.org"]) {
-      const req = request("/learn", { origin });
-      // nextUrl normalizes loopback hosts (127.0.0.1 -> localhost); Next compares against that.
-      assertRewrite(proxy(req), "/en/learn", req.nextUrl.origin);
+  // `next start|dev -H 127.0.0.1` looped on every page: nextUrl rewrites loopback hosts
+  // to localhost, but Next's router compares the rewrite with the raw bound host.
+  const ORIGINS = ["http://127.0.0.1:3197", "http://[::1]:3197", "http://localhost:3197", "https://covate.org"];
+
+  it("the rewrite stays on the request's raw origin, whatever host it arrived on", () => {
+    for (const origin of ORIGINS) {
+      for (const [path, cookie, expected] of [
+        ["/", undefined, "/en"],
+        ["/learn", undefined, "/en/learn"],
+        ["/learn?ref=x", `${LOCALE_COOKIE}=zh-CN`, "/zh-CN/learn?ref=x"],
+      ] as const) {
+        const req = request(path, { origin, cookie });
+        assert.equal(new URL(req.url).origin, origin, "the request keeps its raw origin");
+        assertRewrite(proxy(req), expected, origin);
+      }
     }
   });
 });
@@ -94,6 +112,16 @@ describe("proxy: an externally typed prefixed path redirects once and sets the c
     assertRedirect(proxy(request("/zh-CN/learn?ref=x")), "/learn?ref=x", "zh-CN");
   });
 
+  it("redirects on the request's raw origin, whatever host it arrived on", () => {
+    for (const origin of ["http://127.0.0.1:3197", "http://[::1]:3197", "https://covate.org"]) {
+      assertRedirect(proxy(request("/zh-CN/learn?ref=x", { origin })), "/learn?ref=x", "zh-CN", origin);
+    }
+  });
+
+  it("drops Next's _rsc cache-busting param from the redirect", () => {
+    assertRedirect(proxy(request("/zh-CN/learn?ref=x&_rsc=abc")), "/learn?ref=x", "zh-CN");
+  });
+
   it("the prefix in the URL wins over an existing cookie", () => {
     assertRedirect(proxy(request("/zh-CN/learn", { cookie: `${LOCALE_COOKIE}=en` })), "/learn", "zh-CN");
   });
@@ -111,8 +139,9 @@ describe("proxy: an externally typed prefixed path redirects once and sets the c
 describe("proxy: the rewritten /<locale>/... request", () => {
   // proxy() cannot tell its own rewrite target from a typed-in prefixed URL; both are
   // /<locale>/... . If that request ever reached it a second time, rewrite + redirect
-  // would alternate forever (/ -> rewrite /en -> 307 / -> ...). Next serves same-origin
-  // rewrites without re-running the proxy, which is what the origin check above pins.
+  // would alternate forever (/ -> rewrite /en -> 307 / -> ...), which is what happened
+  // under -H 127.0.0.1. Next serves same-origin rewrites without re-running the proxy;
+  // the raw-origin checks above pin that.
   it("would be redirected back to where it came from", () => {
     const rewritten = rewriteTarget(proxy(request("/learn")))!;
     assertRedirect(proxy(request(rewritten.pathname)), "/learn", "en");
