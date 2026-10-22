@@ -345,7 +345,8 @@ if ($Force -and $isLocked) {
     try {
         switch ($EnvManager) {
             "uv" {
-                uv pip install -e ".[dev]" --reinstall --quiet
+                # Nothing is activated here, so name the environment's interpreter for uv.
+                uv pip install --python (Join-Path (Split-Path $ExePath) "python.exe") -e ".[dev]" --reinstall --quiet
             }
             "conda" {
                 $null = conda activate covate 2>&1
@@ -360,6 +361,8 @@ if ($Force -and $isLocked) {
                 & $pipPath install -e ".[dev]" --force-reinstall --no-deps --quiet
             }
         }
+        # A failing native command doesn't throw; turn it into the warning below.
+        if ($LASTEXITCODE -ne 0) { throw "installer exited with code $LASTEXITCODE" }
         Write-Host "  Dependencies updated." -ForegroundColor Green
     } catch {
         Write-Host "  Warning: Dependency update encountered issues." -ForegroundColor Yellow

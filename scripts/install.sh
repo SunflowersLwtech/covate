@@ -14,6 +14,17 @@ PYTHON_VERSION_REQUIRED="3.11"
 ENV_MANAGER=""
 SCRIPT_PATH=""
 
+fail() {
+    echo ""
+    echo "================================================"
+    echo "  Installation FAILED"
+    echo "================================================"
+    echo "  $1"
+    echo ""
+    echo "Nothing was configured. Fix the error above and run the installer again."
+    exit 1
+}
+
 echo "================================================"
 echo "  Covate - Installation Script"
 echo "================================================"
@@ -23,11 +34,24 @@ echo ""
 # CHECK FOR EXISTING INSTALLATION
 # ============================================================================
 
+# A clone is not an installation: .env_manager ships in the repository, so a run
+# that failed after cloning leaves one behind. Count a path only once its
+# environment has the covate command.
+is_installed() {
+    local path="$1"
+    [[ -f "$path/.env_manager" ]] || return 1
+    if [[ -x "$path/covate/bin/covate" || -x "$path/.venv/bin/covate" || -x "$path/venv/bin/covate" ]]; then
+        return 0
+    fi
+    [[ "$(tr -d '[:space:]' < "$path/.env_manager")" == "conda" ]] && command -v conda &> /dev/null &&
+        [[ -n "$(conda env list 2>/dev/null | grep "covate")" ]]
+}
+
 find_existing_installation() {
     local candidates=()
 
     # Check default installation path
-    if [[ -f "$INSTALL_PATH/.env_manager" ]]; then
+    if is_installed "$INSTALL_PATH"; then
         candidates+=("$INSTALL_PATH")
     fi
 
@@ -52,7 +76,7 @@ find_existing_installation() {
     )
 
     for path in "${alt_paths[@]}"; do
-        if [[ -f "$path/.env_manager" ]]; then
+        if is_installed "$path"; then
             candidates+=("$path")
         fi
     done
@@ -176,7 +200,7 @@ if [ -d "$INSTALL_PATH" ]; then
     git pull origin main 2>/dev/null || true
 else
     echo "  Cloning repository..."
-    git clone https://github.com/SunflowersLwtech/covate.git "$INSTALL_PATH"
+    git clone https://github.com/SunflowersLwtech/covate.git "$INSTALL_PATH" || fail "could not clone the repository"
     cd "$INSTALL_PATH"
 fi
 
@@ -190,7 +214,7 @@ echo "[3/4] Creating virtual environment..."
 case "$ENV_MANAGER" in
     "uv")
         if [ ! -d "covate" ]; then
-            uv venv --python $PYTHON_VERSION_REQUIRED covate
+            uv venv --python $PYTHON_VERSION_REQUIRED covate || fail "uv could not create a Python $PYTHON_VERSION_REQUIRED environment"
             echo "  Virtual environment created with Python $PYTHON_VERSION_REQUIRED"
         else
             echo "  Virtual environment already exists."
@@ -199,7 +223,7 @@ case "$ENV_MANAGER" in
         ;;
     "conda")
         if ! conda env list | grep -q "covate"; then
-            conda create -n covate python=$PYTHON_VERSION_REQUIRED -y
+            conda create -n covate python=$PYTHON_VERSION_REQUIRED -y || fail "conda could not create the environment 'covate'"
             echo "  Conda environment created."
         else
             echo "  Conda environment already exists."
@@ -210,7 +234,7 @@ case "$ENV_MANAGER" in
         ;;
     "venv")
         if [ ! -d "covate" ]; then
-            python3 -m venv covate
+            python3 -m venv covate || fail "python3 could not create a virtual environment"
             echo "  Virtual environment created."
         else
             echo "  Virtual environment already exists."
@@ -225,18 +249,25 @@ echo "[4/4] Installing dependencies..."
 
 case "$ENV_MANAGER" in
     "uv")
-        uv pip install -e '.[dev]' --quiet
+        # uv pip only finds an environment that is activated or named .venv; this one is
+        # neither, so name its interpreter.
+        uv pip install --python "$INSTALL_PATH/covate/bin/python" -e '.[dev]' --quiet ||
+            fail "uv could not install covate into $INSTALL_PATH/covate"
         ;;
     "conda")
         eval "$(conda shell.bash hook)"
         conda activate covate
-        pip install -e '.[dev]' --quiet
+        pip install -e '.[dev]' --quiet || fail "pip could not install covate into the conda environment 'covate'"
         conda deactivate
         ;;
     "venv")
-        ./covate/bin/pip install -e '.[dev]' --quiet
+        ./covate/bin/pip install -e '.[dev]' --quiet || fail "pip could not install covate into $INSTALL_PATH/covate"
         ;;
 esac
+
+# Report what is on disk, not what the steps above meant to do.
+[[ -x "$SCRIPT_PATH" ]] || fail "$SCRIPT_PATH was not created"
+"$(dirname "$SCRIPT_PATH")/python" -c "import covate" || fail "covate does not import in $(dirname "$SCRIPT_PATH")"
 
 echo "  Dependencies installed."
 
