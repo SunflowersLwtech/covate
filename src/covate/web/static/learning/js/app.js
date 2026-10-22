@@ -510,7 +510,10 @@ function initKeyboardShortcuts() {
 }
 
 // ==================== WebSocket Setup ====================
-function initWebSocket() {
+function initWebSocket(sessionId) {
+    // The socket lives at /ws/learning/<session id>; with no session there is
+    // nothing to connect to.
+    if (!sessionId) return;
     state.wsManager = new WebSocketManager({
         path: '/ws/learning',
         onMessage: (data) => {
@@ -532,7 +535,7 @@ function initWebSocket() {
     });
 
     // Connect WebSocket for real-time updates
-    state.wsManager.connect(getSessionIdFromUrl());
+    state.wsManager.connect(sessionId);
 }
 
 // ==================== Initialize ====================
@@ -564,11 +567,12 @@ async function init() {
     // Keyboard shortcuts
     initKeyboardShortcuts();
 
-    // WebSocket
-    initWebSocket();
-
-    // Load session
+    // Load the session first. Opened without ?session= (typed in, or the link was
+    // never opened for the user), the page finds the current session itself, and the
+    // WebSocket needs that session's id: the bare /ws/learning path is refused, which
+    // used to show "Reconnecting..." on every load.
     await loadSession();
+    initWebSocket(getSessionIdFromUrl() || state.currentSession?.session_id);
 }
 
 // ==================== Export for HTML onclick handlers ====================

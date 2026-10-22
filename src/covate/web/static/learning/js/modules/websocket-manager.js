@@ -47,6 +47,7 @@ export class WebSocketManager {
         this.reconnectTimeout = null;
         this.state = ConnectionState.DISCONNECTED;
         this.sessionId = null;
+        this.hasConnected = false;
     }
 
     /**
@@ -112,12 +113,13 @@ export class WebSocketManager {
     handleOpen() {
         console.log('[WebSocket] Connected');
         this.setState(ConnectionState.CONNECTED);
-        this.reconnectAttempts = 0;
 
         // Show reconnected toast if this was a reconnection
-        if (this.reconnectAttempts > 0) {
+        if (this.reconnectAttempts > 0 && this.hasConnected) {
             showToast(i18n.t('toast.reconnected'), 'success');
         }
+        this.reconnectAttempts = 0;
+        this.hasConnected = true;
     }
 
     /**
@@ -184,7 +186,11 @@ export class WebSocketManager {
         );
 
         console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-        showToast(i18n.t('toast.reconnecting'), 'warning');
+        // Once per outage, and only after a connection existed: there is nothing to
+        // *re*connect before the first one, and one toast per retry piles up.
+        if (this.reconnectAttempts === 1 && this.hasConnected) {
+            showToast(i18n.t('toast.reconnecting'), 'warning');
+        }
 
         this.reconnectTimeout = setTimeout(() => {
             this.connect(this.sessionId);
