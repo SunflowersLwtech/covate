@@ -109,18 +109,20 @@ class WebUIManager:
     def _listen_on(self, family: int, port: int) -> socket.socket | None:
         """A socket listening on port, or None if the port belongs to someone else.
 
+        A port where anything answers is left alone. Binding alone can't tell: macOS
+        with SO_REUSEADDR, and Windows even without it, let a socket bind 127.0.0.1
+        under a program listening on 0.0.0.0 and take that program's local traffic.
+
         SO_REUSEADDR lets covate rebind a port whose last connections sit in TIME_WAIT
         (the previous covate closed them, up to a minute ago); Linux wants the option
-        on both the old and the new socket for that. On macOS the same option would
-        also let it bind 127.0.0.1 under a program listening on 0.0.0.0 and take that
-        program's local traffic, so a port where anything answers is left alone.
-        Listening straight after binding keeps two covates starting together off one
-        port. Windows needs neither: TIME_WAIT doesn't block a bind there, and the
-        option would let two live servers share a port.
+        on both the old and the new socket for that. Windows doesn't get it: TIME_WAIT
+        doesn't block a bind there, and the option would let two live servers share a
+        port. Listening straight after binding keeps two covates starting together off
+        one port.
         """
-        reuse = port != 0 and os.name != "nt"
-        if reuse and self._answers(family, port):
+        if port != 0 and self._answers(family, port):
             return None
+        reuse = port != 0 and os.name != "nt"
         sock = socket.socket(family, socket.SOCK_STREAM)
         try:
             if reuse:
