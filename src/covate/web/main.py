@@ -6,6 +6,7 @@ Manages the FastAPI server, learning sessions, and browser integration.
 """
 
 import asyncio
+import os
 import socket
 import threading
 import time
@@ -98,8 +99,16 @@ class WebUIManager:
         preferred = [self.preferred_port] if self.preferred_port and self.preferred_port > 0 else []
         for port in [*preferred, *self.DEFAULT_PORTS, 0]:
             sock = socket.socket(family, socket.SOCK_STREAM)
+            # A port the last covate just closed sits in TIME_WAIT for about a minute;
+            # without this it reads as taken. (On Windows the same option would let
+            # two servers share a port, and TIME_WAIT doesn't block a bind there.)
+            if os.name != "nt":
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
                 sock.bind((self.host, port))
+                # Listen at once: with SO_REUSEADDR a second covate could still bind the
+                # same port until one of them listens.
+                sock.listen(2048)
             except OSError:
                 sock.close()
                 continue

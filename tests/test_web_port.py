@@ -68,6 +68,37 @@ def test_moves_off_a_configured_port_that_is_taken(started, monkeypatch):
         assert _wait_healthy(manager)["status"] == "healthy"
 
 
+def test_reuses_the_configured_port_right_after_the_last_session(started, monkeypatch):
+    """The previous covate closed its connections itself, so the port sits in TIME_WAIT
+    for about a minute; that is not "taken", and the next session must not move off it."""
+    port = _free_port()
+    monkeypatch.setenv("MCP_SIDECAR_SERVER_PORT", str(port))
+    first = started()
+    with httpx.Client() as browser:  # keep-alive, like the quiz page
+        assert browser.get(f"{first.get_server_url()}/health", timeout=5).status_code == 200
+        first.stop_server()  # the server closes the open connection first
+        first.server_thread.join(timeout=10)
+    assert not first.server_thread.is_alive()
+
+    second = started()
+    assert second.port == port
+    assert _wait_healthy(second)["status"] == "healthy"
+
+
+def test_two_binds_at_the_same_moment_get_different_ports(monkeypatch):
+    """Two covate sessions starting together: the second must not share the port the
+    first has bound but not yet handed to uvicorn."""
+    port = _free_port()
+    monkeypatch.setenv("MCP_SIDECAR_SERVER_PORT", str(port))
+    first, second = WebUIManager()._bind_socket(), WebUIManager()._bind_socket()
+    try:
+        assert first.getsockname()[1] == port
+        assert second.getsockname()[1] != port
+    finally:
+        first.close()
+        second.close()
+
+
 def test_two_servers_at_once_get_different_ports(started):
     first, second = started(), started()
     assert first.port != second.port
