@@ -18,6 +18,21 @@ $PythonVersionRequired = "3.11"
 $EnvManager = ""
 $ScriptPath = ""
 
+# PowerShell does not stop when a native command (git, uv, pip) fails, so every one
+# of them is checked by hand. Throwing rather than `exit` keeps the message on screen
+# when the script runs through `irm | iex`, and still exits non-zero from -File/-Command.
+function Stop-Install {
+    param([string]$Message)
+    Write-Host ""
+    Write-Host "================================================" -ForegroundColor Red
+    Write-Host "  Installation FAILED" -ForegroundColor Red
+    Write-Host "================================================" -ForegroundColor Red
+    Write-Host "  $Message" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Nothing was configured. Fix the error above and run the installer again." -ForegroundColor Yellow
+    throw "Covate installation failed: $Message"
+}
+
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host "  Covate - Installation Script" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
@@ -27,11 +42,27 @@ Write-Host ""
 # CHECK FOR EXISTING INSTALLATION
 # ============================================================================
 
+# A clone is not an installation: .env_manager ships in the repository, so a run
+# that failed after cloning leaves one behind. Count a path only once its
+# environment has the covate command.
+function Test-Installed {
+    param([string]$Path)
+    if (-not (Test-Path "$Path\.env_manager")) { return $false }
+    foreach ($exe in @("covate\Scripts\covate.exe", ".venv\Scripts\covate.exe", "venv\Scripts\covate.exe")) {
+        if (Test-Path (Join-Path $Path $exe)) { return $true }
+    }
+    $manager = (Get-Content "$Path\.env_manager" -Raw).Trim()
+    if ($manager -eq "conda" -and (Get-Command conda -ErrorAction SilentlyContinue)) {
+        return [bool](conda env list | Select-String "covate")
+    }
+    return $false
+}
+
 function Find-ExistingInstallation {
     $candidates = @()
 
     # Check default installation path
-    if (Test-Path "$InstallPath\.env_manager") {
+    if (Test-Installed $InstallPath) {
         $candidates += $InstallPath
     }
 
@@ -56,7 +87,7 @@ function Find-ExistingInstallation {
         "$env:USERPROFILE\Projects\covate"
     )
     foreach ($path in $altPaths) {
-        if (Test-Path "$path\.env_manager") {
+        if (Test-Installed $path) {
             $candidates += $path
         }
     }
@@ -209,8 +240,7 @@ if (Test-Path $InstallPath) {
     Write-Host "  Cloning repository..." -ForegroundColor Gray
     git clone https://github.com/SunflowersLwtech/covate.git $InstallPath
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "Error: Failed to clone repository" -ForegroundColor Red
-        exit 1
+        Stop-Install "Could not clone the repository."
     }
 }
 
@@ -224,6 +254,7 @@ switch ($EnvManager) {
     "uv" {
         if (-not (Test-Path "covate")) {
             uv venv --python $PythonVersionRequired covate
+            if ($LASTEXITCODE -ne 0) { Stop-Install "uv could not create a Python $PythonVersionRequired environment." }
             Write-Host "  Virtual environment created with Python $PythonVersionRequired" -ForegroundColor Green
         } else {
             Write-Host "  Virtual environment already exists." -ForegroundColor Gray
@@ -234,6 +265,7 @@ switch ($EnvManager) {
         $envExists = conda env list | Select-String "covate"
         if (-not $envExists) {
             conda create -n covate python=$PythonVersionRequired -y
+            if ($LASTEXITCODE -ne 0) { Stop-Install "conda could not create the environment 'covate'." }
             Write-Host "  Conda environment created." -ForegroundColor Green
         } else {
             Write-Host "  Conda environment already exists." -ForegroundColor Gray
@@ -246,6 +278,7 @@ switch ($EnvManager) {
     "venv" {
         if (-not (Test-Path "covate")) {
             python -m venv covate
+            if ($LASTEXITCODE -ne 0) { Stop-Install "python could not create a virtual environment." }
             Write-Host "  Virtual environment created." -ForegroundColor Green
         } else {
             Write-Host "  Virtual environment already exists." -ForegroundColor Gray
@@ -260,17 +293,32 @@ Write-Host "[4/4] Installing dependencies..." -ForegroundColor Yellow
 
 switch ($EnvManager) {
     "uv" {
-        uv pip install -e '.[dev]' --quiet
+        # uv pip only finds an environment that is activated or named .venv; this one is
+        # neither, so name its interpreter.
+        uv pip install --python "$InstallPath\covate\Scripts\python.exe" -e '.[dev]' --quiet
+        if ($LASTEXITCODE -ne 0) { Stop-Install "uv could not install covate into $InstallPath\covate." }
     }
     "conda" {
         conda activate covate
         pip install -e '.[dev]' --quiet
+        if ($LASTEXITCODE -ne 0) { Stop-Install "pip could not install covate into the conda environment 'covate'." }
         conda deactivate
     }
     "venv" {
         & ".\covate\Scripts\pip.exe" install -e '.[dev]' --quiet
+        if ($LASTEXITCODE -ne 0) { Stop-Install "pip could not install covate into $InstallPath\covate." }
     }
 }
+
+# Report what is on disk, not what the steps above meant to do. A venv keeps python.exe
+# next to covate.exe in Scripts\; a conda environment keeps it at the environment root.
+# -I keeps the current directory off sys.path: from here, the environment's own .\covate
+# folder would import as an empty namespace package and pass for an installation.
+if (-not (Test-Path $ScriptPath)) { Stop-Install "$ScriptPath was not created." }
+$EnvPython = if ($EnvManager -eq "conda") { Join-Path $CondaEnvPath "python.exe" } else { Join-Path (Split-Path $ScriptPath) "python.exe" }
+if (-not (Test-Path $EnvPython)) { Stop-Install "$EnvPython was not found." }
+& $EnvPython -I -c "import covate.server"
+if ($LASTEXITCODE -ne 0) { Stop-Install "covate does not import with $EnvPython." }
 
 Write-Host "  Dependencies installed." -ForegroundColor Green
 
