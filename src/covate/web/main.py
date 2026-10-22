@@ -98,24 +98,45 @@ class WebUIManager:
         family = socket.AF_INET6 if ":" in self.host else socket.AF_INET
         preferred = [self.preferred_port] if self.preferred_port and self.preferred_port > 0 else []
         for port in [*preferred, *self.DEFAULT_PORTS, 0]:
-            sock = socket.socket(family, socket.SOCK_STREAM)
-            # A port the last covate just closed sits in TIME_WAIT for about a minute;
-            # without this it reads as taken. (On Windows the same option would let
-            # two servers share a port, and TIME_WAIT doesn't block a bind there.)
-            if os.name != "nt":
-                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            try:
-                sock.bind((self.host, port))
-                # Listen at once: with SO_REUSEADDR a second covate could still bind the
-                # same port until one of them listens.
-                sock.listen(2048)
-            except OSError:
-                sock.close()
+            sock = self._listen_on(family, port)
+            if sock is None:
                 continue
             if preferred and port != preferred[0]:
                 debug_log(f"Port {preferred[0]} is in use; using {sock.getsockname()[1]}")
             return sock
         raise RuntimeError(f"No port available on {self.host}")
+
+    def _listen_on(self, family: int, port: int) -> socket.socket | None:
+        """A socket listening on port, or None if the port belongs to someone else.
+
+        SO_REUSEADDR lets covate rebind a port whose last connections sit in TIME_WAIT
+        (the previous covate closed them, up to a minute ago); Linux wants the option
+        on both the old and the new socket for that. On macOS the same option would
+        also let it bind 127.0.0.1 under a program listening on 0.0.0.0 and take that
+        program's local traffic, so a port where anything answers is left alone.
+        Listening straight after binding keeps two covates starting together off one
+        port. Windows needs neither: TIME_WAIT doesn't block a bind there, and the
+        option would let two live servers share a port.
+        """
+        reuse = port != 0 and os.name != "nt"
+        if reuse and self._answers(family, port):
+            return None
+        sock = socket.socket(family, socket.SOCK_STREAM)
+        try:
+            if reuse:
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind((self.host, port))
+            sock.listen(2048)
+        except OSError:
+            sock.close()
+            return None
+        return sock
+
+    def _answers(self, family: int, port: int) -> bool:
+        """Whether something accepts connections on host:port."""
+        with socket.socket(family, socket.SOCK_STREAM) as probe:
+            probe.settimeout(1)
+            return probe.connect_ex((self.host, port)) == 0
 
     def _create_app(self) -> FastAPI:
         """Create and configure the FastAPI application."""

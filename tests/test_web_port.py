@@ -68,6 +68,20 @@ def test_moves_off_a_configured_port_that_is_taken(started, monkeypatch):
         assert _wait_healthy(manager)["status"] == "healthy"
 
 
+def test_leaves_a_port_another_program_listens_on_for_all_addresses(started, monkeypatch):
+    """A dev server on 0.0.0.0:<port> owns 127.0.0.1:<port> too. macOS lets a socket
+    with SO_REUSEADDR bind the more specific address anyway and take its local traffic."""
+    with socket.socket() as other:
+        other.bind(("0.0.0.0", 0))
+        other.listen()
+        taken = other.getsockname()[1]
+        monkeypatch.setenv("MCP_SIDECAR_SERVER_PORT", str(taken))
+
+        manager = started()
+        assert manager.port != taken
+        assert _wait_healthy(manager)["status"] == "healthy"
+
+
 def test_reuses_the_configured_port_right_after_the_last_session(started, monkeypatch):
     """The previous covate closed its connections itself, so the port sits in TIME_WAIT
     for about a minute; that is not "taken", and the next session must not move off it."""
