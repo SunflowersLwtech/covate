@@ -11,24 +11,119 @@ Configure via environment:
 
 Usage (run inside a project you've used Covate in):
     COVATE_SYNC_URL=... COVATE_SYNC_TOKEN=... python -m covate.platform_sync [project_dir]
+
+What goes over the wire differs from what the MCP stores locally, and the mapping is
+done here rather than left to the ledger:
+    started_at / completed_at  ISO 8601 with an explicit UTC offset. Sessions store
+                               created_at as Unix seconds and completed_at as a naive
+                               local-time string; a naive time is read as this machine's.
+    user_answer / correct_answer  the option's text. The quiz page records a pick as a
+                               letter label ("A" = first option); agents write the
+                               correct answer as text, a letter, an index or "B) ...".
+    is_correct                 true/false when both resolve to an option, else null.
 """
 
 from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
+from datetime import datetime, timezone
 from typing import Any
 
 from .storage.session_storage import SessionStorageManager
 
 
+_LABELLED = re.compile(r"^([A-Za-z])\s*[).:]\s+")
+
+
+def _iso_timestamp(value: Any) -> str | None:
+    """A stored timestamp as ISO 8601 in UTC, or None if it isn't one."""
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        if isinstance(value, str):
+            text = value.strip()
+            if not text:
+                return None
+            try:
+                value = float(text)
+            except ValueError:
+                moment = datetime.fromisoformat(text)
+                if moment.tzinfo is None:
+                    moment = moment.astimezone()  # naive: this machine's local time
+                return moment.astimezone(timezone.utc).isoformat()
+        if isinstance(value, (int, float)):
+            return datetime.fromtimestamp(value, tz=timezone.utc).isoformat()
+    except (ValueError, OverflowError, OSError):
+        return None
+    return None
+
+
+def _option_index(value: Any, options: list[Any]) -> int | None:
+    """The 0-based option an answer names, or None.
+
+    Same rule as the quiz page and the ledger (cases in tests/fixtures/answer_cases.json):
+    option text first, then a letter label, a 0-based index, or a labelled "B) ..." answer.
+    """
+    if not options or value is None or isinstance(value, bool):
+        return None
+
+    def in_range(i: int) -> int | None:
+        return i if 0 <= i < len(options) else None
+
+    if isinstance(value, float) and value.is_integer():
+        value = int(value)
+    if isinstance(value, int):
+        return in_range(value)
+    if not isinstance(value, str):
+        return None
+    text = value.strip()
+    texts = [str(o).strip() for o in options]
+    if text in texts:
+        return texts.index(text)
+    lowered = [t.lower() for t in texts]
+    if text.lower() in lowered:
+        return lowered.index(text.lower())
+    if len(text) == 1 and "A" <= text.upper() <= "Z":
+        return in_range(ord(text.upper()) - ord("A"))
+    if text.isascii() and text.isdigit():
+        return in_range(int(text))
+    labelled = _LABELLED.match(text)
+    if labelled:
+        return in_range(ord(labelled.group(1).upper()) - ord("A"))
+    return None
+
+
+def _first_present(d: dict[str, Any], *keys: str) -> Any:
+    for key in keys:
+        if d.get(key) is not None:
+            return d[key]
+    return None
+
+
+def _picks(raw_answers: list[Any]) -> dict[int, Any]:
+    """The stored answers keyed by question index.
+
+    The quiz page stores {"question": <index>, "answer": "<letter>"}; older records
+    are a bare list in question order.
+    """
+    picks: dict[int, Any] = {}
+    for position, item in enumerate(raw_answers):
+        index = item.get("question") if isinstance(item, dict) else None
+        if not isinstance(index, int) or isinstance(index, bool):
+            index = position
+        picks.setdefault(index, item)
+    return picks
+
+
 def _map_session(record: dict[str, Any]) -> dict[str, Any]:
     """Map a stored session record to the /api/ingest request body (tolerant)."""
     quizzes = record.get("quizzes") or []
-    raw_answers = (record.get("results") or {}).get("answers") or []
+    picks = _picks((record.get("results") or {}).get("answers") or [])
     focus = record.get("focus_areas") or []
     topic = focus[0] if focus else None
     meta = record.get("metadata") or {}
@@ -37,19 +132,23 @@ def _map_session(record: dict[str, Any]) -> dict[str, Any]:
     for i, q in enumerate(quizzes):
         if not isinstance(q, dict):
             continue
+        options = q.get("options") if isinstance(q.get("options"), list) else []
         correct = q.get("answer")
-        ua = raw_answers[i] if i < len(raw_answers) else None
-        if isinstance(ua, dict):
-            user_answer = ua.get("user_answer") or ua.get("answer") or ua.get("selected")
-            is_correct = ua.get("is_correct")
-        else:
-            user_answer = ua
-            is_correct = (ua == correct) if (ua is not None and correct is not None) else None
+        pick = picks.get(i)
+        is_correct = None
+        if isinstance(pick, dict):
+            if isinstance(pick.get("is_correct"), bool):
+                is_correct = pick["is_correct"]
+            pick = _first_present(pick, "user_answer", "answer", "selected")
+        correct_i = _option_index(correct, options)
+        pick_i = _option_index(pick, options)
+        if is_correct is None and correct_i is not None and pick_i is not None:
+            is_correct = pick_i == correct_i
         answers.append({
             "question": q.get("question"),
             "options": q.get("options"),
-            "correct_answer": correct,
-            "user_answer": user_answer,
+            "correct_answer": str(options[correct_i]) if correct_i is not None else correct,
+            "user_answer": str(options[pick_i]) if pick_i is not None else pick,
             "is_correct": is_correct,
             "explanation": q.get("explanation"),
             "topic": topic,
@@ -61,8 +160,8 @@ def _map_session(record: dict[str, Any]) -> dict[str, Any]:
         "client_id": record.get("session_id"),
         "project": os.path.basename(project_dir.rstrip("/\\")) or None,
         "change_summary": record.get("summary"),
-        "started_at": meta.get("created_at"),
-        "completed_at": meta.get("completed_at"),
+        "started_at": _iso_timestamp(meta.get("created_at")),
+        "completed_at": _iso_timestamp(meta.get("completed_at") or record.get("saved_at")),
         "answers": answers,
     }
 

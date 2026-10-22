@@ -1,0 +1,51 @@
+{
+  "client_id": "1792690295_25edc417",
+  "project": "retry-demo",
+  "change_summary": "xp lnx0131: added retry with exponential backoff to the HTTP client",
+  "started_at": 1792690295.152762,
+  "completed_at": "2026-10-23T01:32:17.297955",
+  "answers": [
+    {
+      "question": "[lnx0131] Why does the retry wait double each time?",
+      "options": [
+        "To spread load",
+        "To go faster",
+        "No reason"
+      ],
+      "correct_answer": "To spread load",
+      "user_answer": "A",
+      "is_correct": null,
+      "explanation": "Backoff gives the server room to recover.",
+      "topic": "logic",
+      "concept": "[lnx0131] Why does the retry wait double each time?"
+    },
+    {
+      "question": "[lnx0131] What stops the retries?",
+      "options": [
+        "A max attempt count",
+        "Nothing",
+        "The user"
+      ],
+      "correct_answer": "A max attempt count",
+      "user_answer": "B",
+      "is_correct": null,
+      "explanation": "Without a cap it retries forever.",
+      "topic": "logic",
+      "concept": "[lnx0131] What stops the retries?"
+    },
+    {
+      "question": "[lnx0131] Which error is worth retrying?",
+      "options": [
+        "503",
+        "400",
+        "404"
+      ],
+      "correct_answer": "503",
+      "user_answer": "A",
+      "is_correct": null,
+      "explanation": "Only transient errors are worth retrying.",
+      "topic": "logic",
+      "concept": "[lnx0131] Which error is worth retrying?"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+name: Sync E2E
+
+# The MCP's sync command against the ledger's real ingest route and a real Postgres.
+# Each half has its own unit tests; this is the one place they meet, with sessions
+# the MCP actually stores rather than bodies a test wrote by hand.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/covate/**"
+      - "tests/**"
+      - "platform/app/api/ingest/**"
+      - "platform/app/lib/**"
+      - "platform/db/**"
+      - "platform/ingest*.test.ts"
+      - "platform/package*.json"
+      - "pyproject.toml"
+      - ".github/workflows/sync-e2e.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/covate/**"
+      - "tests/**"
+      - "platform/app/api/ingest/**"
+      - "platform/app/lib/**"
+      - "platform/db/**"
+      - "platform/ingest*.test.ts"
+      - "platform/package*.json"
+      - "pyproject.toml"
+      - ".github/workflows/sync-e2e.yml"
+
+concurrency:
+  group: covate-sync-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          # A throwaway database on the runner: no password at all.
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: covate_e2e
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - run: npm ci
+        working-directory: platform
+      - name: Quiz page answer rule
+        run: node --test tests/answer_label.test.mjs
+      - name: Ingest unit + end-to-end tests
+        working-directory: platform
+        env:
+          INGEST_E2E_DATABASE_URL: postgres://postgres@127.0.0.1:5432/covate_e2e
+          COVATE_PYTHON: python
+        run: npm run test:ingest

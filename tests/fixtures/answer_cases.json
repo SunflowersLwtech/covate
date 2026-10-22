@@ -1,0 +1,24 @@
+{
+  "_comment": "Which option a quiz answer points at. Shared by the three places that resolve answers: covate.platform_sync (Python), the quiz page (modules/answers.js) and the ledger's ingest route (platform/app/lib/ingest.ts). index is the 0-based option, or null when the value names no option.",
+  "cases": [
+    {"options": ["To spread load", "To go faster", "No reason"], "value": "To spread load", "index": 0, "why": "option text"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": "  to spread LOAD ", "index": 0, "why": "option text, ignoring case and outer spaces"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": "A", "index": 0, "why": "letter label, as the quiz page records a pick"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": "c", "index": 2, "why": "lower-case letter label"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": "D", "index": null, "why": "letter past the last option"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": 1, "index": 1, "why": "0-based index"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": "2", "index": 2, "why": "0-based index as a string"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": 2.0, "index": 2, "why": "0-based index written as a whole-number float"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": -1, "index": null, "why": "negative index"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": 1.5, "index": null, "why": "not an integer"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": true, "index": null, "why": "a boolean is not an index"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": null, "index": null, "why": "no answer"},
+    {"options": ["To spread load", "To go faster", "No reason"], "value": "Something else", "index": null, "why": "names no option"},
+    {"options": ["A) Performance improvement", "B) Bug fix", "C) New feature", "D) Refactoring"], "value": "B", "index": 1, "why": "letter, options carry their own labels (the built-in quizzes)"},
+    {"options": ["A) Performance improvement", "B) Bug fix", "C) New feature", "D) Refactoring"], "value": "B) Bug fix", "index": 1, "why": "full labelled option text"},
+    {"options": ["Performance improvement", "Bug fix", "New feature"], "value": "B) Bug fix", "index": 1, "why": "labelled answer, unlabelled options"},
+    {"options": ["503", "400", "404"], "value": "503", "index": 0, "why": "numeric option text wins over reading it as an index"},
+    {"options": ["1", "2", "3"], "value": "1", "index": 0, "why": "numeric option text wins over reading it as an index"},
+    {"options": [], "value": "A", "index": null, "why": "no options"}
+  ]
+}

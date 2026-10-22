@@ -1,10 +1,15 @@
 import { db } from "../../lib/db";
+import { normalizeAnswer, normalizeTimestamp, type IncomingAnswer } from "../../lib/ingest";
 
 // POST /api/ingest — the opt-in Covate MCP sync client posts one completed
 // learning_session here. Auth: `Authorization: Bearer <sync_token>` (the per-user
 // token from the dashboard). Idempotent on (user_id, client_id) so re-syncs don't
 // duplicate. This is the hosted ledger's ingestion path; the MCP never calls it
 // unless the user has linked an account and configured the token.
+//
+// Timestamps are ISO 8601 (or, from older clients, Unix seconds) and answers are
+// option text (or a letter label); lib/ingest.ts reads both. A timestamp it can't
+// read is the client's mistake and gets a 400, not a database error.
 //
 // Ceilings. Every answer is its own insert, so without them one token could post
 // an arbitrarily large session, or post forever, and keep the (metered) database
@@ -18,25 +23,17 @@ const MAX_BODY_BYTES = 256 * 1024;
 const MAX_ANSWERS = 200;
 const MAX_REQUESTS_PER_HOUR = 240;
 
-type IncomingAnswer = {
-  question: string;
-  options?: unknown;
-  correct_answer?: string;
-  user_answer?: string;
-  is_correct?: boolean;
-  explanation?: string;
-  topic?: string;
-  concept?: string;
-};
-
 type IncomingSession = {
   client_id: string;
   project?: string;
   change_summary?: string;
-  started_at?: string;
-  completed_at?: string;
+  started_at?: unknown;
+  completed_at?: unknown;
   answers?: IncomingAnswer[];
 };
+
+// Postgres's own verdict on a timestamp that passed the format check (month 13, hour 25).
+const BAD_DATETIME = new Set(["22007", "22008"]);
 
 function bearer(req: Request): string | null {
   const h = req.headers.get("authorization") ?? "";
@@ -67,12 +64,19 @@ export async function POST(req: Request) {
   }
   if (!body?.client_id) return Response.json({ error: "client_id required" }, { status: 400 });
 
-  const answers = Array.isArray(body.answers) ? body.answers : [];
-  if (answers.length > MAX_ANSWERS) {
+  const incoming = Array.isArray(body.answers) ? body.answers : [];
+  if (incoming.length > MAX_ANSWERS) {
     return Response.json({ error: `too many answers (max ${MAX_ANSWERS})` }, { status: 413 });
   }
-  const total = answers.length;
-  const correct = answers.filter((a) => a.is_correct === true).length;
+  const startedAt = normalizeTimestamp(body.started_at);
+  const completedAt = normalizeTimestamp(body.completed_at);
+  if (startedAt === undefined || completedAt === undefined) {
+    const field = startedAt === undefined ? "started_at" : "completed_at";
+    return Response.json({ error: `${field} must be an ISO 8601 timestamp` }, { status: 400 });
+  }
+  const answers = incoming.map(normalizeAnswer);
+  const total = incoming.length;
+  const correct = answers.filter((a) => a?.is_correct === true).length;
 
   let sql;
   try {
@@ -113,22 +117,30 @@ export async function POST(req: Request) {
   // `new Date(x).toISOString()`, which silently truncates anything finer than a
   // millisecond. Describing the parameter as text hands the client's string to
   // Postgres untouched and lets Postgres do the parsing.
-  const sessRows = (await sql`
-    insert into learning_session
-      (user_id, client_id, project, change_summary, question_count, correct_count, started_at, completed_at, synced_at)
-    values
-      (${userId}, ${body.client_id}, ${body.project ?? null}, ${body.change_summary ?? null},
-       ${total}, ${correct}, ${body.started_at ?? null}::text::timestamptz,
-       ${body.completed_at ?? null}::text::timestamptz, now())
-    on conflict (user_id, client_id) do update set
-      project = excluded.project,
-      change_summary = excluded.change_summary,
-      question_count = excluded.question_count,
-      correct_count = excluded.correct_count,
-      completed_at = excluded.completed_at,
-      synced_at = now()
-    returning id
-  `) as { id: string }[];
+  let sessRows: { id: string }[];
+  try {
+    sessRows = (await sql`
+      insert into learning_session
+        (user_id, client_id, project, change_summary, question_count, correct_count, started_at, completed_at, synced_at)
+      values
+        (${userId}, ${body.client_id}, ${body.project ?? null}, ${body.change_summary ?? null},
+         ${total}, ${correct}, ${startedAt}::text::timestamptz,
+         ${completedAt}::text::timestamptz, now())
+      on conflict (user_id, client_id) do update set
+        project = excluded.project,
+        change_summary = excluded.change_summary,
+        question_count = excluded.question_count,
+        correct_count = excluded.correct_count,
+        completed_at = excluded.completed_at,
+        synced_at = now()
+      returning id
+    `) as { id: string }[];
+  } catch (e) {
+    if (BAD_DATETIME.has((e as { code?: string }).code ?? "")) {
+      return Response.json({ error: "started_at / completed_at is not a valid timestamp" }, { status: 400 });
+    }
+    throw e;
+  }
   const sessionId = sessRows[0].id;
 
   // Replace this session's answers (idempotent re-sync). Remember the topics this
@@ -140,7 +152,7 @@ export async function POST(req: Request) {
 
   await sql`delete from quiz_answer where session_id = ${sessionId}`;
   for (const a of answers) {
-    if (!a?.question) continue;
+    if (!a) continue;
     // `options` is already a JSON string, so it goes in as text and Postgres parses
     // it — same reason as the timestamps above: a jsonb-described parameter would be
     // JSON.stringify'd by the driver and land as a jsonb *string* of JSON.
@@ -149,8 +161,8 @@ export async function POST(req: Request) {
         (session_id, user_id, question, options, correct_answer, user_answer, is_correct, explanation, topic, concept)
       values
         (${sessionId}, ${userId}, ${a.question}, ${JSON.stringify(a.options ?? null)}::text::jsonb,
-         ${a.correct_answer ?? null}, ${a.user_answer ?? null}, ${a.is_correct ?? null},
-         ${a.explanation ?? null}, ${a.topic ?? null}, ${a.concept ?? null})
+         ${a.correct_answer}, ${a.user_answer}, ${a.is_correct},
+         ${a.explanation}, ${a.topic}, ${a.concept})
     `;
     if (a.topic) touchedTopics.add(a.topic);
   }
