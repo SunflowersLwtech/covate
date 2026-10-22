@@ -10,6 +10,7 @@ import { copyToClipboard, escapeHtml, downloadFile, parseQueryParams, initUtilsD
 import { handleError } from './modules/error-handler.js';
 import { WebSocketManager, ConnectionState } from './modules/websocket-manager.js';
 import { icons } from './modules/icons.js';
+import { answerLabel } from './modules/answers.js';
 
 // Initialize utils dependencies to avoid circular imports
 initUtilsDeps(showToast, i18n);
@@ -109,31 +110,6 @@ function showSessionWarnings(session) {
         const message = i18n.t(`toast.${warning}`);
         showToast(message, 'warning');
     });
-}
-
-// ==================== Utility Functions ====================
-/**
- * Normalize answer to label format (A, B, C, D)
- * Handles various formats: "A", "B", 0, 1, "0", "1", etc.
- */
-function normalizeAnswerToLabel(answer) {
-    if (typeof answer === 'string') {
-        // Already a label like "A", "B", "C", "D"
-        if (/^[A-Da-d]$/.test(answer)) {
-            return answer.toUpperCase();
-        }
-        // Numeric string like "0", "1", "2"
-        const num = parseInt(answer, 10);
-        if (!isNaN(num) && num >= 0 && num <= 3) {
-            return String.fromCharCode(65 + num);
-        }
-    }
-    // Numeric value like 0, 1, 2
-    if (typeof answer === 'number' && answer >= 0 && answer <= 3) {
-        return String.fromCharCode(65 + answer);
-    }
-    // Default: return as-is (uppercase if string)
-    return typeof answer === 'string' ? answer.toUpperCase() : String(answer);
 }
 
 // ==================== Rendering ====================
@@ -296,8 +272,7 @@ function renderQuizzes(quizzes) {
                     <div class="quiz-options" id="quiz-options-${index}">
                         ${quiz.options.map((opt, optIndex) => {
         const label = String.fromCharCode(65 + optIndex);
-        // Normalize the correct answer to compare properly
-        const correctLabel = normalizeAnswerToLabel(quiz.answer);
+        const correctLabel = answerLabel(quiz.answer, quiz.options);
         const isCorrect = label === correctLabel;
         return `
                                 <div class="quiz-option" onclick="window.app.selectAnswer(${index}, '${label}', ${isCorrect})" data-label="${label}">
@@ -337,9 +312,8 @@ function selectAnswer(quizIndex, answer, isCorrect) {
     const optionsContainer = document.getElementById(`quiz-options-${quizIndex}`);
     const options = optionsContainer.querySelectorAll('.quiz-option');
 
-    // Get the correct answer and normalize it to a label (A, B, C, D)
-    const correctAnswer = state.currentSession.quizzes[quizIndex].answer;
-    const correctLabel = normalizeAnswerToLabel(correctAnswer);
+    const quiz = state.currentSession.quizzes[quizIndex];
+    const correctLabel = answerLabel(quiz.answer, quiz.options);
 
     options.forEach(opt => {
         const label = opt.dataset.label;
@@ -382,8 +356,8 @@ function updateScore() {
     if (!state.currentSession?.quizzes) return;
     let score = 0;
     state.currentSession.quizzes.forEach((quiz, index) => {
-        const correctLabel = normalizeAnswerToLabel(quiz.answer);
-        if (state.selectedAnswers[index] === correctLabel) score++;
+        const correctLabel = answerLabel(quiz.answer, quiz.options);
+        if (correctLabel !== null && state.selectedAnswers[index] === correctLabel) score++;
     });
     // Score elements removed - just track internally
     state.currentScore = score;
