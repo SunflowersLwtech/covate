@@ -310,10 +310,15 @@ switch ($EnvManager) {
     }
 }
 
-# Report what is on disk, not what the steps above meant to do.
+# Report what is on disk, not what the steps above meant to do. A venv keeps python.exe
+# next to covate.exe in Scripts\; a conda environment keeps it at the environment root.
+# -I keeps the current directory off sys.path: from here, the environment's own .\covate
+# folder would import as an empty namespace package and pass for an installation.
 if (-not (Test-Path $ScriptPath)) { Stop-Install "$ScriptPath was not created." }
-& (Join-Path (Split-Path $ScriptPath) "python.exe") -c "import covate"
-if ($LASTEXITCODE -ne 0) { Stop-Install "covate does not import in $(Split-Path $ScriptPath)." }
+$EnvPython = if ($EnvManager -eq "conda") { Join-Path $CondaEnvPath "python.exe" } else { Join-Path (Split-Path $ScriptPath) "python.exe" }
+if (-not (Test-Path $EnvPython)) { Stop-Install "$EnvPython was not found." }
+& $EnvPython -I -c "import covate.server"
+if ($LASTEXITCODE -ne 0) { Stop-Install "covate does not import with $EnvPython." }
 
 Write-Host "  Dependencies installed." -ForegroundColor Green
 

@@ -265,9 +265,11 @@ case "$ENV_MANAGER" in
         ;;
 esac
 
-# Report what is on disk, not what the steps above meant to do.
+# Report what is on disk, not what the steps above meant to do. -I keeps the current
+# directory off sys.path: from here, the environment's own ./covate folder would
+# import as an empty namespace package and pass for an installation.
 [[ -x "$SCRIPT_PATH" ]] || fail "$SCRIPT_PATH was not created"
-"$(dirname "$SCRIPT_PATH")/python" -c "import covate" || fail "covate does not import in $(dirname "$SCRIPT_PATH")"
+"$(dirname "$SCRIPT_PATH")/python" -I -c "import covate.server" || fail "covate does not import in $(dirname "$SCRIPT_PATH")"
 
 echo "  Dependencies installed."
 
