@@ -67,8 +67,9 @@ CRITICAL RULES:
 DATA: All data stored locally in .mcp-sidecar/ directory.
 """
 
-# Initialize MCP server with instructions
-mcp: Any = FastMCP(SERVER_NAME, instructions=SERVER_INSTRUCTIONS)
+# Initialize MCP server with instructions. Without `version`, fastmcp reports its own
+# version as the server's, and nobody can tell which covate is installed.
+mcp: Any = FastMCP(SERVER_NAME, instructions=SERVER_INSTRUCTIONS, version=__version__)
 
 
 def _validate_reasoning(reasoning: dict[str, Any]) -> None:
