@@ -6,6 +6,7 @@ Manages the FastAPI server, learning sessions, and browser integration.
 """
 
 import asyncio
+import os
 import socket
 import threading
 import time
@@ -19,6 +20,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
+from .. import __version__
 from ..debug import web_debug_log as debug_log
 from ..config import get_config
 from ..storage import SessionStorageManager
@@ -49,19 +51,27 @@ class WebUIManager:
     - Handle browser opening
     """
 
-    def __init__(self, host: str = "127.0.0.1", port: int = 0):
+    # Tried in order when the configured port is 0 or taken.
+    DEFAULT_PORTS = range(8765, 8865)
+
+    def __init__(self, host: str | None = None, port: int | None = None):
         """
         Initialize the WebUIManager.
 
         Args:
-            host: Server host address
-            port: Server port (0 = auto-select)
+            host: Server host address (default: [server] host in config.toml)
+            port: Preferred port (default: [server] port in config.toml, or
+                MCP_SIDECAR_SERVER_PORT); 0 = the first free one from 8765. A port
+                that is taken when the server starts is skipped.
         """
-        self.host = host
-        self.port = port if port > 0 else self._find_available_port()
+        server_config = get_config().server
+        self.host = host or server_config.host or "127.0.0.1"
+        self.preferred_port = port if port is not None else server_config.port
+        self.port = self.preferred_port
         self._app: FastAPI | None = None
         self.server_thread: threading.Thread | None = None
         self._server: uvicorn.Server | None = None
+        self._socket: socket.socket | None = None
 
         # Session management
         self.sessions: dict[str, LearningSession] = {}
@@ -79,23 +89,63 @@ class WebUIManager:
             self._app = self._create_app()
         return self._app
 
-    def _find_available_port(self, start: int = 8765, end: int = 8865) -> int:
-        """Find an available port in the specified range."""
-        for port in range(start, end):
-            try:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.bind((self.host, port))
-                    return port
-            except OSError:
+    def _bind_socket(self) -> socket.socket:
+        """Bind the preferred port, else the first free default one, else any free port.
+
+        The bound socket itself is handed to uvicorn, so a second covate starting at
+        the same moment can't take the port between the check and the bind.
+        """
+        family = socket.AF_INET6 if ":" in self.host else socket.AF_INET
+        preferred = [self.preferred_port] if self.preferred_port and self.preferred_port > 0 else []
+        for port in [*preferred, *self.DEFAULT_PORTS, 0]:
+            sock = self._listen_on(family, port)
+            if sock is None:
                 continue
-        raise RuntimeError(f"No available ports in range {start}-{end}")
+            if preferred and port != preferred[0]:
+                debug_log(f"Port {preferred[0]} is in use; using {sock.getsockname()[1]}")
+            return sock
+        raise RuntimeError(f"No port available on {self.host}")
+
+    def _listen_on(self, family: int, port: int) -> socket.socket | None:
+        """A socket listening on port, or None if the port belongs to someone else.
+
+        A port where anything answers is left alone. Binding alone can't tell: macOS
+        with SO_REUSEADDR, and Windows even without it, let a socket bind 127.0.0.1
+        under a program listening on 0.0.0.0 and take that program's local traffic.
+
+        SO_REUSEADDR lets covate rebind a port whose last connections sit in TIME_WAIT
+        (the previous covate closed them, up to a minute ago); Linux wants the option
+        on both the old and the new socket for that. Windows doesn't get it: TIME_WAIT
+        doesn't block a bind there, and the option would let two live servers share a
+        port. Listening straight after binding keeps two covates starting together off
+        one port.
+        """
+        if port != 0 and self._answers(family, port):
+            return None
+        reuse = port != 0 and os.name != "nt"
+        sock = socket.socket(family, socket.SOCK_STREAM)
+        try:
+            if reuse:
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind((self.host, port))
+            sock.listen(2048)
+        except OSError:
+            sock.close()
+            return None
+        return sock
+
+    def _answers(self, family: int, port: int) -> bool:
+        """Whether something accepts connections on host:port."""
+        with socket.socket(family, socket.SOCK_STREAM) as probe:
+            probe.settimeout(1)
+            return probe.connect_ex((self.host, port)) == 0
 
     def _create_app(self) -> FastAPI:
         """Create and configure the FastAPI application."""
         app = FastAPI(
             title="MCP Learning Sidecar",
             description="Learning session management for AI coding assistants",
-            version="1.0.0",
+            version=__version__,
         )
 
         # Register routes
@@ -336,6 +386,9 @@ class WebUIManager:
         # Use the app property which creates the app if needed
         app = self.app
 
+        self._socket = self._bind_socket()
+        self.port = self._socket.getsockname()[1]
+
         config = uvicorn.Config(
             app=app,
             host=self.host,
@@ -345,7 +398,7 @@ class WebUIManager:
         self._server = uvicorn.Server(config)
 
         def run_server():
-            asyncio.run(self._server.serve())
+            asyncio.run(self._server.serve(sockets=[self._socket]))
 
         self.server_thread = threading.Thread(target=run_server, daemon=True)
         self.server_thread.start()

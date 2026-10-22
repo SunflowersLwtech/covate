@@ -345,7 +345,9 @@ Write-Host ""
 Write-Host "For other IDEs (Cursor, Windsurf, etc.), add this to MCP config:" -ForegroundColor Yellow
 Write-Host "  {" -ForegroundColor Gray
 Write-Host "    `"covate`": {" -ForegroundColor Gray
-Write-Host "      `"command`": `"$($ScriptPath -replace '\\', '\\\\')`"" -ForegroundColor Gray
+# JSON escapes each backslash once. -replace takes a regex ('\\' matches one backslash)
+# but a literal replacement, so '\\' there is two backslashes, not one escaped.
+Write-Host "      `"command`": `"$($ScriptPath -replace '\\', '\\')`"" -ForegroundColor Gray
 Write-Host "    }" -ForegroundColor Gray
 Write-Host "  }" -ForegroundColor Gray
 Write-Host ""

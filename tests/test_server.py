@@ -13,6 +13,7 @@ import httpx
 import pytest
 from fastmcp.exceptions import ToolError
 
+from covate import __version__
 from covate.server import SERVER_NAME
 from covate.storage import DebugRetrieval
 
@@ -37,11 +38,13 @@ async def test_server_initializes(client):
     # fastmcp 4 may negotiate the modern server/discover handshake, which leaves
     # initialize_result as None; server_info/instructions are the era-neutral accessors.
     if hasattr(client, "server_info"):
-        server_name, instructions = client.server_info.name, client.instructions
+        info, instructions = client.server_info, client.instructions
     else:
         init = client.initialize_result
-        server_name, instructions = init.serverInfo.name, init.instructions
-    assert server_name == SERVER_NAME
+        info, instructions = init.serverInfo, init.instructions
+    assert info.name == SERVER_NAME
+    # covate's own version, not the fastmcp version underneath it.
+    assert info.version == __version__
     assert "learning_session" in (instructions or "")
 
 
