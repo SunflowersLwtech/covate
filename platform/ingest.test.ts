@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
-import { normalizeAnswer, normalizeTimestamp, optionIndex } from "./app/lib/ingest";
+import { normalizeAnswer, normalizeTimestamp, optionIndex, parseIngestBody, sessionTimes } from "./app/lib/ingest";
 
 type AnswerCase = { options: unknown[]; value: unknown; index: number | null; why: string };
 const CASES: AnswerCase[] = JSON.parse(
@@ -44,6 +44,68 @@ describe("normalizeTimestamp", () => {
     for (const v of ["yesterday", "2026/10/23", "1e9", -5, Number.NaN, Infinity, true, {}, []]) {
       assert.equal(normalizeTimestamp(v), undefined, JSON.stringify(v));
     }
+  });
+
+  it("rejects Unix time past year 9999, which would come out as +010000-… text", () => {
+    assert.equal(normalizeTimestamp(253402300799999), "9999-12-31T23:59:59.999Z");
+    assert.equal(normalizeTimestamp(253402300800000), undefined);
+  });
+});
+
+describe("sessionTimes", () => {
+  // The fixture session: started 1792690295.152762 (17:31:35Z), completed 42 s later on
+  // a machine at UTC+8, which stored the completion as 01:32:17.297955 local.
+  const STARTED = 1792690295.152762;
+  const completedAt = (started: unknown, completed: unknown) => {
+    const times = sessionTimes(started, completed);
+    assert.ok(!("invalid" in times), JSON.stringify(times));
+    return times.completedAt;
+  };
+
+  it("recovers the zone of a pre-fix client's local completion time from its Unix start", () => {
+    assert.deepEqual(sessionTimes(STARTED, "2026-10-23T01:32:17.297955"), {
+      startedAt: "2026-10-22T17:31:35.152Z",
+      completedAt: "2026-10-23T01:32:17.297955+08:00",
+    });
+    // The same session recorded at UTC-5, at UTC+5:30, and at UTC.
+    assert.equal(completedAt(STARTED, "2026-10-22T12:32:17.297955"), "2026-10-22T12:32:17.297955-05:00");
+    assert.equal(completedAt(STARTED, "2026-10-22T23:02:17.297955"), "2026-10-22T23:02:17.297955+05:30");
+    assert.equal(completedAt(`${STARTED}`, "2026-10-22T17:32:17.297955"), "2026-10-22T17:32:17.297955+00:00");
+  });
+
+  it("never puts completion before the start or after the real completion", () => {
+    // 40 minutes at UTC+5:30 also fits +5:45 (25 minutes) and +6:00 (10 minutes); the
+    // shortest reading wins, and it stays within the session either way.
+    const at = Date.parse(completedAt(STARTED, "2026-10-22T23:41:35")!);
+    assert.ok(at >= Date.parse("2026-10-22T17:31:35.152Z") && at <= Date.parse("2026-10-22T18:11:35Z"));
+  });
+
+  it("leaves zoned or current-client times alone", () => {
+    assert.deepEqual(sessionTimes("2026-10-22T17:31:35.152762+00:00", "2026-10-22T17:32:17.297955+00:00"), {
+      startedAt: "2026-10-22T17:31:35.152762+00:00",
+      completedAt: "2026-10-22T17:32:17.297955+00:00",
+    });
+    assert.equal(completedAt(STARTED, "2026-10-22T17:32:17Z"), "2026-10-22T17:32:17Z");
+    assert.equal(completedAt(STARTED, null), null);
+  });
+
+  it("does not guess when no zone gives a plausible session", () => {
+    // Three days after the start: no offset makes that a session of at most two hours.
+    assert.equal(completedAt(STARTED, "2026-10-26T01:32:17"), "2026-10-26T01:32:17");
+  });
+
+  it("names the field it cannot read", () => {
+    assert.deepEqual(sessionTimes("yesterday", null), { invalid: "started_at" });
+    assert.deepEqual(sessionTimes(STARTED, "soon"), { invalid: "completed_at" });
+  });
+});
+
+describe("parseIngestBody", () => {
+  it("drops NUL characters, which Postgres text and jsonb cannot hold, from every string", () => {
+    const body = parseIngestBody(
+      JSON.stringify({ client_id: "a\u0000b", answers: [{ question: "q\u0000", options: ["x\u0000y", "z"] }] }),
+    );
+    assert.deepEqual(body, { client_id: "ab", answers: [{ question: "q", options: ["xy", "z"] }] });
   });
 });
 

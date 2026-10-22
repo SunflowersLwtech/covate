@@ -194,7 +194,9 @@ describe("sync from the MCP to the ledger", { skip }, () => {
 
     const { row, answers } = await session("legacy-client");
     assert.equal(row.started_at?.toISOString(), "2026-10-22T17:31:35.152Z");
-    assert.ok(row.completed_at, "naive local time is kept (read in the database's zone)");
+    // Sent as "2026-10-23T01:32:17.297955", local time at UTC+8 with no zone; read as
+    // UTC it would land 8 hours late.
+    assert.equal(row.completed_at?.toISOString(), "2026-10-22T17:32:17.297Z");
     assert.deepEqual(
       answers.map((a) => [a.user_answer, a.is_correct]),
       [
@@ -206,10 +208,45 @@ describe("sync from the MCP to the ledger", { skip }, () => {
   });
 
   it("answers an unreadable timestamp with a 400 and stores nothing", async () => {
-    for (const started_at of ["not a time", "2026-13-45T00:00:00Z"]) {
+    // An offset Postgres refuses, and Unix milliseconds past year 9999.
+    for (const started_at of ["not a time", "2026-13-45T00:00:00Z", "2026-10-23T01:32:17+25:00", 253402300800000]) {
       const { status, json } = await postBody({ client_id: `bad-${started_at}`, started_at, answers: [] });
       assert.equal(status, 400, `${started_at}: ${JSON.stringify(json)}`);
       assert.equal((await session(`bad-${started_at}`)).row, undefined);
     }
+  });
+
+  it("stores a session whose text holds NUL characters, without them", async () => {
+    const { status, json } = await postBody({
+      client_id: "nul-text",
+      started_at: "2026-10-22T17:31:35Z",
+      answers: [{ question: "Why\u0000?", options: ["a\u0000", "b"], correct_answer: "a", user_answer: "A", topic: "nul" }],
+    });
+    assert.equal(status, 200, JSON.stringify(json));
+    const { answers } = await session("nul-text");
+    assert.deepEqual(
+      answers.map((a) => [a.question, a.user_answer, a.is_correct]),
+      [["Why?", "a", true]],
+    );
+  });
+
+  it("leaves the stored copy whole when a re-sync is refused partway", async () => {
+    const answer = (question: string, options: unknown) => ({
+      question, options, correct_answer: "x", user_answer: "A", topic: "atomic",
+    });
+    const good = { client_id: "atomic", started_at: "2026-10-22T17:31:35Z", answers: [answer("q1", ["x", "y"]), answer("q2", ["x", "y"])] };
+    assert.equal((await postBody(good)).status, 200);
+
+    // The second answer's options hold a lone surrogate, which jsonb refuses after the
+    // first answer has already been rewritten.
+    const bad = { ...good, answers: [answer("q1 changed", ["x", "y"]), answer("q2", ["x", "\ud800"])] };
+    const { status, json } = await postBody(bad);
+    assert.equal(status, 400, JSON.stringify(json));
+
+    const { row, answers } = await session("atomic");
+    assert.equal(row.question_count, 2);
+    assert.deepEqual(answers.map((a) => a.question), ["q1", "q2"]);
+    const [progress] = await sql`select total_answered from topic_progress where user_id = ${userId} and topic = 'atomic'`;
+    assert.equal(progress.total_answered, 2);
   });
 });

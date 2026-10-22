@@ -1,5 +1,5 @@
 import { db } from "../../lib/db";
-import { normalizeAnswer, normalizeTimestamp, type IncomingAnswer } from "../../lib/ingest";
+import { normalizeAnswer, parseIngestBody, sessionTimes, type IncomingAnswer } from "../../lib/ingest";
 
 // POST /api/ingest — the opt-in Covate MCP sync client posts one completed
 // learning_session here. Auth: `Authorization: Bearer <sync_token>` (the per-user
@@ -7,9 +7,11 @@ import { normalizeAnswer, normalizeTimestamp, type IncomingAnswer } from "../../
 // duplicate. This is the hosted ledger's ingestion path; the MCP never calls it
 // unless the user has linked an account and configured the token.
 //
-// Timestamps are ISO 8601 (or, from older clients, Unix seconds) and answers are
-// option text (or a letter label); lib/ingest.ts reads both. A timestamp it can't
-// read is the client's mistake and gets a 400, not a database error.
+// Timestamps are ISO 8601 (or, from older clients, Unix seconds and a zoneless local
+// time) and answers are option text (or a letter label); lib/ingest.ts reads both.
+// Input Postgres refuses (a timestamp it can't read, text it can't store) is the
+// client's mistake and gets a 400, and every write for a session happens in one
+// transaction, so a refused re-sync leaves the previous copy whole.
 //
 // Ceilings. Every answer is its own insert, so without them one token could post
 // an arbitrarily large session, or post forever, and keep the (metered) database
@@ -32,8 +34,11 @@ type IncomingSession = {
   answers?: IncomingAnswer[];
 };
 
-// Postgres's own verdict on a timestamp that passed the format check (month 13, hour 25).
-const BAD_DATETIME = new Set(["22007", "22008"]);
+// Postgres's own verdict on input that passed our checks: a timestamp it cannot read
+// (month 13, a +25:00 offset), or text it cannot store (a NUL byte that got past the
+// parser, an unpaired surrogate in an option, which jsonb reports as 22P02).
+const BAD_DATETIME = new Set(["22007", "22008", "22009"]);
+const BAD_TEXT = new Set(["22021", "22P02", "22P05"]);
 
 function bearer(req: Request): string | null {
   const h = req.headers.get("authorization") ?? "";
@@ -58,7 +63,7 @@ export async function POST(req: Request) {
 
   let body: IncomingSession;
   try {
-    body = JSON.parse(raw) as IncomingSession;
+    body = parseIngestBody(raw) as IncomingSession;
   } catch {
     return Response.json({ error: "invalid JSON" }, { status: 400 });
   }
@@ -68,12 +73,11 @@ export async function POST(req: Request) {
   if (incoming.length > MAX_ANSWERS) {
     return Response.json({ error: `too many answers (max ${MAX_ANSWERS})` }, { status: 413 });
   }
-  const startedAt = normalizeTimestamp(body.started_at);
-  const completedAt = normalizeTimestamp(body.completed_at);
-  if (startedAt === undefined || completedAt === undefined) {
-    const field = startedAt === undefined ? "started_at" : "completed_at";
-    return Response.json({ error: `${field} must be an ISO 8601 timestamp` }, { status: 400 });
+  const times = sessionTimes(body.started_at, body.completed_at);
+  if ("invalid" in times) {
+    return Response.json({ error: `${times.invalid} must be an ISO 8601 timestamp` }, { status: 400 });
   }
+  const { startedAt, completedAt } = times;
   const answers = incoming.map(normalizeAnswer);
   const total = incoming.length;
   const correct = answers.filter((a) => a?.is_correct === true).length;
@@ -109,81 +113,88 @@ export async function POST(req: Request) {
     );
   }
 
-  // Idempotent upsert of the session.
-  //
-  // The `::text::` on the timestamps is load-bearing. The driver asks Postgres to
-  // describe each parameter and then applies its own serializer for the type that
-  // comes back: a timestamptz-described parameter is pushed through
-  // `new Date(x).toISOString()`, which silently truncates anything finer than a
-  // millisecond. Describing the parameter as text hands the client's string to
-  // Postgres untouched and lets Postgres do the parsing.
-  let sessRows: { id: string }[];
+  let sessionId: string;
   try {
-    sessRows = (await sql`
-      insert into learning_session
-        (user_id, client_id, project, change_summary, question_count, correct_count, started_at, completed_at, synced_at)
-      values
-        (${userId}, ${body.client_id}, ${body.project ?? null}, ${body.change_summary ?? null},
-         ${total}, ${correct}, ${startedAt}::text::timestamptz,
-         ${completedAt}::text::timestamptz, now())
-      on conflict (user_id, client_id) do update set
-        project = excluded.project,
-        change_summary = excluded.change_summary,
-        question_count = excluded.question_count,
-        correct_count = excluded.correct_count,
-        completed_at = excluded.completed_at,
-        synced_at = now()
-      returning id
-    `) as { id: string }[];
+    sessionId = await sql.begin(async (tx) => {
+      // Idempotent upsert of the session.
+      //
+      // The `::text::` on the timestamps is load-bearing. The driver asks Postgres to
+      // describe each parameter and then applies its own serializer for the type that
+      // comes back: a timestamptz-described parameter is pushed through
+      // `new Date(x).toISOString()`, which silently truncates anything finer than a
+      // millisecond. Describing the parameter as text hands the client's string to
+      // Postgres untouched and lets Postgres do the parsing.
+      const sessRows = (await tx`
+        insert into learning_session
+          (user_id, client_id, project, change_summary, question_count, correct_count, started_at, completed_at, synced_at)
+        values
+          (${userId}, ${body.client_id}, ${body.project ?? null}, ${body.change_summary ?? null},
+           ${total}, ${correct}, ${startedAt}::text::timestamptz,
+           ${completedAt}::text::timestamptz, now())
+        on conflict (user_id, client_id) do update set
+          project = excluded.project,
+          change_summary = excluded.change_summary,
+          question_count = excluded.question_count,
+          correct_count = excluded.correct_count,
+          completed_at = excluded.completed_at,
+          synced_at = now()
+        returning id
+      `) as { id: string }[];
+      const id = sessRows[0].id;
+
+      // Replace this session's answers (idempotent re-sync). Remember the topics this
+      // session used to touch so their rollups get recomputed even if the answers changed.
+      const prevTopicRows = (await tx`
+        select distinct topic from quiz_answer where session_id = ${id} and topic is not null
+      `) as { topic: string }[];
+      const touchedTopics = new Set<string>(prevTopicRows.map((r) => r.topic));
+
+      await tx`delete from quiz_answer where session_id = ${id}`;
+      for (const a of answers) {
+        if (!a) continue;
+        // `options` is already a JSON string, so it goes in as text and Postgres parses
+        // it — same reason as the timestamps above: a jsonb-described parameter would be
+        // JSON.stringify'd by the driver and land as a jsonb *string* of JSON.
+        await tx`
+          insert into quiz_answer
+            (session_id, user_id, question, options, correct_answer, user_answer, is_correct, explanation, topic, concept)
+          values
+            (${id}, ${userId}, ${a.question}, ${JSON.stringify(a.options ?? null)}::text::jsonb,
+             ${a.correct_answer}, ${a.user_answer}, ${a.is_correct},
+             ${a.explanation}, ${a.topic}, ${a.concept})
+        `;
+        if (a.topic) touchedTopics.add(a.topic);
+      }
+
+      // Recompute the rollup for every topic this sync touched, straight from quiz_answer.
+      // Incrementing here would double-count: the MCP client re-posts every stored session
+      // on each run, and the answers above are deleted-and-reinserted on a re-sync.
+      for (const topic of touchedTopics) {
+        await tx`
+          insert into topic_progress (user_id, topic, total_answered, total_correct, last_seen)
+          select ${userId}, ${topic}, count(*), count(*) filter (where is_correct), max(created_at)
+            from quiz_answer where user_id = ${userId} and topic = ${topic}
+          on conflict (user_id, topic) do update set
+            total_answered = excluded.total_answered,
+            total_correct = excluded.total_correct,
+            last_seen = excluded.last_seen
+        `;
+      }
+      // A topic can lose its last answer (edited quiz, removed session) — don't leave an
+      // empty row behind for the progress chart to render.
+      await tx`delete from topic_progress where user_id = ${userId} and total_answered = 0`;
+      return id;
+    });
   } catch (e) {
-    if (BAD_DATETIME.has((e as { code?: string }).code ?? "")) {
+    const code = (e as { code?: string }).code ?? "";
+    if (BAD_DATETIME.has(code)) {
       return Response.json({ error: "started_at / completed_at is not a valid timestamp" }, { status: 400 });
+    }
+    if (BAD_TEXT.has(code)) {
+      return Response.json({ error: "the session holds text the ledger cannot store" }, { status: 400 });
     }
     throw e;
   }
-  const sessionId = sessRows[0].id;
-
-  // Replace this session's answers (idempotent re-sync). Remember the topics this
-  // session used to touch so their rollups get recomputed even if the answers changed.
-  const prevTopicRows = (await sql`
-    select distinct topic from quiz_answer where session_id = ${sessionId} and topic is not null
-  `) as { topic: string }[];
-  const touchedTopics = new Set<string>(prevTopicRows.map((r) => r.topic));
-
-  await sql`delete from quiz_answer where session_id = ${sessionId}`;
-  for (const a of answers) {
-    if (!a) continue;
-    // `options` is already a JSON string, so it goes in as text and Postgres parses
-    // it — same reason as the timestamps above: a jsonb-described parameter would be
-    // JSON.stringify'd by the driver and land as a jsonb *string* of JSON.
-    await sql`
-      insert into quiz_answer
-        (session_id, user_id, question, options, correct_answer, user_answer, is_correct, explanation, topic, concept)
-      values
-        (${sessionId}, ${userId}, ${a.question}, ${JSON.stringify(a.options ?? null)}::text::jsonb,
-         ${a.correct_answer}, ${a.user_answer}, ${a.is_correct},
-         ${a.explanation}, ${a.topic}, ${a.concept})
-    `;
-    if (a.topic) touchedTopics.add(a.topic);
-  }
-
-  // Recompute the rollup for every topic this sync touched, straight from quiz_answer.
-  // Incrementing here would double-count: the MCP client re-posts every stored session
-  // on each run, and the answers above are deleted-and-reinserted on a re-sync.
-  for (const topic of touchedTopics) {
-    await sql`
-      insert into topic_progress (user_id, topic, total_answered, total_correct, last_seen)
-      select ${userId}, ${topic}, count(*), count(*) filter (where is_correct), max(created_at)
-        from quiz_answer where user_id = ${userId} and topic = ${topic}
-      on conflict (user_id, topic) do update set
-        total_answered = excluded.total_answered,
-        total_correct = excluded.total_correct,
-        last_seen = excluded.last_seen
-    `;
-  }
-  // A topic can lose its last answer (edited quiz, removed session) — don't leave an
-  // empty row behind for the progress chart to render.
-  await sql`delete from topic_progress where user_id = ${userId} and total_answered = 0`;
 
   return Response.json({ ok: true, session_id: sessionId, answers: total, correct });
 }
