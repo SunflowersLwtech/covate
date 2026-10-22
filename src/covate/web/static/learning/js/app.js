@@ -441,6 +441,7 @@ async function submitLearning() {
 
         if (data.success) {
             updateStatus('completed');
+            closeSocket();
             showToast(i18n.t('toast.submitSuccess'), 'success');
             document.getElementById('submit-btn').disabled = true;
             document.getElementById('submit-btn').innerHTML = `${icons.check} <span>${i18n.t('buttons.completed')}</span>`;
@@ -459,6 +460,7 @@ async function cancelSession() {
     try {
         await fetch(`/api/learning/session/${state.currentSession.session_id}/cancel`, { method: 'POST' });
         updateStatus('cancelled');
+        closeSocket();
         showToast(i18n.t('toast.cancelSuccess'), 'success');
     } catch (e) {
         handleError(e, 'cancelSession');
@@ -510,6 +512,15 @@ function initKeyboardShortcuts() {
 }
 
 // ==================== WebSocket Setup ====================
+// A finished session has nothing more to hear. Closing the socket keeps the page from
+// warning "Reconnecting..." when the MCP server later exits with the editor. It is not a
+// lost connection, so the indicator stays as it was rather than turning red.
+function closeSocket() {
+    if (!state.wsManager) return;
+    state.wsManager.onStateChange = () => {};
+    state.wsManager.close();
+}
+
 function initWebSocket(sessionId) {
     // The socket lives at /ws/learning/<session id>; with no session there is
     // nothing to connect to.
