@@ -51,10 +51,10 @@ export function normalizeTimestamp(value: unknown): string | null | undefined {
   return date.toISOString();
 }
 
-// UTC offsets in use somewhere, in minutes.
+// UTC offsets in use somewhere, standard or summer time, in minutes.
 const UTC_OFFSETS = [
   ...Array.from({ length: 27 }, (_, i) => (i - 12) * 60),
-  -570, -210, 210, 270, 330, 345, 390, 525, 570, 630, 765, 825,
+  -570, -210, -150, 210, 270, 330, 345, 390, 525, 570, 630, 765, 825,
 ];
 // learning_session's longest timeout is two hours.
 const LONGEST_SESSION_MINUTES = 125;
@@ -66,9 +66,10 @@ const LONGEST_SESSION_MINUTES = 125;
  * A pre-fix client sends completed_at as its local time with no zone, which Postgres
  * would read as UTC (8 hours late for a user at UTC+8). Its started_at is Unix time,
  * an absolute instant, so the zone is recovered from the pair: the UTC offset in use
- * that puts completion closest after the start. That never places completion before
- * the start or after the real completion, and is exact when no other offset fits
- * inside the session's own length (any session under 15 minutes).
+ * that puts completion closest after the start. As long as the user's offset is in
+ * UTC_OFFSETS, that never places completion before the start or after the real
+ * completion, and is exact when no other offset fits inside the session's own
+ * length (any session under 15 minutes).
  */
 export function sessionTimes(
   started: unknown,

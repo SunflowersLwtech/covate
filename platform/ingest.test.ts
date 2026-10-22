@@ -73,6 +73,12 @@ describe("sessionTimes", () => {
     assert.equal(completedAt(`${STARTED}`, "2026-10-22T17:32:17.297955"), "2026-10-22T17:32:17.297955+00:00");
   });
 
+  it("knows Newfoundland summer time (UTC-2:30)", () => {
+    // A 5-minute session ending 17:36:35Z, stored as 15:06:35 local. Without -2:30 in
+    // the list the best fit is -3:00, which puts completion 30 minutes late.
+    assert.equal(completedAt(STARTED, "2026-10-22T15:06:35"), "2026-10-22T15:06:35-02:30");
+  });
+
   it("never puts completion before the start or after the real completion", () => {
     // 40 minutes at UTC+5:30 also fits +5:45 (25 minutes) and +6:00 (10 minutes); the
     // shortest reading wins, and it stays within the session either way.
