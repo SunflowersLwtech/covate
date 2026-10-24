@@ -135,9 +135,14 @@ class WebUIManager:
         return sock
 
     def _answers(self, family: int, port: int) -> bool:
-        """Whether something accepts connections on host:port."""
+        """Whether something accepts connections on host:port.
+
+        A local listener answers within milliseconds. Windows never refuses a connect
+        to an unused local port outright, it lets the attempt run out, so the wait is
+        kept short: a full second here was a second on every quiz page start.
+        """
         with socket.socket(family, socket.SOCK_STREAM) as probe:
-            probe.settimeout(1)
+            probe.settimeout(0.25)
             return probe.connect_ex((self.host, port)) == 0
 
     def _create_app(self) -> FastAPI:
