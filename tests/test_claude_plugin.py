@@ -9,8 +9,6 @@ import json
 import re
 from pathlib import Path
 
-import pytest
-
 import covate
 from covate.review.cli import _parser
 
@@ -68,8 +66,10 @@ def test_the_commands_point_at_skill_steps_that_exist():
             assert f"## {step}" in skill, f"{p.name} refers to a missing section: {step}"
 
 
-@pytest.mark.parametrize("key", ["hooks"])
-def test_the_plugin_installs_no_hooks(key):
-    # A review nudge must never be able to block or slow a tool call.
-    assert key not in PLUGIN
+def test_the_plugin_installs_no_hooks():
+    # A review nudge must never be able to block or slow a tool call. A plugin's hooks can be
+    # declared in plugin.json, in a hooks/ folder, or inline in its marketplace entry.
+    assert "hooks" not in PLUGIN
     assert not (ROOT / "hooks").exists()
+    for entry in MARKET["plugins"]:
+        assert "hooks" not in entry, f"marketplace entry {entry['name']} declares hooks"
