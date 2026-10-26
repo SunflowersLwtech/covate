@@ -71,6 +71,8 @@ undo window, so an answer you take back inside that window does not count; one y
 alone does.) A new concept comes back after 1 day, then 7, then 30
 days; a wrong answer sends it back to the 1-day step; passing all three means mastered.
 The ledger lives in the global Covate storage (override with `COVATE_REVIEW_LEDGER`).
+`questions.json` is `{"title": ..., "questions": [{"concept", "question", "options": [...],
+"correct": <0-based index>, "explanation"?}]}`.
 
 In Claude Code, install the plugin to get the MCP server plus `/covate:review` and
 `/covate:review-record`, which walk your agent through the steps above (no hooks, nothing runs
@@ -80,8 +82,6 @@ unless you call it):
 /plugin marketplace add SunflowersLwtech/covate
 /plugin install covate@covate
 ```
-`questions.json` is `{"title": ..., "questions": [{"concept", "question", "options": [...],
-"correct": <0-based index>, "explanation"?}]}`.
 
 ---
 
