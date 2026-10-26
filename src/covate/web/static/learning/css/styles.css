@@ -1,78 +1,93 @@
 /**
  * MCP Learning Sidecar - Design System
  * =====================================
- * HSL-based color system with light/dark theme support
- * Based on WebUI design patterns
+ * HSL-based color system with light/dark theme support.
+ *
+ * The dark theme is the covate.org palette (platform/app/globals.css @theme), value
+ * for value: tests/quiz_palette.test.mjs fails when the two drift apart. Values are
+ * HSL triplets with two decimals so each one converts back to exactly the site's hex.
+ * The light theme has no counterpart on the site; it keeps the same hues, darkened
+ * until text on it clears WCAG AA.
  */
 
 /* ==================== CSS Variables ==================== */
 :root {
+    color-scheme: light;
+
     /* Colors - Light Theme */
-    --background: 220 15% 95%;
-    --foreground: 220 13% 15%;
-    --card: 220 15% 98%;
-    --card-foreground: 220 13% 15%;
-    --primary: 200 98% 40%;
-    --primary-foreground: 200 98% 98%;
-    --secondary: 220 13% 88%;
-    --secondary-foreground: 220 13% 20%;
-    --muted: 220 13% 85%;
-    --muted-foreground: 220 13% 45%;
-    --accent: 200 50% 90%;
-    --accent-foreground: 200 98% 30%;
-    --destructive: 0 72% 50%;
-    --destructive-foreground: 0 85% 97%;
-    --success: 142 70% 45%;
-    --success-foreground: 142 70% 95%;
-    --warning: 38 92% 50%;
-    --warning-foreground: 38 92% 10%;
-    --info: 200 98% 50%;
-    --border: 220 13% 85%;
-    --ring: 200 98% 40%;
-    --radius: 0.5rem;
+    --background: 210 28.57% 97.25%;      /* #f6f8fa */
+    --foreground: 211.76 36.17% 9.22%;    /* #0f1720 */
+    --card: 0 0% 100%;                    /* #ffffff */
+    --card-foreground: 211.76 36.17% 9.22%;
+    --primary: 162.93 93.55% 24.31%;      /* #047857 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 27.78% 92.94%;       /* #e8edf2 */
+    --secondary-foreground: 211.76 36.17% 9.22%;
+    --muted: 210 23.81% 83.53%;           /* #cbd5df */
+    --muted-foreground: 212 16.3% 36.08%; /* #4d5b6b */
+    --accent: 160 40% 92%;
+    --accent-foreground: 162.93 93.55% 24.31%;
+    --destructive: 0 73.71% 41.76%;       /* #b91c1c */
+    --destructive-foreground: 0 0% 100%;
+    --success: 162.93 93.55% 24.31%;
+    --success-foreground: 0 0% 100%;
+    --warning: 25.96 90.48% 37.06%;       /* #b45309 */
+    --warning-foreground: 0 0% 100%;
+    --info: 201.27 96.34% 32.16%;         /* #0369a1 */
+    --border: 211.76 25.37% 86.86%;       /* #d5dde6 */
+    --ring: 162.93 93.55% 24.31%;
+    --radius: 0.75rem;
 
     /* Chart Colors */
-    --chart-1: 200 98% 45%;
-    --chart-2: 142 70% 40%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 262 83% 58%;
-    --chart-5: 0 72% 55%;
+    --chart-1: 201.27 96.34% 32.16%;      /* blue */
+    --chart-2: 162.93 93.55% 24.31%;      /* green */
+    --chart-3: 25.96 90.48% 37.06%;       /* amber */
+    --chart-4: 263.39 69.96% 50.39%;      /* violet */
+    --chart-5: 0 73.71% 41.76%;           /* red */
 
     /* Quiz Special */
-    --quiz-bg: 262 50% 95%;
-    --quiz-border: 262 50% 80%;
+    --quiz-bg: 160 35% 95%;
+    --quiz-border: 160 30% 80%;
 
-    /* Fonts */
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    /* Fonts: the site's stacks. Nothing is fetched, so the page works offline. */
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
 }
 
-/* Dark Theme */
+/* Dark Theme: covate.org */
 .dark {
-    --background: 220 13% 12%;
-    --foreground: 220 13% 95%;
-    --card: 220 13% 15%;
-    --card-foreground: 220 13% 95%;
-    --primary: 200 98% 50%;
-    --primary-foreground: 220 13% 8%;
-    --secondary: 220 13% 22%;
-    --secondary-foreground: 220 13% 90%;
-    --muted: 220 13% 25%;
-    --muted-foreground: 220 13% 65%;
-    --accent: 200 70% 25%;
-    --accent-foreground: 200 98% 70%;
-    --destructive: 0 72% 55%;
-    --border: 220 13% 22%;
-    --ring: 200 98% 50%;
+    color-scheme: dark;
 
-    --chart-1: 200 98% 55%;
-    --chart-2: 142 70% 50%;
-    --chart-3: 38 92% 55%;
-    --chart-4: 262 83% 58%;
-    --chart-5: 0 72% 55%;
+    --background: 216 33.33% 5.88%;       /* deep       #0a0e14 */
+    --foreground: 207.69 35.14% 92.75%;   /* primary    #e6edf3 */
+    --card: 215.29 30.91% 10.78%;         /* surface    #131a24 */
+    --card-foreground: 207.69 35.14% 92.75%;
+    --primary: 158.11 64.37% 51.57%;      /* accent     #34d399 */
+    --primary-foreground: 216 33.33% 5.88%;
+    --secondary: 215.45 23.91% 18.04%;    /* border     #232c39 */
+    --secondary-foreground: 207.69 35.14% 92.75%;
+    --muted: 213.6 21.74% 22.55%;         /*            #2d3846 */
+    --muted-foreground: 211.11 15.43% 65.69%; /* secondary #9aa7b5 */
+    --accent: 175 30% 14%;
+    --accent-foreground: 156.2 71.6% 66.86%; /* accent-soft #6ee7b7 */
+    --destructive: 0 90.6% 70.78%;        /* #f87171 */
+    --destructive-foreground: 216 33.33% 5.88%;
+    --success: 158.11 64.37% 51.57%;
+    --success-foreground: 216 33.33% 5.88%;
+    --warning: 43.26 96.41% 56.27%;       /* #fbbf24 */
+    --warning-foreground: 216 33.33% 5.88%;
+    --info: 198.44 93.2% 59.61%;
+    --border: 215.45 23.91% 18.04%;       /* border     #232c39 */
+    --ring: 158.11 64.37% 51.57%;
 
-    --quiz-bg: 262 50% 18%;
-    --quiz-border: 262 50% 30%;
+    --chart-1: 198.44 93.2% 59.61%;       /* brand-blue #38bdf8 */
+    --chart-2: 158.11 64.37% 51.57%;
+    --chart-3: 43.26 96.41% 56.27%;
+    --chart-4: 255.14 91.74% 76.27%;      /* #a78bfa */
+    --chart-5: 0 90.6% 70.78%;
+
+    --quiz-bg: 175 30% 10%;
+    --quiz-border: 175 25% 22%;
 }
 
 /* ==================== Base Styles ==================== */
@@ -117,15 +132,15 @@ svg {
 
 /* ==================== Utility Classes ==================== */
 .card-glow {
-    box-shadow: 0 0 0 1px hsl(var(--border)), 0 4px 12px hsl(0 0% 0% / 0.08);
+    box-shadow: 0 1px 2px hsl(0 0% 0% / 0.06);
 }
 
 .dark .card-glow {
-    box-shadow: 0 0 0 1px hsl(var(--border)), 0 4px 12px hsl(0 0% 0% / 0.3);
+    box-shadow: none;
 }
 
 .logic-line {
-    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.3) 100%);
+    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--chart-1)) 100%);
 }
 
 .quiz-gradient {
@@ -190,7 +205,10 @@ svg {
 }
 
 .sidecar-header .logo span {
+    font-family: var(--font-mono);
+    font-size: 14px;
     font-weight: 600;
+    letter-spacing: -0.025em;
     color: hsl(var(--foreground));
 }
 
@@ -340,7 +358,7 @@ svg {
 
 /* ==================== Card Base ==================== */
 .card {
-    border-radius: 8px;
+    border-radius: 12px;
     border: 1px solid hsl(var(--border));
     background: hsl(var(--card));
     overflow: hidden;
@@ -479,7 +497,7 @@ svg {
     bottom: 10px;
     width: 2px;
     border-radius: 9999px;
-    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.3) 100%);
+    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--chart-1)) 100%);
 }
 
 .timeline-item {
@@ -535,6 +553,7 @@ svg {
 }
 
 .timeline-label {
+    font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 500;
     text-transform: uppercase;
@@ -673,7 +692,7 @@ svg {
     gap: 12px;
     padding: 12px 16px;
     border: 1px solid hsl(var(--border));
-    border-radius: 6px;
+    border-radius: 8px;
     background: hsl(var(--secondary) / 0.3);
     cursor: pointer;
     transition: all 0.2s;
@@ -704,6 +723,12 @@ svg {
 .quiz-option.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* The chosen and the correct option stay fully legible after submit. */
+.quiz-option.disabled.correct,
+.quiz-option.disabled.wrong {
+    opacity: 1;
 }
 
 .quiz-option .option-label {
@@ -744,7 +769,7 @@ svg {
 .quiz-feedback {
     margin-top: 16px;
     padding: 12px;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid;
     animation: fadeSlideIn 0.3s ease-out;
 }
@@ -947,7 +972,7 @@ svg {
     align-items: center;
     gap: 8px;
     animation: toastIn 0.3s ease-out;
-    box-shadow: 0 4px 12px hsl(0 0% 0% / 0.15);
+    box-shadow: 0 4px 12px hsl(0 0% 0% / 0.3);
 }
 
 @keyframes toastIn {
@@ -980,13 +1005,13 @@ svg {
 }
 
 .toast.success {
-    background: hsl(var(--chart-2));
-    color: white;
+    background: hsl(var(--success));
+    color: hsl(var(--success-foreground));
 }
 
 .toast.error {
     background: hsl(var(--destructive));
-    color: white;
+    color: hsl(var(--destructive-foreground));
 }
 
 .toast.warning {
@@ -995,8 +1020,8 @@ svg {
 }
 
 .toast.info {
-    background: hsl(var(--chart-1));
-    color: white;
+    background: hsl(var(--info));
+    color: hsl(var(--primary-foreground));
 }
 
 /* ==================== Collapsible ==================== */
@@ -1157,7 +1182,7 @@ svg {
     padding: 1px;
     background: linear-gradient(135deg,
             hsl(var(--primary) / 0.5),
-            hsl(var(--chart-4) / 0.5));
+            hsl(var(--chart-1) / 0.5));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -1316,8 +1341,11 @@ svg {
 /* ==================== Focus Visible Styles ==================== */
 .btn:focus-visible,
 .quiz-option:focus-visible,
-.icon-btn:focus-visible {
-    outline: 2px solid hsl(var(--primary));
+.icon-btn:focus-visible,
+.lang-selector select:focus-visible,
+.session-id:focus-visible,
+.card-header-left:focus-visible {
+    outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
 }
 
@@ -1429,7 +1457,7 @@ svg {
 .term-card {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 16px;
     transition: all 0.2s ease;
     position: relative;
@@ -1443,7 +1471,7 @@ svg {
     left: 0;
     width: 4px;
     height: 100%;
-    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--chart-4)) 100%);
+    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--chart-1)) 100%);
     opacity: 0.8;
 }
 
@@ -1534,28 +1562,28 @@ svg {
 }
 
 .term-card[data-domain="version_control"] .term-domain {
-    background: hsl(142 70% 45% / 0.15);
-    color: hsl(142 70% 45%);
+    background: hsl(var(--chart-2) / 0.15);
+    color: hsl(var(--chart-2));
 }
 
 .term-card[data-domain="testing"] .term-domain {
-    background: hsl(38 92% 50% / 0.15);
-    color: hsl(38 92% 50%);
+    background: hsl(var(--chart-3) / 0.15);
+    color: hsl(var(--chart-3));
 }
 
 .term-card[data-domain="security"] .term-domain {
-    background: hsl(0 72% 50% / 0.15);
-    color: hsl(0 72% 50%);
+    background: hsl(var(--chart-5) / 0.15);
+    color: hsl(var(--chart-5));
 }
 
 .term-card[data-domain="databases"] .term-domain {
-    background: hsl(262 83% 58% / 0.15);
-    color: hsl(262 83% 58%);
+    background: hsl(var(--chart-4) / 0.15);
+    color: hsl(var(--chart-4));
 }
 
 .term-card[data-domain="devops"] .term-domain {
-    background: hsl(200 98% 40% / 0.15);
-    color: hsl(200 98% 40%);
+    background: hsl(var(--chart-1) / 0.15);
+    color: hsl(var(--chart-1));
 }
 
 /* Animation for terms appearing */
@@ -1597,5 +1625,24 @@ svg {
 
     .term-definition {
         font-size: 12px;
+    }
+}
+
+/* ==================== Reduced Motion ==================== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .btn-primary:hover:not(:disabled),
+    .card-elevated:hover,
+    .term-card:hover {
+        transform: none;
     }
 }
