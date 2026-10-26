@@ -17,6 +17,7 @@ PLUGIN = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding
 MARKET = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
 SKILL = ROOT / "skills" / "covate-review" / "SKILL.md"
 COMMANDS = sorted((ROOT / "commands").glob("*.md"))
+UVX = 'uvx --from "${CLAUDE_PLUGIN_ROOT}" '
 
 
 def frontmatter(path: Path) -> dict[str, str]:
@@ -57,6 +58,17 @@ def test_every_covate_review_subcommand_the_skill_names_exists():
     assert named <= real_subcommands(), named - real_subcommands()
     # and it teaches the whole loop
     assert {"page", "record", "due", "status"} <= named
+
+
+def test_every_covate_review_command_runs_the_copy_that_ships_with_the_plugin():
+    # A `covate` already on PATH can be an older install with no `review`: it would start the MCP
+    # server and print a banner instead of the ledger. So no file may tell an agent to run it bare.
+    for p in [SKILL, *COMMANDS]:
+        text = p.read_text(encoding="utf-8")
+        for m in re.finditer(r"covate review", text):
+            assert text[: m.start()].endswith(UVX), f"{p.name} runs a bare `{text[m.start() :][:40]}`"
+    wrapped = re.findall(re.escape(UVX) + r"covate review ([a-z]+)", SKILL.read_text(encoding="utf-8"))
+    assert {"due", "page", "record", "status"} <= set(wrapped)  # the check above did not pass on nothing
 
 
 def test_the_commands_point_at_skill_steps_that_exist():

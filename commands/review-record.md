@@ -6,4 +6,4 @@ allowed-tools:
 ---
 
 Follow the "Score the answers" steps of the covate-review skill for the page `$ARGUMENTS`,
-then show `covate review status`.
+including its last step, showing where things stand.
