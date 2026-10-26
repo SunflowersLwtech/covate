@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.description="Context-aware MCP server for AI codi
 LABEL org.opencontainers.image.licenses="MIT"
 
 # Ownership label the official MCP Registry checks against server.json's "name"
-LABEL io.modelcontextprotocol.server.name="io.github.sunflowerslwtech/covate"
+LABEL io.modelcontextprotocol.server.name="io.github.SunflowersLwtech/covate"
 
 # Set working directory
 WORKDIR /app
