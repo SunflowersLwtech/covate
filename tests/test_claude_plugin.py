@@ -58,6 +58,9 @@ def test_every_covate_review_subcommand_the_skill_names_exists():
     assert named <= real_subcommands(), named - real_subcommands()
     # and it teaches the whole loop
     assert {"page", "record", "due", "status"} <= named
+    # `record` reads the JSON that `foldrender answers PAGE --json` prints; without --json FoldRender
+    # prints text for people, which `record` refuses, so nothing would be scored.
+    assert f"`foldrender answers <page> --json | {UVX}covate review record`" in text
 
 
 def test_every_covate_review_command_runs_the_copy_that_ships_with_the_plugin():
