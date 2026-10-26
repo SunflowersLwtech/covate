@@ -66,7 +66,9 @@ covate review status                              # every concept + first-answer
 ```
 
 Only the **first** pick on each question counts, so changing an answer after seeing the
-explanation cannot raise the score. A new concept comes back after 1 day, then 7, then 30
+explanation cannot raise the score. (FoldRender shows the explanation during its few-second
+undo window, so an answer you take back inside that window does not count; one you leave
+alone does.) A new concept comes back after 1 day, then 7, then 30
 days; a wrong answer sends it back to the 1-day step; passing all three means mastered.
 The ledger lives in the global Covate storage (override with `COVATE_REVIEW_LEDGER`).
 `questions.json` is `{"title": ..., "questions": [{"concept", "question", "options": [...],
