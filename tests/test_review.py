@@ -91,6 +91,13 @@ def test_a_wrong_answer_even_when_not_yet_due_resets(ledger):
     assert (out.reason, out.stage, out.due) == ("reset", 0, day(3))
 
 
+def test_a_late_right_answer_is_scheduled_from_the_day_it_was_given_not_the_day_it_was_due(ledger):
+    ledger.record_first_answer("a1", "c", True, D0)
+    ledger.record_first_answer("a2", "c", True, day(1))  # stage 1, due day 8
+    out = ledger.record_first_answer("a3", "c", True, day(18))  # ten days late
+    assert (out.reason, out.stage, out.due) == ("advanced", 2, day(48))
+
+
 def test_a_mastered_concept_that_is_later_missed_is_learning_again(ledger):
     ledger.record_first_answer("a1", "c", True, D0)
     for n, when in enumerate([day(1), day(8), day(38)], 2):
