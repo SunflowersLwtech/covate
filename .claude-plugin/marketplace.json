@@ -1,0 +1,17 @@
+{
+  "name": "covate",
+  "owner": {
+    "name": "SunflowersLwtech"
+  },
+  "metadata": {
+    "description": "Covate: a learning sidebar MCP server and spaced review for AI coding assistants."
+  },
+  "plugins": [
+    {
+      "name": "covate",
+      "source": "./",
+      "description": "Covate MCP server plus the /covate:review commands (spaced review of what you learned).",
+      "version": "1.1.0"
+    }
+  ]
+}
