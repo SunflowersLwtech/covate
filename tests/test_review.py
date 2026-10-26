@@ -10,7 +10,8 @@ import copy
 import json
 import subprocess
 import sys
-from datetime import date, timedelta
+import time
+from datetime import date, datetime, timedelta, timezone
 
 import pytest
 
@@ -24,6 +25,15 @@ D0 = date(2026, 10, 27)
 
 def day(n: int) -> date:
     return D0 + timedelta(days=n)
+
+
+def at_local(of_month: int, hour: int) -> str:
+    """An answer time on 2026-10-<of_month> in this machine's own zone, as FoldRender-style ISO text.
+
+    first_answers files an answer under its local calendar day, so tests that read the day
+    back build their stamps in the local zone and pass wherever they run.
+    """
+    return datetime(2026, 10, of_month, hour).astimezone().isoformat()
 
 
 @pytest.fixture
@@ -238,7 +248,7 @@ def answers_json(*answers, questions=None):
     return {"slug": "tonight", "title": "Tonight", "questions": qs, "answers": list(answers)}
 
 
-def ans(values, *, history=(), choice="q1", login="me", state="live", at="2026-10-27T20:00:00.000Z", **extra):
+def ans(values, *, history=(), choice="q1", login="me", state="live", at=at_local(27, 20), **extra):
     row = {
         "id": 9,
         "choice": choice,
@@ -259,19 +269,19 @@ def ans(values, *, history=(), choice="q1", login="me", state="live", at="2026-1
 
 def test_a_wrong_first_pick_stays_wrong_even_though_the_page_marks_the_latest_right():
     # FoldRender's own `correct` follows the latest answer (right); the history has the first (wrong).
-    data = answers_json(ans(["o1"], history=[(["o0"], "2026-10-27T19:00:00.000Z")], correct=True))
+    data = answers_json(ans(["o1"], history=[(["o0"], at_local(27, 19))], correct=True))
     [fa], skipped = first_answers(data)
     assert (fa.correct, fa.on, fa.key, skipped) == (False, date(2026, 10, 27), "tonight#q1#me", [])
 
 
 def test_a_right_first_pick_stays_right_after_changing_to_a_wrong_one():
-    data = answers_json(ans(["o0"], history=[(["o1"], "2026-10-27T19:00:00.000Z")], correct=False))
+    data = answers_json(ans(["o0"], history=[(["o1"], at_local(27, 19))], correct=False))
     [fa], _ = first_answers(data)
     assert fa.correct is True
 
 
 def test_a_withdrawn_pick_is_not_the_first_answer():
-    data = answers_json(ans(["o1"], history=[([], "2026-10-27T18:00:00.000Z"), (["o0"], "2026-10-28T09:00:00.000Z")]))
+    data = answers_json(ans(["o1"], history=[([], at_local(27, 18)), (["o0"], at_local(28, 9))]))
     [fa], _ = first_answers(data)
     assert (fa.correct, fa.on) == (False, date(2026, 10, 28))
 
@@ -283,7 +293,7 @@ def test_an_answer_still_inside_its_undo_window_is_not_scored_yet():
 
 
 def test_a_pending_change_does_not_hide_the_earlier_live_first_answer():
-    data = answers_json(ans(["o1"], state="pending", history=[(["o0"], "2026-10-27T19:00:00.000Z")]))
+    data = answers_json(ans(["o1"], state="pending", history=[(["o0"], at_local(27, 19))]))
     [fa], _ = first_answers(data)
     assert fa.correct is False
 
@@ -298,6 +308,50 @@ def test_a_multi_pick_must_match_the_right_set_exactly():
     data = answers_json(ans(["o0", "o1"]))
     [fa], _ = first_answers(data)
     assert fa.correct is False
+
+
+# FoldRender stamps answers in UTC. This one is 01:05 on the 28th in UTC+8, 12:05 on the 27th in UTC-5.
+LATE_UTC = "2026-10-27T17:05:00.000Z"
+UTC_PLUS_8 = timezone(timedelta(hours=8))
+UTC_MINUS_5 = timezone(timedelta(hours=-5))
+
+
+def test_an_answer_counts_on_the_calendar_day_it_was_given_in_the_readers_zone():
+    data = answers_json(ans(["o1"], at=LATE_UTC))
+    days = {}
+    for name, tz in [("utc+8", UTC_PLUS_8), ("utc-5", UTC_MINUS_5), ("utc", timezone.utc)]:
+        [fa], _ = first_answers(data, tz=tz)
+        days[name] = fa.on
+    assert days == {"utc+8": date(2026, 10, 28), "utc-5": D0, "utc": D0}
+
+
+def test_a_small_hours_answer_in_utc_plus_8_is_due_that_morning_not_early(ledger):
+    ledger.record_first_answer("first", "Idempotency keys", True, D0)  # first seen the 27th, due the 28th
+    [fa], _ = first_answers(answers_json(ans(["o1"], at=LATE_UTC)), tz=UTC_PLUS_8)
+    out = ledger.record_first_answer(fa.key, fa.concept, fa.correct, fa.on)
+    assert (out.reason, out.stage) == ("advanced", 1)
+
+
+@pytest.fixture
+def machine_in_utc_plus_8(monkeypatch):
+    monkeypatch.setenv("TZ", "CST-8")  # POSIX zone string, no zone database needed
+    time.tzset()
+    yield
+    monkeypatch.undo()
+    time.tzset()
+
+
+@pytest.mark.skipif(not hasattr(time, "tzset"), reason="time.tzset does not exist on Windows")
+def test_without_a_zone_the_machines_own_day_is_used_so_record_and_due_agree(tmp_path, capsys, machine_in_utc_plus_8):
+    a = tmp_path / "a.json"
+    a.write_text(json.dumps(answers_json(ans(["o1"], at=LATE_UTC))), encoding="utf-8")
+    assert run(tmp_path, "record", str(a)) == 0
+    capsys.readouterr()
+    # Given on the 28th where this machine is, so due the 29th: not on the 28th, yes on the 29th.
+    assert run(tmp_path, "--today", "2026-10-28", "due") == 0
+    assert "Nothing due." in capsys.readouterr().out
+    assert run(tmp_path, "--today", "2026-10-29", "due", "--json") == 0
+    assert [r["concept"] for r in json.loads(capsys.readouterr().out)] == ["Idempotency keys"]
 
 
 def test_answers_that_cannot_be_scored_are_reported_not_dropped_silently():

@@ -12,7 +12,7 @@ the latest answer, so scoring here goes back to the first one.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, tzinfo
 from html import escape
 from typing import Any
 
@@ -109,8 +109,13 @@ class Skipped:
     reason: str
 
 
-def first_answers(data: dict[str, Any]) -> tuple[list[FirstAnswer], list[Skipped]]:
-    """Each person's first real pick on each question of a `foldrender answers --json` result."""
+def first_answers(data: dict[str, Any], tz: tzinfo | None = None) -> tuple[list[FirstAnswer], list[Skipped]]:
+    """Each person's first real pick on each question of a `foldrender answers --json` result.
+
+    FoldRender stamps answers in UTC. An answer counts on the calendar day it was given in
+    `tz` (default: this machine's zone, the same one `covate review due` calls "today"),
+    so a late-night answer in UTC+8 is not filed under the previous day.
+    """
     if (
         not isinstance(data, dict)
         or not isinstance(data.get("answers"), list)
@@ -152,7 +157,7 @@ def first_answers(data: dict[str, Any]) -> tuple[list[FirstAnswer], list[Skipped
             skipped.append(Skipped(key, "no final answer yet"))
             continue
         try:
-            on = date.fromisoformat(str(pick.get("at") or a.get("at"))[:10])
+            on = datetime.fromisoformat(str(pick.get("at") or a.get("at"))).astimezone(tz).date()
         except ValueError:
             skipped.append(Skipped(key, "answer has no usable date"))
             continue
