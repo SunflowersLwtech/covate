@@ -305,9 +305,9 @@ python -c "import covate"
 
 When releasing:
 
-1. Bump the version in `pyproject.toml`, `src/covate/__init__.py`, `.claude-plugin/plugin.json` and `server.json` (both the top-level `version` and the package `identifier` tag).
+1. Bump the version in `pyproject.toml`, `src/covate/__init__.py`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` and `server.json` (both the top-level `version` and the package `identifier` tag), and move the `[Unreleased]` notes in `CHANGELOG.md` under the new version.
 2. Push a `v<version>` tag. The image workflow only produces the `<version>` image tag from a `v*` tag push, and `server.json` references that tag.
-3. Once the image is up, publish with `mcp-publisher login github` then `mcp-publisher publish` from the repository root.
+3. Once that run has pushed the image, run the registry workflow on the tag: `gh workflow run mcp-registry.yml --ref v<version>`. It validates `server.json` and publishes it, signed in with the run's GitHub OIDC token. (By hand from the repository root, `mcp-publisher login github` then `mcp-publisher publish` does the same.)
 
 ## Submitting a Pull Request
 

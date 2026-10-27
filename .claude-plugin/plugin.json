@@ -1,6 +1,6 @@
 {
   "name": "covate",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Covate - Context-aware learning sidebar for AI coding assistants, served as an MCP server.",
   "author": {
     "name": "SunflowersLwtech"
