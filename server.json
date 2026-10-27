@@ -3,7 +3,7 @@
   "name": "io.github.SunflowersLwtech/covate",
   "title": "Covate",
   "description": "Learning sidebar for AI coding assistants: quizzes on your changes, debug memory, term explanations",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "websiteUrl": "https://covate.org",
   "icons": [
     {
@@ -18,7 +18,7 @@
   "packages": [
     {
       "registryType": "oci",
-      "identifier": "ghcr.io/sunflowerslwtech/covate:1.1.0",
+      "identifier": "ghcr.io/sunflowerslwtech/covate:1.2.0",
       "transport": {
         "type": "stdio"
       }

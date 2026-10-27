@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-27
+
 ### Added
 - `server.json` for the official MCP Registry, and the `io.modelcontextprotocol.server.name` label on the container image the registry verifies
 - A test that keeps `server.json`, the Dockerfile label, `pyproject.toml` and the package version consistent
