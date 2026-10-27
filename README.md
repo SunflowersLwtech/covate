@@ -516,7 +516,7 @@ pip install -e '.[dev]' --upgrade
 
 We're building toward a **Personalized Learning Center** that grows with you. Here's what's coming:
 
-### 🔍 Advanced Search & Indexing (v1.2)
+### 🔍 Advanced Search & Indexing (v1.3)
 
 | Feature | Description |
 |---------|-------------|
