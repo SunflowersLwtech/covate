@@ -74,6 +74,15 @@ The ledger lives in the global Covate storage (override with `COVATE_REVIEW_LEDG
 `questions.json` is `{"title": ..., "questions": [{"concept", "question", "options": [...],
 "correct": <0-based index>, "explanation"?}]}`.
 
+In Claude Code, install the plugin to get the MCP server plus `/covate:review` and
+`/covate:review-record`, which walk your agent through the steps above (no hooks, nothing runs
+unless you call it):
+
+```
+/plugin marketplace add SunflowersLwtech/covate
+/plugin install covate@covate
+```
+
 ---
 
 ## 📦 Available Tools
