@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.SunflowersLwtech/covate",
+  "title": "Covate",
+  "description": "Learning sidebar for AI coding assistants: quizzes on your changes, debug memory, term explanations",
+  "version": "1.1.0",
+  "websiteUrl": "https://covate.org",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/SunflowersLwtech/covate/main/assets/icon.png",
+      "mimeType": "image/png"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/SunflowersLwtech/covate",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "ghcr.io/sunflowerslwtech/covate:1.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
