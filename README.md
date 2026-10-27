@@ -51,6 +51,40 @@ and the ledger costs nothing.
 
 ---
 
+## 🔁 Spaced review (local, offline)
+
+`covate review` keeps a small local ledger of concepts and when to ask about them again. It
+never talks to the network or to a model; your own agent writes the questions and publishes
+the page (for example with the [FoldRender](https://foldrender.dev) command line).
+
+```bash
+covate review page questions.json -o page.html   # questions -> a quiz page (answers marked)
+foldrender publish page.html                      # your agent publishes it
+foldrender answers <page> --json | covate review record   # score the first answers
+covate review due                                 # what to ask about again today
+covate review status                              # every concept + first-answer accuracy
+```
+
+Only the **first** pick on each question counts, so changing an answer after seeing the
+explanation cannot raise the score. (FoldRender shows the explanation during its few-second
+undo window, so an answer you take back inside that window does not count; one you leave
+alone does.) A new concept comes back after 1 day, then 7, then 30
+days; a wrong answer sends it back to the 1-day step; passing all three means mastered.
+The ledger lives in the global Covate storage (override with `COVATE_REVIEW_LEDGER`).
+`questions.json` is `{"title": ..., "questions": [{"concept", "question", "options": [...],
+"correct": <0-based index>, "explanation"?}]}`.
+
+In Claude Code, install the plugin to get the MCP server plus `/covate:review` and
+`/covate:review-record`, which walk your agent through the steps above (no hooks, nothing runs
+unless you call it):
+
+```
+/plugin marketplace add SunflowersLwtech/covate
+/plugin install covate@covate
+```
+
+---
+
 ## 📦 Available Tools
 
 | Tool | Type | Description |

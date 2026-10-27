@@ -299,6 +299,16 @@ python -c "import covate"
 
 ---
 
+## Publishing to the MCP Registry
+
+`server.json` is the entry for the [official MCP Registry](https://registry.modelcontextprotocol.io). It points at the container image `ghcr.io/sunflowerslwtech/covate:<version>`, and the registry checks that the image carries the label `io.modelcontextprotocol.server.name` equal to the `name` in `server.json`. `tests/test_registry_metadata.py` keeps `server.json`, the Dockerfile label, `pyproject.toml` and `covate.__version__` in step.
+
+When releasing:
+
+1. Bump the version in `pyproject.toml`, `src/covate/__init__.py`, `.claude-plugin/plugin.json` and `server.json` (both the top-level `version` and the package `identifier` tag).
+2. Push a `v<version>` tag. The image workflow only produces the `<version>` image tag from a `v*` tag push, and `server.json` references that tag.
+3. Once the image is up, publish with `mcp-publisher login github` then `mcp-publisher publish` from the repository root.
+
 ## Submitting a Pull Request
 
 ### Before Submitting
