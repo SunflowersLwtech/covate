@@ -11,6 +11,7 @@ on:
       - "tests/**"
       - "platform/app/api/ingest/**"
       - "platform/app/lib/**"
+      - "platform/app/globals.css"
       - "platform/db/**"
       - "platform/ingest*.test.ts"
       - "platform/package*.json"
@@ -23,6 +24,7 @@ on:
       - "tests/**"
       - "platform/app/api/ingest/**"
       - "platform/app/lib/**"
+      - "platform/app/globals.css"
       - "platform/db/**"
       - "platform/ingest*.test.ts"
       - "platform/package*.json"
@@ -61,6 +63,8 @@ jobs:
         working-directory: platform
       - name: Quiz page answer rule
         run: node --test tests/answer_label.test.mjs
+      - name: Quiz page palette matches the site
+        run: node --test tests/quiz_palette.test.mjs
       - name: Ingest unit + end-to-end tests
         working-directory: platform
         env:
