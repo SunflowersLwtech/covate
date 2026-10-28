@@ -18,6 +18,10 @@ function gitSha(): string {
 const withNextIntl = createNextIntlPlugin("./app/i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  // Nothing renders next/image and logo.png is served from public/, yet the default
+  // /_next/image endpoint still answers — three of the critical/high advisories the
+  // 16.4.3 upgrade closed live behind it. Turn the optimizer off so the next one can't.
+  images: { unoptimized: true },
   // Hand proxy.ts the request URL as the server saw it. By default Next renames loopback
   // hosts to localhost in it (and again in the rewrite it returns), while its router
   // compares rewrites with the raw bound host: under `next start -H 127.0.0.1` every
