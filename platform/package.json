@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/i18n-check.mjs && next build",
+    "build": "node scripts/i18n-check.mjs && next build && node scripts/check-image-optimizer-off.mjs",
     "start": "next start",
     "i18n:check": "node scripts/i18n-check.mjs",
     "test:proxy": "node --import tsx --test proxy.test.ts",
