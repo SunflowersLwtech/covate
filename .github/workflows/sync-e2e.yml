@@ -10,10 +10,12 @@ on:
       - "src/covate/**"
       - "tests/**"
       - "platform/app/api/ingest/**"
+      - "platform/app/api/ops/**"
       - "platform/app/lib/**"
       - "platform/app/globals.css"
       - "platform/db/**"
       - "platform/ingest*.test.ts"
+      - "platform/ops*.test.ts"
       - "platform/package*.json"
       - "pyproject.toml"
       - ".github/workflows/sync-e2e.yml"
@@ -23,10 +25,12 @@ on:
       - "src/covate/**"
       - "tests/**"
       - "platform/app/api/ingest/**"
+      - "platform/app/api/ops/**"
       - "platform/app/lib/**"
       - "platform/app/globals.css"
       - "platform/db/**"
       - "platform/ingest*.test.ts"
+      - "platform/ops*.test.ts"
       - "platform/package*.json"
       - "pyproject.toml"
       - ".github/workflows/sync-e2e.yml"
@@ -71,3 +75,8 @@ jobs:
           INGEST_E2E_DATABASE_URL: postgres://postgres@127.0.0.1:5432/covate_e2e
           COVATE_PYTHON: python
         run: npm run test:ingest
+      - name: Ops surface unit + Postgres tests
+        working-directory: platform
+        env:
+          OPS_E2E_DATABASE_URL: postgres://postgres@127.0.0.1:5432/covate_e2e
+        run: npm run test:ops
