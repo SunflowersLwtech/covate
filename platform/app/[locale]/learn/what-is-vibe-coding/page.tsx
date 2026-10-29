@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/what-is-vibe-coding";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "What Is Vibe Coding? Meaning, Origin, and When to Use It";
 const DESCRIPTION =
   "Vibe coding means describing what you want to an AI in plain English and largely accepting what it produces without reading the code closely. Here's a clear definition, where the term came from (Andrej Karpathy, 2025), where it genuinely works, where it bites you, and how to vibe code without quietly losing your skills.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -43,6 +45,10 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const USES = [
   {
@@ -135,7 +141,6 @@ const ld = [
 
 export default async function WhatIsVibeCoding() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -148,187 +153,198 @@ export default async function WhatIsVibeCoding() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Plain-English definition</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            What is <span className="text-brand">vibe coding</span>?
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            Vibe coding means describing what you want to an AI in plain English and largely accepting what it
-            produces — running it, reacting to what you see, pasting errors back — without reading the code closely.
-            It&apos;s fast, it&apos;s genuinely useful for the right things, and it comes with one real catch. Here&apos;s
-            what the term actually means, where it came from, where it works, where it bites you, and how to do it
-            without quietly losing your skills.
-          </p>
-          <ArticleByline updated="2026-08-05" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">What vibe coding actually means</h2>
-            <p className="mt-4">
-              Traditional coding is about precision: you tell the computer exactly what to do, in a language it
-              understands, and you own every line. <strong>Vibe coding is the opposite posture.</strong> You describe
-              what you want in ordinary language — &ldquo;make me a page that lists my meetings and lets me add one&rdquo; —
-              the AI generates the code, and you steer by what you see on screen rather than by the code itself. You
-              accept the changes, run the app, and if something breaks you paste the error back to the AI and let it try
-              again.
-            </p>
-            <p className="mt-4">
-              The defining move is that you <em>don&apos;t read the code</em>. As one common description puts it, you
-              build the software by prompting, trying it out, and prompting for changes — without looking at what the
-              model actually wrote. That&apos;s what makes it accessible to people with no programming background at all,
-              and what makes it so fast for people who do. It&apos;s also, as we&apos;ll see, exactly where the risk
-              lives.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Where the term came from</h2>
-            <p className="mt-4">
-              &ldquo;Vibe coding&rdquo; was coined by <strong>Andrej Karpathy</strong> — a co-founder of OpenAI and
-              former director of AI at Tesla — in a post on X on <strong>February 2, 2025</strong>. His words:
-            </p>
-            <blockquote className="mt-5 border-l-2 border-accent/50 pl-5 text-secondary">
-              &ldquo;There&apos;s a new kind of coding I call &lsquo;vibe coding&rsquo;, where you fully give in to the
-              vibes, embrace exponentials, and forget that the code even exists. [&hellip;] I &lsquo;Accept All&rsquo;
-              always, I don&apos;t read the diffs anymore. [&hellip;] It&apos;s not too bad for throwaway weekend
-              projects.&rdquo;
-            </blockquote>
-            <p className="mt-5">
-              The line built on an idea Karpathy had floated in 2023 — that &ldquo;the hottest new programming language
-              is English&rdquo; — the point being that models had gotten good enough that you could increasingly command
-              a computer in natural language instead of code. The name caught on fast. Merriam-Webster flagged it as a
-              &ldquo;slang &amp; trending&rdquo; term in March 2025, and by November 2025 <strong>Collins Dictionary had
-              named &ldquo;vibe coding&rdquo; its Word of the Year</strong> — a decent sign of how far the idea travelled
-              beyond engineering circles in a single year.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Where vibe coding works — and where it bites you</h2>
-            <p className="mt-4">
-              Vibe coding isn&apos;t good or bad in the abstract; it&apos;s a great fit for some jobs and a genuine
-              liability for others. The deciding question is simple: <strong>how much does it cost if the code is
-              wrong?</strong> When the answer is &ldquo;almost nothing,&rdquo; vibe away. When it&apos;s &ldquo;a lot,&rdquo;
-              slow down.
-            </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {USES.map((u) => (
-                <div key={u.title} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <span
-                    className={
-                      "font-mono text-[11px] uppercase tracking-[0.18em] " +
-                      (u.kind === "good" ? "text-accent" : "text-brand")
-                    }
-                  >
-                    {u.kind === "good" ? "Good fit" : "Risky"}
-                  </span>
-                  <h3 className="mt-2 text-base font-medium text-primary">{u.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{u.body}</p>
-                </div>
-              ))}
-            </div>
-            <p className="mt-6">
-              A useful rule of thumb from people who&apos;ve pushed vibe coding hard: it gets you the first ~60% — a
-              working prototype — remarkably fast, but the last 40% (reliability, security, scale, edge cases,
-              maintainability) is real engineering that depends on someone actually understanding the system. Vibe the
-              prototype; engineer the product.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The catch: shipping code you don&apos;t understand</h2>
-            <p className="mt-4">
-              Here&apos;s the honest part, and it&apos;s the whole reason Covate exists. The defining feature of vibe
-              coding — not reading the code — is also its one real hazard, and it shows up in two ways. In the short
-              term, code nobody read is code whose bugs, security holes, and awkward design nobody caught; it&apos;s hard
-              to debug, risky to change, and easy for the model itself to break on the next edit. In the long term,
-              there&apos;s <strong>skill decay</strong>: if accepting-without-understanding becomes your <em>only</em>
-              mode, the muscles that make you a developer — reasoning about code, recalling APIs, debugging from first
-              principles — quietly weaken from disuse. The scary part is that nothing feels wrong while it&apos;s
-              happening; the gap only surfaces when you hit a problem the AI can&apos;t solve, or have to reason
-              unaided.
-            </p>
-            <p className="mt-4">
-              None of this is an argument against vibe coding — it&apos;s an argument for closing the loop. You can vibe
-              code <em>and</em> keep learning, and the two aren&apos;t in tension if you spend a minute of real attention
-              on the code that just entered your codebase, while the context is still fresh. That&apos;s the difference
-              between using AI to move faster and using AI to ship things you don&apos;t understand — and it&apos;s a
-              habit, not a personality trait, which means it can be built into your workflow.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Vibe code without losing your skills — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Covate lets you keep the speed of vibe coding while closing the gap that makes it risky. It&apos;s a free,
-              open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others), watches what
-              actually changes, and turns your real diffs into short, targeted quizzes about the concepts, edge cases,
-              and trade-offs — blocking further generation until you answer, so you understand each change while the
-              context is fresh instead of passively accepting it. You still see stuff, say stuff, and run stuff — you
-              just don&apos;t forget the code exists. Every session is saved; the free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate learning ledger
-              </a>{" "}
-              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
-              topics you keep getting wrong are there to review. Nothing to buy.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a
-                href={GITHUB}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary"
-              >
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to actually learn from AI-generated code (without skill decay) →
-              </a>
-              <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Does using AI make you a worse programmer? An honest look →
-              </a>
-              <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Should you still learn to code in the age of AI? →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Plain-English definition</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          What is <span className="text-brand">vibe coding</span>?
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          Vibe coding means describing what you want to an AI in plain English and largely accepting what it
+          produces — running it, reacting to what you see, pasting errors back — without reading the code closely.
+          It&apos;s fast, it&apos;s genuinely useful for the right things, and it comes with one real catch. Here&apos;s
+          what the term actually means, where it came from, where it works, where it bites you, and how to do it
+          without quietly losing your skills.
+        </p>
+        <ArticleByline updated="2026-08-05" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">What vibe coding actually means</h2>
+          <p className="mt-4">
+            Traditional coding is about precision: you tell the computer exactly what to do, in a language it
+            understands, and you own every line. <strong>Vibe coding is the opposite posture.</strong> You describe
+            what you want in ordinary language — &ldquo;make me a page that lists my meetings and lets me add one&rdquo; —
+            the AI generates the code, and you steer by what you see on screen rather than by the code itself. You
+            accept the changes, run the app, and if something breaks you paste the error back to the AI and let it try
+            again.
+          </p>
+          <p className="mt-4">
+            The defining move is that you <em>don&apos;t read the code</em>. As one common description puts it, you
+            build the software by prompting, trying it out, and prompting for changes — without looking at what the
+            model actually wrote. That&apos;s what makes it accessible to people with no programming background at all,
+            and what makes it so fast for people who do. It&apos;s also, as we&apos;ll see, exactly where the risk
+            lives.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Where the term came from</h2>
+          <p className="mt-4">
+            &ldquo;Vibe coding&rdquo; was coined by <strong>Andrej Karpathy</strong> — a co-founder of OpenAI and
+            former director of AI at Tesla — in a post on X on <strong>February 2, 2025</strong>. His words:
+          </p>
+          <blockquote className="mt-5 border-l-2 border-accent/50 pl-5 text-secondary">
+            &ldquo;There&apos;s a new kind of coding I call &lsquo;vibe coding&rsquo;, where you fully give in to the
+            vibes, embrace exponentials, and forget that the code even exists. [&hellip;] I &lsquo;Accept All&rsquo;
+            always, I don&apos;t read the diffs anymore. [&hellip;] It&apos;s not too bad for throwaway weekend
+            projects.&rdquo;
+          </blockquote>
+          <p className="mt-5">
+            The line built on an idea Karpathy had floated in 2023 — that &ldquo;the hottest new programming language
+            is English&rdquo; — the point being that models had gotten good enough that you could increasingly command
+            a computer in natural language instead of code. The name caught on fast. Merriam-Webster flagged it as a
+            &ldquo;slang &amp; trending&rdquo; term in March 2025, and by November 2025 <strong>Collins Dictionary had
+            named &ldquo;vibe coding&rdquo; its Word of the Year</strong> — a decent sign of how far the idea travelled
+            beyond engineering circles in a single year.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Where vibe coding works — and where it bites you</h2>
+          <p className="mt-4">
+            Vibe coding isn&apos;t good or bad in the abstract; it&apos;s a great fit for some jobs and a genuine
+            liability for others. The deciding question is simple: <strong>how much does it cost if the code is
+            wrong?</strong> When the answer is &ldquo;almost nothing,&rdquo; vibe away. When it&apos;s &ldquo;a lot,&rdquo;
+            slow down.
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {USES.map((u) => (
+              <div key={u.title} className="rounded-xl border border-border bg-surface/40 p-5">
+                <span
+                  className={
+                    "font-mono text-[11px] uppercase tracking-[0.18em] " +
+                    (u.kind === "good" ? "text-accent" : "text-brand")
+                  }
+                >
+                  {u.kind === "good" ? "Good fit" : "Risky"}
+                </span>
+                <h3 className="mt-2 text-base font-medium text-primary">{u.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-secondary">{u.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-6">
+            A useful rule of thumb from people who&apos;ve pushed vibe coding hard: it gets you the first ~60% — a
+            working prototype — remarkably fast, but the last 40% (reliability, security, scale, edge cases,
+            maintainability) is real engineering that depends on someone actually understanding the system. Vibe the
+            prototype; engineer the product.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The catch: shipping code you don&apos;t understand</h2>
+          <p className="mt-4">
+            Here&apos;s the honest part, and it&apos;s the whole reason Covate exists. The defining feature of vibe
+            coding — not reading the code — is also its one real hazard, and it shows up in two ways. In the short
+            term, code nobody read is code whose bugs, security holes, and awkward design nobody caught; it&apos;s hard
+            to debug, risky to change, and easy for the model itself to break on the next edit. In the long term,
+            there&apos;s <strong>skill decay</strong>: if accepting-without-understanding becomes your <em>only</em>
+            mode, the muscles that make you a developer — reasoning about code, recalling APIs, debugging from first
+            principles — quietly weaken from disuse. The scary part is that nothing feels wrong while it&apos;s
+            happening; the gap only surfaces when you hit a problem the AI can&apos;t solve, or have to reason
+            unaided.
+          </p>
+          <p className="mt-4">
+            None of this is an argument against vibe coding — it&apos;s an argument for closing the loop. You can vibe
+            code <em>and</em> keep learning, and the two aren&apos;t in tension if you spend a minute of real attention
+            on the code that just entered your codebase, while the context is still fresh. That&apos;s the difference
+            between using AI to move faster and using AI to ship things you don&apos;t understand — and it&apos;s a
+            habit, not a personality trait, which means it can be built into your workflow.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Vibe code without losing your skills — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Covate lets you keep the speed of vibe coding while closing the gap that makes it risky. It&apos;s a free,
+            open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others), watches what
+            actually changes, and turns your real diffs into short, targeted quizzes about the concepts, edge cases,
+            and trade-offs — blocking further generation until you answer, so you understand each change while the
+            context is fresh instead of passively accepting it. You still see stuff, say stuff, and run stuff — you
+            just don&apos;t forget the code exists. Every session is saved; the free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              Covate learning ledger
+            </a>{" "}
+            takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+            topics you keep getting wrong are there to review. Nothing to buy.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a
+              href={GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary"
+            >
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to actually learn from AI-generated code (without skill decay) →
+            </a>
+            <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Does using AI make you a worse programmer? An honest look →
+            </a>
+            <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Should you still learn to code in the age of AI? →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

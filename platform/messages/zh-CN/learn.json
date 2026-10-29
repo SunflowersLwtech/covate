@@ -6,7 +6,6 @@
     "guides": "指南",
     "count": "{count} 篇文章",
     "read": "阅读 →",
-    "englishOnly": "这些指南目前仅提供英文版。",
     "habit": {
       "eyebrow": "阅读只是第一步",
       "title": "指南背后的习惯",
@@ -16,7 +15,6 @@
   },
   "article": {
     "byline": "Covate 团队 · 更新于 {date, date, long}",
-    "englishOnly": "本指南目前仅提供英文版。",
     "faq": "常见问题",
     "related": "相关阅读",
     "getMcp": "获取免费开源的 MCP →",

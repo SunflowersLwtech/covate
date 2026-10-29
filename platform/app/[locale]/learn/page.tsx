@@ -7,6 +7,8 @@ import { SignInCta } from "../../_components/SignInCta";
 import { NAV, SiteHeader } from "../../_components/SiteHeader";
 import { SiteFooter } from "../../_components/SiteFooter";
 import { Breadcrumb } from "../../_components/Breadcrumb";
+import { zhMetadata } from "../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "Learning Center — Learn to Code With AI, Not Instead of It";
 const DESCRIPTION =
   "The Covate Learning Center: honest, practical guides on staying a strong developer while you build with AI — how to learn from AI-generated code, review it, retain what you learn, and whether to still learn to code at all. Free to read, like the Covate MCP that quizzes you on your own code and the learning ledger that keeps the results.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -43,6 +45,10 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 
 const collectionLd = {
@@ -82,6 +88,7 @@ const breadcrumbLd = {
 export default async function LearnHub() {
   const locale = await getLocale();
   const t = await getTranslations("learn.hub");
+  const articles = locale === "zh-CN" ? ARTICLES.map((a) => ({ ...a, ...zh.ARTICLES[a.slug] })) : ARTICLES;
   return (
     <div className="min-h-screen bg-deep text-primary">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
@@ -114,10 +121,8 @@ export default async function LearnHub() {
               <h2 className="text-2xl font-semibold text-primary sm:text-3xl">{t("guides")}</h2>
               <span className="font-mono text-xs text-dim">{t("count", { count: ARTICLES.length })}</span>
             </div>
-            {/* The guides are English content; when the chrome is in another language, say so. */}
-            {locale !== "en" ? <p className="mt-3 font-mono text-xs text-dim">{t("englishOnly")}</p> : null}
-            <div lang="en" className="mt-10 grid gap-6 md:grid-cols-2">
-              {ARTICLES.map((a) => (
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {articles.map((a) => (
                 <a
                   key={a.slug}
                   href={"/learn/" + a.slug}
@@ -130,7 +135,7 @@ export default async function LearnHub() {
                     {a.title}
                   </h3>
                   <p className="mt-3 flex-1 text-sm leading-7 text-secondary">{a.description}</p>
-                  <span lang={locale} className="mt-4 font-mono text-xs text-dim group-hover:text-secondary">
+                  <span className="mt-4 font-mono text-xs text-dim group-hover:text-secondary">
                     {t("read")}
                   </span>
                 </a>

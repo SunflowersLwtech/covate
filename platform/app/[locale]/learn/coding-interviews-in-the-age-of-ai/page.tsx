@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/coding-interviews-in-the-age-of-ai";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "Coding Interviews in the Age of AI: What to Still Practice";
 const DESCRIPTION =
   "Interviews are adapting to a world where everyone has an AI assistant: less syntax recall, more explaining decisions, reading unfamiliar code, and debugging live. What that means for what you should practice — and what you can safely stop drilling.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -30,6 +32,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const SHIFTS = [
   {
@@ -117,7 +123,6 @@ const ld = [
 
 export default async function InterviewsAiEra() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -129,123 +134,134 @@ export default async function InterviewsAiEra() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            Coding interviews in the age of AI: what to still practice
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            Interviews are adapting to a world where everyone has an assistant: less syntax recall, more explaining
-            decisions, reading unfamiliar code, and debugging live. What that means for your practice hours — and
-            what you can safely stop drilling.
-          </p>
-          <ArticleByline updated="2026-08-16" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <p>
-              The uncomfortable truth for anyone who codes daily with AI: the interview room is one of the few
-              remaining places where the assistant isn&rsquo;t in the room with you, and the skills it quietly
-              stopped exercising are precisely the ones being tested. That&rsquo;s not a reason to panic — it&rsquo;s
-              a reason to redirect practice toward the formats that actually appear now, instead of grinding the
-              ones that matter less each year.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Five shifts worth training for</h2>
-            <ol className="mt-6 space-y-5">
-              {SHIFTS.map((c) => (
-                <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{c.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{c.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The thread underneath</h2>
-            <p className="mt-4">
-              Every shifted format tests the same underlying thing: can you still think out loud, unassisted, about
-              code? That&rsquo;s the same question our other guides circle from the daily-work side —{" "}
-              <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                whether to keep learning fundamentals
-              </a>,{" "}
-              <a href="/learn/cant-code-without-ai-anymore" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                rebuilding what dependence eroded
-              </a>, and{" "}
-              <a href="/learn/how-to-explain-ai-generated-code-in-a-code-review" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                explaining AI-generated code under questioning
-              </a>. Interview prep and skill retention have converged: one practice regimen now serves both, and the
-              blank-file test is its checkpoint.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Rehearse the real formats daily — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Covate turns your everyday AI-assisted work into interview reps. The free, open-source MCP plugs into
-              your assistant (Claude, Cursor, Copilot and others), quizzes you on your real diffs — the
-              &ldquo;explain this code&rdquo; round, on the code you actually ship — and its debug memory keeps the
-              failure patterns you&rsquo;ve solved retrievable. The free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                learning ledger
-              </a>{" "}
-              on covate.org tracks accuracy and weakest topics, so prep targets your gaps instead of your comfort.
-              Nothing to buy.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Should you still learn to code in the age of AI? →
-              </a>
-              <a href="/learn/how-to-learn-a-new-programming-language-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to learn a new programming language with AI →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          Coding interviews in the age of AI: what to still practice
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          Interviews are adapting to a world where everyone has an assistant: less syntax recall, more explaining
+          decisions, reading unfamiliar code, and debugging live. What that means for your practice hours — and
+          what you can safely stop drilling.
+        </p>
+        <ArticleByline updated="2026-08-16" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <p>
+            The uncomfortable truth for anyone who codes daily with AI: the interview room is one of the few
+            remaining places where the assistant isn&rsquo;t in the room with you, and the skills it quietly
+            stopped exercising are precisely the ones being tested. That&rsquo;s not a reason to panic — it&rsquo;s
+            a reason to redirect practice toward the formats that actually appear now, instead of grinding the
+            ones that matter less each year.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Five shifts worth training for</h2>
+          <ol className="mt-6 space-y-5">
+            {SHIFTS.map((c) => (
+              <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{c.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{c.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The thread underneath</h2>
+          <p className="mt-4">
+            Every shifted format tests the same underlying thing: can you still think out loud, unassisted, about
+            code? That&rsquo;s the same question our other guides circle from the daily-work side —{" "}
+            <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              whether to keep learning fundamentals
+            </a>,{" "}
+            <a href="/learn/cant-code-without-ai-anymore" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              rebuilding what dependence eroded
+            </a>, and{" "}
+            <a href="/learn/how-to-explain-ai-generated-code-in-a-code-review" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              explaining AI-generated code under questioning
+            </a>. Interview prep and skill retention have converged: one practice regimen now serves both, and the
+            blank-file test is its checkpoint.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Rehearse the real formats daily — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Covate turns your everyday AI-assisted work into interview reps. The free, open-source MCP plugs into
+            your assistant (Claude, Cursor, Copilot and others), quizzes you on your real diffs — the
+            &ldquo;explain this code&rdquo; round, on the code you actually ship — and its debug memory keeps the
+            failure patterns you&rsquo;ve solved retrievable. The free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              learning ledger
+            </a>{" "}
+            on covate.org tracks accuracy and weakest topics, so prep targets your gaps instead of your comfort.
+            Nothing to buy.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Should you still learn to code in the age of AI? →
+            </a>
+            <a href="/learn/how-to-learn-a-new-programming-language-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to learn a new programming language with AI →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

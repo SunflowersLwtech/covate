@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/how-to-learn-from-ai-generated-code";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "How to Actually Learn From AI-Generated Code (Without Skill Decay
 const DESCRIPTION =
   "AI writes most of your code now — so how do you keep learning instead of quietly losing your skills? A practical guide to understanding AI-generated code, avoiding vibe-coding skill decay, and turning every diff into durable knowledge with active recall.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -44,6 +46,10 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const FAQ = [
   {
@@ -125,7 +131,6 @@ const STEPS = [
 
 export default async function LearnFromAiCode() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -138,170 +143,181 @@ export default async function LearnFromAiCode() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">The learning problem</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            How to actually learn from AI-generated code
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            AI writes most of your code now. That makes you faster — but if you only ever accept what it
-            generates, your own understanding quietly erodes. Here&apos;s how to keep learning while you build:
-            why generated code doesn&apos;t stick, what &ldquo;vibe coding&rdquo; skill decay really is, and the
-            one habit — active recall on your own diffs — that turns every change into durable knowledge.
-          </p>
-          <ArticleByline updated="2026-08-04" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          {/* Answer-first summary. This page has live impressions on the query it is
-              named after, and a retriever quoting it will quote the first passage under
-              the first question-shaped heading — so that passage is the whole answer,
-              not a lead-in to one. */}
-          <section className="rounded-2xl border border-border bg-surface/40 p-6">
-            <h2 className="text-lg font-semibold tracking-tight text-primary">How do you actually understand code an AI generated?</h2>
-            <p className="mt-3 text-sm leading-7 text-secondary">Read the diff before the explanation, then close it and say out loud what each part does and why this approach over the obvious alternative. Anything you cannot say, look up in the language&rsquo;s official documentation rather than asking the AI again. Then change one line and predict what breaks &mdash; if the prediction is wrong, you had recognition, not understanding.</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Why generated code doesn&apos;t stick</h2>
-            <p className="mt-4">
-              When you write code yourself, you make hundreds of tiny decisions — which API, which data
-              structure, how to handle the edge case — and each one leaves a memory trace. When an AI writes
-              it, you read a finished, plausible-looking solution and move on. Reading is passive; your brain
-              treats a solution you merely approved very differently from one you had to construct. That&apos;s
-              why you can ship a feature on Monday and, by Friday, be unable to explain or safely modify it: the
-              code is in your repository, but it never made it into your head.
-            </p>
-            <p className="mt-4">
-              None of this is an argument against AI. Used well, an assistant is the best learning accelerator
-              programming has ever had — it can explain, compare approaches, and answer &ldquo;why&rdquo; on
-              demand. The problem is only the default workflow: generate, glance, accept, repeat. That loop
-              optimizes for shipping and skips the step where learning happens.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">&ldquo;Vibe coding&rdquo; skill decay is real — and invisible</h2>
-            <p className="mt-4">
-              &ldquo;Vibe coding&rdquo; — describing what you want, accepting what the AI produces, and iterating
-              on vibes rather than understanding — is fast and often works. But if it&apos;s <em>all</em> you do,
-              the skills you&apos;re not using start to fade: reasoning about code, recalling APIs, debugging from
-              first principles. Skill decay is dangerous precisely because it&apos;s invisible. Everything feels
-              fine while the AI is available and the problems are routine; the gap only shows up when you hit
-              something the model can&apos;t solve, have to review code critically, or need to explain your own
-              system to someone else. The goal isn&apos;t to code slower — it&apos;s to stay an active participant
-              in the code the AI writes.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The fix: active recall on your own diffs</h2>
-            <p className="mt-4">
-              Decades of learning research point to one robust finding: you remember things far better when you
-              <em> retrieve</em> them from memory than when you re-read them — and best of all when you&apos;re
-              tested shortly after first exposure, while the context is still fresh. This is the
-              <strong> testing effect</strong>, and it maps perfectly onto AI-assisted coding. The moment a change
-              is generated is the moment its context is richest in your mind and the cheapest time to lock it in.
-              So instead of accepting and moving on, run a tiny active-recall loop on the diff:
-            </p>
-            <ol className="mt-6 space-y-5">
-              {STEPS.map((s) => (
-                <li key={s.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{s.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{s.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{s.body}</p>
-                </li>
-              ))}
-            </ol>
-            <p className="mt-6">
-              Done immediately, this costs about a minute per meaningful change and compounds into genuinely
-              understanding your own codebase — which pays for itself the first time you have to debug or extend
-              it. Deferred, it never happens. The whole trick is to make the check automatic and tied to the code
-              you&apos;re already shipping.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Make the loop automatic with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Covate is a free, open-source MCP tool that turns this habit from something you have to remember
-              into something that just happens as you code. It plugs into your AI assistant (Claude, Cursor,
-              Copilot and others), watches what actually changes, and generates short, targeted quizzes from your
-              real diffs — blocking further generation until you answer, so you learn while the context is fresh.
-              Every session is saved locally. The free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate learning ledger
-              </a>{" "}
-              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
-              topics you keep getting wrong are there to review. Nothing to buy.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a
-                href={GITHUB}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary"
-              >
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence
-            sources={[
-              {
-                href: "https://docs.python.org/3/tutorial/index.html",
-                label: "Python — The Python Tutorial (official documentation)",
-                note: "Look the construct up in the language's own reference instead of asking the assistant that just used it.",
-              },
-              {
-                href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-                label: "MDN Web Docs — JavaScript reference",
-                note: "The equivalent primary reference for JavaScript and the web platform.",
-              },
-            ]}
-          />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Does using AI make you a worse programmer? An honest look →
-              </a>
-              <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to review AI-generated code before you merge it →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">The learning problem</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          How to actually learn from AI-generated code
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          AI writes most of your code now. That makes you faster — but if you only ever accept what it
+          generates, your own understanding quietly erodes. Here&apos;s how to keep learning while you build:
+          why generated code doesn&apos;t stick, what &ldquo;vibe coding&rdquo; skill decay really is, and the
+          one habit — active recall on your own diffs — that turns every change into durable knowledge.
+        </p>
+        <ArticleByline updated="2026-08-04" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        {/* Answer-first summary. This page has live impressions on the query it is
+            named after, and a retriever quoting it will quote the first passage under
+            the first question-shaped heading — so that passage is the whole answer,
+            not a lead-in to one. */}
+        <section className="rounded-2xl border border-border bg-surface/40 p-6">
+          <h2 className="text-lg font-semibold tracking-tight text-primary">How do you actually understand code an AI generated?</h2>
+          <p className="mt-3 text-sm leading-7 text-secondary">Read the diff before the explanation, then close it and say out loud what each part does and why this approach over the obvious alternative. Anything you cannot say, look up in the language&rsquo;s official documentation rather than asking the AI again. Then change one line and predict what breaks &mdash; if the prediction is wrong, you had recognition, not understanding.</p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Why generated code doesn&apos;t stick</h2>
+          <p className="mt-4">
+            When you write code yourself, you make hundreds of tiny decisions — which API, which data
+            structure, how to handle the edge case — and each one leaves a memory trace. When an AI writes
+            it, you read a finished, plausible-looking solution and move on. Reading is passive; your brain
+            treats a solution you merely approved very differently from one you had to construct. That&apos;s
+            why you can ship a feature on Monday and, by Friday, be unable to explain or safely modify it: the
+            code is in your repository, but it never made it into your head.
+          </p>
+          <p className="mt-4">
+            None of this is an argument against AI. Used well, an assistant is the best learning accelerator
+            programming has ever had — it can explain, compare approaches, and answer &ldquo;why&rdquo; on
+            demand. The problem is only the default workflow: generate, glance, accept, repeat. That loop
+            optimizes for shipping and skips the step where learning happens.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">&ldquo;Vibe coding&rdquo; skill decay is real — and invisible</h2>
+          <p className="mt-4">
+            &ldquo;Vibe coding&rdquo; — describing what you want, accepting what the AI produces, and iterating
+            on vibes rather than understanding — is fast and often works. But if it&apos;s <em>all</em> you do,
+            the skills you&apos;re not using start to fade: reasoning about code, recalling APIs, debugging from
+            first principles. Skill decay is dangerous precisely because it&apos;s invisible. Everything feels
+            fine while the AI is available and the problems are routine; the gap only shows up when you hit
+            something the model can&apos;t solve, have to review code critically, or need to explain your own
+            system to someone else. The goal isn&apos;t to code slower — it&apos;s to stay an active participant
+            in the code the AI writes.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The fix: active recall on your own diffs</h2>
+          <p className="mt-4">
+            Decades of learning research point to one robust finding: you remember things far better when you
+            <em> retrieve</em> them from memory than when you re-read them — and best of all when you&apos;re
+            tested shortly after first exposure, while the context is still fresh. This is the
+            <strong> testing effect</strong>, and it maps perfectly onto AI-assisted coding. The moment a change
+            is generated is the moment its context is richest in your mind and the cheapest time to lock it in.
+            So instead of accepting and moving on, run a tiny active-recall loop on the diff:
+          </p>
+          <ol className="mt-6 space-y-5">
+            {STEPS.map((s) => (
+              <li key={s.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{s.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{s.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-6">
+            Done immediately, this costs about a minute per meaningful change and compounds into genuinely
+            understanding your own codebase — which pays for itself the first time you have to debug or extend
+            it. Deferred, it never happens. The whole trick is to make the check automatic and tied to the code
+            you&apos;re already shipping.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Make the loop automatic with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Covate is a free, open-source MCP tool that turns this habit from something you have to remember
+            into something that just happens as you code. It plugs into your AI assistant (Claude, Cursor,
+            Copilot and others), watches what actually changes, and generates short, targeted quizzes from your
+            real diffs — blocking further generation until you answer, so you learn while the context is fresh.
+            Every session is saved locally. The free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              Covate learning ledger
+            </a>{" "}
+            takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+            topics you keep getting wrong are there to review. Nothing to buy.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a
+              href={GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary"
+            >
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence
+          sources={[
+            {
+              href: "https://docs.python.org/3/tutorial/index.html",
+              label: "Python — The Python Tutorial (official documentation)",
+              note: "Look the construct up in the language's own reference instead of asking the assistant that just used it.",
+            },
+            {
+              href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+              label: "MDN Web Docs — JavaScript reference",
+              note: "The equivalent primary reference for JavaScript and the web platform.",
+            },
+          ]}
+        />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Does using AI make you a worse programmer? An honest look →
+            </a>
+            <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to review AI-generated code before you merge it →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

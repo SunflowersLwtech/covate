@@ -1,6 +1,7 @@
 // The Learning Center's published guides — English content data, not UI copy. The
 // canonical hub for the /learn cluster; each entry links to its full article. Keep in
-// sync when adding a new /learn/<slug> page (also add it to sitemap.ts and llms.txt).
+// sync when adding a new /learn/<slug> page (also add it to sitemap.ts and llms.txt, and
+// its Chinese card text to app/[locale]/learn/zh-CN.ts).
 export type Article = {
   slug: string;
   category: string;
