@@ -10,6 +10,7 @@
     "test:proxy": "node --import tsx --test proxy.test.ts",
     "test:ingest": "node --import tsx --test ingest.test.ts ingest.e2e.test.ts",
     "test:header": "node --test header.test.mjs",
+    "test:ops": "node --import tsx --test ops.test.ts ops.e2e.test.ts",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "npm run i18n:check && npm run typecheck"
   },
