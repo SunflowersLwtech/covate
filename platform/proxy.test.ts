@@ -160,6 +160,10 @@ describe("proxy: matcher", () => {
   it("skips API routes, Next internals, metadata routes and files", () => {
     for (const path of [
       "/api/ingest",
+      "/api/ops/v1",
+      "/api/ops/v1/health",
+      "/api/ops/v1/users/lookup",
+      "/api/ops/v1/users/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/plan",
       "/_next/static/chunks/app.js",
       "/_vercel/insights/script.js",
       "/opengraph-image",

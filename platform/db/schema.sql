@@ -84,6 +84,33 @@ create table if not exists ingest_window (
   primary key (user_id, window_start)
 );
 
+-- ── Ops surface (app/api/ops/v1, read-only, for the products console) ─────────
+-- Reads counted per clock minute and per UTC day for the whole surface (it has one
+-- token). Same upsert-and-roll-over pattern as ingest_window: one row per bucket and
+-- window, past windows deleted when a new minute starts.
+create table if not exists ops_window (
+  bucket        text not null check (bucket in ('minute', 'day')),
+  window_start  timestamptz not null,
+  requests      int not null default 0,
+  primary key (bucket, window_start)
+);
+
+-- One row per read of account data: who asked (the console's X-Ops-Actor, which the
+-- token holder states; the token is the proof), the request id, and which accounts
+-- the answer showed. A lookup that matched nobody keeps `sha256:<hex>` of the
+-- lowercased address, never the address. Rows older than a year are deleted on the
+-- first read of a new day. No foreign key: deleting an account keeps its trail.
+create table if not exists ops_read_audit (
+  id            bigint generated always as identity primary key,
+  at            timestamptz not null default now(),
+  actor         text not null,
+  request_id    text not null,
+  action        text not null check (action in ('users.lookup', 'users.read')),
+  target        text,                     -- users.read: the id asked for; users.lookup: null, or the digest when nobody matched
+  user_ids      uuid[] not null default '{}'
+);
+create index if not exists idx_ops_read_audit_at on ops_read_audit (at);
+
 -- ── Indexes for the review dashboard + progress queries ────────────────────────
 create index if not exists idx_session_user_time   on learning_session (user_id, completed_at desc);
 create index if not exists idx_answer_session       on quiz_answer (session_id);
