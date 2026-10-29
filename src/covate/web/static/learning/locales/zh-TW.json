@@ -100,5 +100,12 @@
     "complete": {
         "message": "學習完成！",
         "hint": "您現在可以關閉此標籤頁"
+    },
+    "tooltips": {
+        "language": "語言",
+        "exportSession": "匯出會話",
+        "toggleTheme": "切換主題",
+        "copyToClipboard": "複製到剪貼簿",
+        "clickToCopy": "點擊複製"
     }
 }

@@ -100,5 +100,12 @@
     "complete": {
         "message": "Learning Complete!",
         "hint": "You may close this tab now"
+    },
+    "tooltips": {
+        "language": "Language",
+        "exportSession": "Export session",
+        "toggleTheme": "Toggle theme",
+        "copyToClipboard": "Copy to clipboard",
+        "clickToCopy": "Click to copy"
     }
 }

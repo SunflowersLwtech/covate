@@ -137,7 +137,8 @@ class I18n {
                     reconnected: 'Reconnected!',
                     sessionStorageUnavailable: 'Session storage is unavailable. Your progress will not be saved.'
                 },
-                errors: { network: 'Network error', timeout: 'Timeout', server: 'Server error', unknown: 'Unknown error' }
+                errors: { network: 'Network error', timeout: 'Timeout', server: 'Server error', unknown: 'Unknown error' },
+                tooltips: { language: 'Language', exportSession: 'Export session', toggleTheme: 'Toggle theme', copyToClipboard: 'Copy to clipboard', clickToCopy: 'Click to copy' }
             },
             'zh-CN': {
                 app: { title: '学习助手' },
@@ -158,7 +159,8 @@ class I18n {
                     reconnected: '已重连!',
                     sessionStorageUnavailable: '会话存储不可用，你的进度将不会保存。'
                 },
-                errors: { network: '网络错误', timeout: '超时', server: '服务器错误', unknown: '未知错误' }
+                errors: { network: '网络错误', timeout: '超时', server: '服务器错误', unknown: '未知错误' },
+                tooltips: { language: '语言', exportSession: '导出会话', toggleTheme: '切换主题', copyToClipboard: '复制到剪贴板', clickToCopy: '点击复制' }
             },
             'zh-TW': {
                 app: { title: '學習助手' },
@@ -179,7 +181,8 @@ class I18n {
                     reconnected: '已重連!',
                     sessionStorageUnavailable: '會話儲存不可用，你的進度將不會保存。'
                 },
-                errors: { network: '網路錯誤', timeout: '逾時', server: '伺服器錯誤', unknown: '未知錯誤' }
+                errors: { network: '網路錯誤', timeout: '逾時', server: '伺服器錯誤', unknown: '未知錯誤' },
+                tooltips: { language: '語言', exportSession: '匯出會話', toggleTheme: '切換主題', copyToClipboard: '複製到剪貼簿', clickToCopy: '點擊複製' }
             }
         };
 
@@ -272,8 +275,17 @@ class I18n {
             }
         });
 
-        // Update document title
+        // Tooltips, and the copy hint that CSS shows from data-copy-hint
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            el.title = this.t(el.getAttribute('data-i18n-title'));
+        });
+        document.querySelectorAll('[data-i18n-copy-hint]').forEach(el => {
+            el.setAttribute('data-copy-hint', this.t(el.getAttribute('data-i18n-copy-hint')));
+        });
+
+        // Update document title and language
         document.title = this.t('app.title');
+        document.documentElement.lang = this.currentLang;
     }
 
     /**
