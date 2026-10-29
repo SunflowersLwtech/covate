@@ -22,7 +22,8 @@
 //       than minHanPerHundred Chinese characters per hundred letters, or
 //   (b) any block of it (a paragraph, list item, heading, button, cell …) is an
 //       English sentence: 8+ Latin words and no Chinese, or 12+ words that are
-//       almost all Latin. Text marked lang="en" may be English (an example
+//       almost all Latin, or holds one: 8+ Latin words in a row between its
+//       Chinese, or Text marked lang="en" may be English (an example
 //       phrase, a product's button name) as long as one block stays under
 //       40 words; code, pre, kbd and samp never count, or
 //   (c) its <title> is English (4+ Latin words, no Chinese).
@@ -36,7 +37,8 @@
 // Every <link rel="icon" | "apple-touch-icon" | "manifest"> target, and every
 // icon a manifest lists, must load, be a real image, and match a sha256 pinned
 // in icons.pinned — so a placeholder or another product's icon fails even
-// when the file exists. A page that cannot be read, or a run that finds no
+// when the file exists. icons.files lists icons no page declares (an app's
+// home-screen set), held to the same pins. A page that cannot be read, or a run that finds no
 // Chinese page at all, fails instead of passing.
 //
 //   node scripts/zh-coverage.mjs [path/to/zh-coverage.json]
@@ -99,7 +101,10 @@ export function analyze(html, mode, opt = {}) {
     if (text) {
       const enLetters = buf.filter((b) => b.declaredEn).reduce((n, b) => n + letters(b.text), 0);
       const zhLabel = buf.every((b) => b.declaredZh || !HAS_HAN.test(b.text));
-      blocks.push({ text, declaredEn: enLetters > 0 && enLetters >= letters(text) * 0.9, declaredZhOnly: zhLabel, inScope: buf.some((b) => b.inScope) });
+      // The block's text without its parts marked lang="en": what must read as
+      // Chinese once the deliberate English is set aside.
+      const plain = buf.filter((b) => !b.declaredEn).map((b) => b.text).join("").replace(/\s+/g, " ").trim();
+      blocks.push({ text, plain, declaredEn: enLetters > 0 && enLetters >= letters(text) * 0.9, declaredZhOnly: zhLabel, inScope: buf.some((b) => b.inScope) });
     }
     buf = [];
   };
@@ -198,6 +203,14 @@ export function judge(page, mode, cfg) {
       const words = count(b.text, LATIN_WORD), han = count(b.text, HAN);
       if ((/https?:\/\/|[{}`]/.test(b.text) || /^\S+@\S+\.\w+$/.test(b.text)) && han === 0 && words < 20) continue;
       const englishSentence = (words >= 8 && han === 0) || (words >= 12 && han * 4 < words);
+      if (!englishSentence && han > 0) {
+        // An English sentence inside a Chinese paragraph: one string of a
+        // paragraph whose translation was never wired in. Eight or more Latin
+        // words with no Chinese between them, outside text marked lang="en".
+        const run = b.plain.split(/[\u3400-\u9fff\uf900-\ufaff\u3000-\u303f\uff00-\uffef]+/)
+          .find((seg) => count(seg.replace(/[\w-]+(?:\.[\w-]+)+/g, " "), LATIN_WORD) >= 8 && !/https?:\/\/|[{}`]/.test(seg));
+        if (run) { out.push(`English sentence inside a Chinese paragraph: ${run.trim().slice(0, 110)}`); continue; }
+      }
       if (!englishSentence) {
         // A short English label — a button, a form field, an empty state —
         // in a Chinese page: no Chinese in the block, not marked lang="en",
@@ -383,6 +396,9 @@ function selfTest() {
     ["zh page in Chinese passes", zh("<p>这是一个完整的中文段落，用来说明产品怎么用。</p><p>第二段也是中文。</p>"), "zh", 0],
     ["English paragraph in a Chinese page fails", zh("<p>这是一个完整的中文段落，用来说明产品怎么用，内容足够长，可以通过比例。这是一个完整的中文段落，用来说明产品怎么用。</p><p>This card still says what the product does in English words only.</p>"), "zh", 1],
     ["split English sentence across inline tags fails", zh("<p>这是一段足够长的中文说明文字，用于比例计算。这是一段足够长的中文说明文字。</p><p>Read <a href=/x>your repository</a> on the half that <em>unfolds</em> right now today</p>"), "zh", 1],
+    ["an English sentence inside a Chinese paragraph fails", zh("<p>这是一段足够长的中文说明，用于比例计算。款项通过支付服务处理。Payments run through Stripe and this sentence was never translated at all.</p>"), "zh", 1],
+    ["an English quote marked lang=en inside a Chinese paragraph passes", zh('<p>签证官判断的起点就是这条法律，下面引的是原文，读的时候注意主语和举证责任在谁。</p><p>法条原文写的是：<q lang="en">shall be presumed to be an immigrant until he establishes the contrary</q>，这一句是拒签的依据。</p>'), "zh", 0],
+    ["domain names in a Chinese sentence are not English words", zh("<p>这是一段足够长的中文说明，用来说明可以用哪些学校邮箱注册。</p><p>支持的邮箱域名：apu.edu.my / mail.apu.edu.my / studentmail.apu.edu.my / staff.apu.edu.my。</p>"), "zh", 0],
     ["short lang=en example phrase passes", zh("<p>这是一个完整的中文段落，用来说明口语练习怎么做，内容足够长。</p><p lang=\"en\">Could you say that again more slowly please, thank you so much?</p>"), "zh", 0],
     ["whole article marked lang=en fails on ratio", zh(`<article lang="en"><p>${"Every word here is English and the page is meant for Chinese readers. ".repeat(6)}</p></article>`), "zh", 2],
     ["code is not prose", zh("<p>运行下面的命令安装，安装完成后重新打开终端窗口即可开始使用本工具。</p><pre><code>npm install the package and then run the command with these flags</code></pre>"), "zh", 0],
@@ -488,6 +504,15 @@ async function main() {
       } else await checkIcon(ic.href, ic.page, ic.page.id);
     }
     if (![...iconRefs.values()].some((i) => i.rel.includes("icon"))) problems.push("no page declares an icon");
+    // Icons no page declares (an app's home-screen icon set): each listed file
+    // must exist, be an image, and be one of the pinned icons.
+    for (const f of cfg.icons?.files ?? []) {
+      const fp = resolve(base, f);
+      if (!existsSync(fp)) { problems.push(`icon file ${f}: missing`); continue; }
+      const buf = readFileSync(fp); const kind = imageKind(buf);
+      if (!kind) { problems.push(`icon file ${f}: not an image`); continue; }
+      if (!pinned.has(sha256(buf))) problems.push(`icon file ${f}: ${kind} sha256 ${sha256(buf).slice(0, 16)}… is not one of the product's pinned icons`);
+    }
   } finally { await src.close(); }
 
   const head = `${stats.zh} Chinese page(s), ${stats.en} English page(s)${stats.redirect ? `, ${stats.redirect} redirect(s)` : ""}`;
