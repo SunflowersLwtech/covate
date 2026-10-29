@@ -5,7 +5,8 @@
     "whatYouGet": "你将获得",
     "github": "GitHub",
     "home": "首页",
-    "signOut": "退出登录"
+    "signOut": "退出登录",
+    "menu": "菜单"
   },
   "locale": {
     "switchLabel": "切换语言",
