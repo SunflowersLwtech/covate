@@ -5,7 +5,8 @@
     "whatYouGet": "What you get",
     "github": "GitHub",
     "home": "Home",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "menu": "Menu"
   },
   "locale": {
     "switchLabel": "Switch language",
