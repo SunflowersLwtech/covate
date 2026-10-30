@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/keep-a-learning-ledger-from-your-commits";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "How to Keep a Learning Ledger From Your Commits";
 const DESCRIPTION =
   "A learning ledger is a running record of what each coding session actually taught you — what changed, why, what you got quizzed on, what you keep getting wrong. The cheapest way to keep one is to derive it automatically from your commits instead of writing notes by hand.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -31,6 +33,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const APPROACHES = [
   {
@@ -118,7 +124,6 @@ const ld = [
 
 export default async function LearningLedger() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -130,126 +135,137 @@ export default async function LearningLedger() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            How to keep a learning ledger from your commits
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            A learning ledger is a running record of what each coding session actually taught you — what changed,
-            why, what you got quizzed on, and what you keep getting wrong. The cheapest way to keep one is to
-            derive it automatically from your commits instead of writing notes by hand.
-          </p>
-          <ArticleByline updated="2026-08-16" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <p>
-              You already generate the raw material for a learning record every day: every diff you merge contains
-              a decision, a trade-off, often a bug you just fixed and a lesson you just paid for. The problem was
-              never producing the material — it&rsquo;s that capturing it by hand doesn&rsquo;t survive contact
-              with a full schedule. A learning ledger flips the direction: instead of you writing down what you
-              learned, the work tells you what to review.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Five levels of keeping the record</h2>
-            <ol className="mt-6 space-y-5">
-              {APPROACHES.map((c) => (
-                <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{c.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{c.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The review ritual that makes it pay off</h2>
-            <p className="mt-4">
-              A ledger earns its keep in one weekly ten-minute ritual. Open it and ask three questions: What did I
-              answer wrong this week? Which topics keep recurring across sessions? Is my running accuracy moving?
-              Whatever tops the wrong-answers list is the next study session — not a random tutorial, but the exact
-              gap your own code exposed. This is ordinary spaced repetition applied to your own work; the science
-              and the scheduling behind it are covered in{" "}
-              <a href="/learn/spaced-repetition-for-developers" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                spaced repetition for developers
-              </a>. And since the entries come from real diffs, the ledger doubles as a map of your codebase
-              history — the same territory covered from the reading side in{" "}
-              <a href="/learn/how-to-learn-a-new-codebase-fast" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                how to learn a new codebase fast
-              </a>.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">A ledger that writes itself — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Covate is the level-3 approach, built in. The open-source MCP runs locally alongside your AI coding
-              assistant (Claude, Cursor, Copilot and others), turns your real code changes into short, targeted
-              quizzes with its <code className="font-mono text-xs">learning_session</code> tool, and keeps
-              project-level debug memory with <code className="font-mono text-xs">debug_search</code> — no account
-              required. Sign in with GitHub at covate.org, reveal your sync token in the dashboard, and run{" "}
-              <code className="font-mono text-xs">python -m covate.platform_sync</code> from a project to push
-              sessions into the free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                learning ledger
-              </a>{" "}
-              — every session with its score, your running accuracy, and the topics you answer worst. Nothing to
-              buy, on either half.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/spaced-repetition-for-developers" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Spaced repetition for developers: how to actually remember what you learn →
-              </a>
-              <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to actually learn from AI-generated code (without skill decay) →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          How to keep a learning ledger from your commits
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          A learning ledger is a running record of what each coding session actually taught you — what changed,
+          why, what you got quizzed on, and what you keep getting wrong. The cheapest way to keep one is to
+          derive it automatically from your commits instead of writing notes by hand.
+        </p>
+        <ArticleByline updated="2026-08-16" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <p>
+            You already generate the raw material for a learning record every day: every diff you merge contains
+            a decision, a trade-off, often a bug you just fixed and a lesson you just paid for. The problem was
+            never producing the material — it&rsquo;s that capturing it by hand doesn&rsquo;t survive contact
+            with a full schedule. A learning ledger flips the direction: instead of you writing down what you
+            learned, the work tells you what to review.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Five levels of keeping the record</h2>
+          <ol className="mt-6 space-y-5">
+            {APPROACHES.map((c) => (
+              <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{c.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{c.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The review ritual that makes it pay off</h2>
+          <p className="mt-4">
+            A ledger earns its keep in one weekly ten-minute ritual. Open it and ask three questions: What did I
+            answer wrong this week? Which topics keep recurring across sessions? Is my running accuracy moving?
+            Whatever tops the wrong-answers list is the next study session — not a random tutorial, but the exact
+            gap your own code exposed. This is ordinary spaced repetition applied to your own work; the science
+            and the scheduling behind it are covered in{" "}
+            <a href="/learn/spaced-repetition-for-developers" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              spaced repetition for developers
+            </a>. And since the entries come from real diffs, the ledger doubles as a map of your codebase
+            history — the same territory covered from the reading side in{" "}
+            <a href="/learn/how-to-learn-a-new-codebase-fast" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              how to learn a new codebase fast
+            </a>.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">A ledger that writes itself — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Covate is the level-3 approach, built in. The open-source MCP runs locally alongside your AI coding
+            assistant (Claude, Cursor, Copilot and others), turns your real code changes into short, targeted
+            quizzes with its <code className="font-mono text-xs">learning_session</code> tool, and keeps
+            project-level debug memory with <code className="font-mono text-xs">debug_search</code> — no account
+            required. Sign in with GitHub at covate.org, reveal your sync token in the dashboard, and run{" "}
+            <code className="font-mono text-xs">python -m covate.platform_sync</code> from a project to push
+            sessions into the free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              learning ledger
+            </a>{" "}
+            — every session with its score, your running accuracy, and the topics you answer worst. Nothing to
+            buy, on either half.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/spaced-repetition-for-developers" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Spaced repetition for developers: how to actually remember what you learn →
+            </a>
+            <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to actually learn from AI-generated code (without skill decay) →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/how-to-learn-a-new-programming-language-with-ai";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "How to Learn a New Programming Language With AI";
 const DESCRIPTION =
   "You can learn a new programming language with AI — if you keep the generation-to-comprehension ratio honest: AI explains and scaffolds, you write the core exercises yourself, and every idiom you don't recognize becomes a study item. The method, and the failure mode it avoids.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -30,6 +32,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const PHASES = [
   {
@@ -112,7 +118,6 @@ const ld = [
 
 export default async function LearnLanguageWithAi() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -124,122 +129,133 @@ export default async function LearnLanguageWithAi() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            How to learn a new programming language with AI
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            You can — if you keep the generation-to-comprehension ratio honest: AI explains, grades your idiom and
-            tutors your reading, while the load-bearing writing stays yours. The four-phase method, and the failure
-            mode that quietly eats six weeks.
-          </p>
-          <ArticleByline updated="2026-08-16" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <p>
-              A new language used to mean a book, a REPL, and a long quiet stretch of getting syntax wrong alone. AI
-              compresses the lonely parts — explanations arrive instantly, errors get diagnosed in context — and in
-              doing so it creates a new failure mode the book era didn&rsquo;t have: you can ship fluent-looking
-              code in a language you cannot yet write unassisted. The method below is about keeping the speedup and
-              refusing the trap.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The four phases</h2>
-            <ol className="mt-6 space-y-5">
-              {PHASES.map((c) => (
-                <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{c.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{c.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The honest ratio</h2>
-            <p className="mt-4">
-              Across all four phases the same principle holds: <em>generation is what AI does; comprehension is what
-              you must be able to demonstrate.</em> When you&rsquo;re unsure which side of the line a task falls on,
-              ask whether the output would exist in the language&rsquo;s own idioms without you — boilerplate would,
-              core logic shouldn&rsquo;t. For the adjacent question of when AI should write anything at all, see{" "}
-              <a href="/learn/when-to-write-code-by-hand-vs-let-ai" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                when to write code by hand vs. let AI write it
-              </a>; for what to do when the dependency has already formed,{" "}
-              <a href="/learn/cant-code-without-ai-anymore" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                &ldquo;I can&rsquo;t code without AI anymore&rdquo;
-              </a>. The blank-file test from the FAQ below is the cheap audit that keeps the whole structure honest.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Keep the ratio measured — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Covate makes the generation-comprehension ratio visible instead of vibes. The free, open-source MCP
-              plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually
-              changes, and turns your real diffs into short, targeted quizzes — in a new language, precisely the
-              idioms and constructs you&rsquo;ve been accepting — blocking further generation until you answer. The
-              free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                learning ledger
-              </a>{" "}
-              on covate.org then tracks accuracy and your weakest topics, so &ldquo;how solid is my Rust,
-              really?&rdquo; stops being a feeling. Nothing to buy.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Should you still learn to code in the age of AI? →
-              </a>
-              <a href="/learn/spaced-repetition-for-developers" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Spaced repetition for developers →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          How to learn a new programming language with AI
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          You can — if you keep the generation-to-comprehension ratio honest: AI explains, grades your idiom and
+          tutors your reading, while the load-bearing writing stays yours. The four-phase method, and the failure
+          mode that quietly eats six weeks.
+        </p>
+        <ArticleByline updated="2026-08-16" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <p>
+            A new language used to mean a book, a REPL, and a long quiet stretch of getting syntax wrong alone. AI
+            compresses the lonely parts — explanations arrive instantly, errors get diagnosed in context — and in
+            doing so it creates a new failure mode the book era didn&rsquo;t have: you can ship fluent-looking
+            code in a language you cannot yet write unassisted. The method below is about keeping the speedup and
+            refusing the trap.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The four phases</h2>
+          <ol className="mt-6 space-y-5">
+            {PHASES.map((c) => (
+              <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{c.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{c.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The honest ratio</h2>
+          <p className="mt-4">
+            Across all four phases the same principle holds: <em>generation is what AI does; comprehension is what
+            you must be able to demonstrate.</em> When you&rsquo;re unsure which side of the line a task falls on,
+            ask whether the output would exist in the language&rsquo;s own idioms without you — boilerplate would,
+            core logic shouldn&rsquo;t. For the adjacent question of when AI should write anything at all, see{" "}
+            <a href="/learn/when-to-write-code-by-hand-vs-let-ai" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              when to write code by hand vs. let AI write it
+            </a>; for what to do when the dependency has already formed,{" "}
+            <a href="/learn/cant-code-without-ai-anymore" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              &ldquo;I can&rsquo;t code without AI anymore&rdquo;
+            </a>. The blank-file test from the FAQ below is the cheap audit that keeps the whole structure honest.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Keep the ratio measured — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Covate makes the generation-comprehension ratio visible instead of vibes. The free, open-source MCP
+            plugs into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually
+            changes, and turns your real diffs into short, targeted quizzes — in a new language, precisely the
+            idioms and constructs you&rsquo;ve been accepting — blocking further generation until you answer. The
+            free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              learning ledger
+            </a>{" "}
+            on covate.org then tracks accuracy and your weakest topics, so &ldquo;how solid is my Rust,
+            really?&rdquo; stops being a feeling. Nothing to buy.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Should you still learn to code in the age of AI? →
+            </a>
+            <a href="/learn/spaced-repetition-for-developers" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Spaced repetition for developers →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

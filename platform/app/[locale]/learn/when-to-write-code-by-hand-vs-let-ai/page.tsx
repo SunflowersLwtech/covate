@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/when-to-write-code-by-hand-vs-let-ai";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "When to Write Code by Hand vs. Let AI Write It";
 const DESCRIPTION =
   "Write it yourself when the goal is learning, the logic is tricky, or the code is central to your system; let AI write it when it's boilerplate, a well-understood pattern, or something you could trivially verify. A decision framework for the split that actually matters.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -31,6 +33,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const CASES = [
   {
@@ -123,7 +129,6 @@ const ld = [
 
 export default async function HandVsAi() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -135,131 +140,142 @@ export default async function HandVsAi() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            When to write code by hand vs. let AI write it
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            Write it yourself when the goal is learning, the logic is tricky, or the code is central to your system;
-            let AI write it when it&rsquo;s boilerplate, a well-understood pattern, or something you could trivially
-            verify. The mistake isn&rsquo;t choosing either — it&rsquo;s choosing by convenience instead of by what
-            the code costs you to not understand.
-          </p>
-          <ArticleByline updated="2026-08-16" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <p>
-              The question sounds like it&rsquo;s about productivity. It&rsquo;s really about where understanding
-              lives. Every line in your codebase is either something you understand well enough to debug, extend,
-              and explain — or something you&rsquo;re renting. AI moves lines between those categories very
-              quickly in one direction. A deliberate hand/AI split is how you keep the load-bearing lines in the
-              first category while still taking the speedups.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The split, case by case</h2>
-            <ol className="mt-6 space-y-5">
-              {CASES.map((c) => (
-                <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{c.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{c.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The rule underneath the cases</h2>
-            <p className="mt-4">
-              Every case above reduces to one question: <strong>what does it cost later if you don&rsquo;t
-              understand this now?</strong> Boilerplate has almost no carrying cost — you&rsquo;ve understood it
-              since your second job. Core logic, concurrency, auth, and money have enormous carrying cost, because
-              the bill arrives during incidents, extensions, and interviews, with interest. Delegate where the
-              carrying cost is low; write or rewrite where it&rsquo;s high. If you want a single heuristic to
-              remember: <em>if you couldn&rsquo;t re-derive it on a whiteboard next week, either write it or
-              rewrite it.</em>
-            </p>
-            <p className="mt-4">
-              This is also the honest answer to &ldquo;will I lose my skills?&rdquo; — you lose the ones you stop
-              practicing, and you choose which those are every time you delegate. The mechanics of skill decay and
-              the evidence are covered in{" "}
-              <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                does using AI make you a worse programmer?
-              </a>, and the daily habits that keep the split healthy in{" "}
-              <a href="/learn/how-to-avoid-over-relying-on-ai-when-coding" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                how to avoid over-relying on AI when coding
-              </a>.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Keep the split honest — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Whatever you delegate, the review has to be real. Covate is a free, open-source MCP tool that plugs
-              into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes,
-              and turns your real diffs into short, targeted quizzes — blocking further generation until you
-              answer — so every delegated change still passes through your understanding. Sessions sync into the
-              free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                learning ledger
-              </a>{" "}
-              on covate.org: sign in with GitHub and see every synced session, your running accuracy, and the
-              topics you keep getting wrong. Nothing to buy.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to review AI-generated code before you merge it →
-              </a>
-              <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Should you still learn to code in the age of AI? →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          When to write code by hand vs. let AI write it
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          Write it yourself when the goal is learning, the logic is tricky, or the code is central to your system;
+          let AI write it when it&rsquo;s boilerplate, a well-understood pattern, or something you could trivially
+          verify. The mistake isn&rsquo;t choosing either — it&rsquo;s choosing by convenience instead of by what
+          the code costs you to not understand.
+        </p>
+        <ArticleByline updated="2026-08-16" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <p>
+            The question sounds like it&rsquo;s about productivity. It&rsquo;s really about where understanding
+            lives. Every line in your codebase is either something you understand well enough to debug, extend,
+            and explain — or something you&rsquo;re renting. AI moves lines between those categories very
+            quickly in one direction. A deliberate hand/AI split is how you keep the load-bearing lines in the
+            first category while still taking the speedups.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The split, case by case</h2>
+          <ol className="mt-6 space-y-5">
+            {CASES.map((c) => (
+              <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{c.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{c.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The rule underneath the cases</h2>
+          <p className="mt-4">
+            Every case above reduces to one question: <strong>what does it cost later if you don&rsquo;t
+            understand this now?</strong> Boilerplate has almost no carrying cost — you&rsquo;ve understood it
+            since your second job. Core logic, concurrency, auth, and money have enormous carrying cost, because
+            the bill arrives during incidents, extensions, and interviews, with interest. Delegate where the
+            carrying cost is low; write or rewrite where it&rsquo;s high. If you want a single heuristic to
+            remember: <em>if you couldn&rsquo;t re-derive it on a whiteboard next week, either write it or
+            rewrite it.</em>
+          </p>
+          <p className="mt-4">
+            This is also the honest answer to &ldquo;will I lose my skills?&rdquo; — you lose the ones you stop
+            practicing, and you choose which those are every time you delegate. The mechanics of skill decay and
+            the evidence are covered in{" "}
+            <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              does using AI make you a worse programmer?
+            </a>, and the daily habits that keep the split healthy in{" "}
+            <a href="/learn/how-to-avoid-over-relying-on-ai-when-coding" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              how to avoid over-relying on AI when coding
+            </a>.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Keep the split honest — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Whatever you delegate, the review has to be real. Covate is a free, open-source MCP tool that plugs
+            into your AI coding assistant (Claude, Cursor, Copilot and others), watches what actually changes,
+            and turns your real diffs into short, targeted quizzes — blocking further generation until you
+            answer — so every delegated change still passes through your understanding. Sessions sync into the
+            free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              learning ledger
+            </a>{" "}
+            on covate.org: sign in with GitHub and see every synced session, your running accuracy, and the
+            topics you keep getting wrong. Nothing to buy.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to review AI-generated code before you merge it →
+            </a>
+            <a href="/learn/should-you-still-learn-to-code-with-ai" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Should you still learn to code in the age of AI? →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

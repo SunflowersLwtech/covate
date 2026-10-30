@@ -3,6 +3,86 @@
     {
       "path": "app/llms-full.txt/route.ts",
       "reason": "answer-engine output, not UI: llms-full.txt carries a deliberate Chinese product summary alongside the English one so assistants can quote either"
+    },
+    {
+      "path": "app/[locale]/learn/zh-CN.ts",
+      "reason": "content data, not UI: the Chinese title, description and per-guide card text of the Learning Center hub (the English counterpart is app/lib/articles.ts)"
+    },
+    {
+      "path": "app/[locale]/learn/cant-code-without-ai-anymore/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/code-reading-routine-for-ai-heavy-teams/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/coding-interviews-in-the-age-of-ai/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/does-ai-make-you-a-worse-programmer/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-juniors-should-use-ai/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-to-avoid-over-relying-on-ai-when-coding/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-to-debug-with-ai-without-losing-the-skill/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-to-explain-ai-generated-code-in-a-code-review/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-to-learn-a-new-codebase-fast/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-to-learn-a-new-programming-language-with-ai/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-to-learn-from-ai-generated-code/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/how-to-review-ai-generated-code/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/keep-a-learning-ledger-from-your-commits/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/onboard-to-a-repo-with-an-mcp-learning-tool/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/prompt-engineering-for-coding/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/should-you-still-learn-to-code-with-ai/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/spaced-repetition-for-developers/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/what-is-vibe-coding/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
+      "path": "app/[locale]/learn/when-to-write-code-by-hand-vs-let-ai/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
     }
   ]
 }

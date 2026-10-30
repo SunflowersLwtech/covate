@@ -187,7 +187,14 @@ export async function Sources({ extra = [] as readonly { href: string; label: st
       <ul className="mt-5 space-y-4 text-sm leading-7 text-secondary">
         {all.map((s) => (
           <li key={s.href}>
-            <a className={A} href={s.href} target="_blank" rel="noopener noreferrer">
+            {/* A source's own title, in the language it is published in. */}
+            <a
+              className={A}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              lang={/[\u3400-\u9fff]/.test(s.label) ? undefined : "en"}
+            >
               {s.label}
             </a>
             {s.note ? <span className="block text-xs leading-6 text-dim">{s.note}</span> : null}

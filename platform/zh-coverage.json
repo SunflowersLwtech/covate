@@ -1,0 +1,27 @@
+{
+  "$comment": "Language gate for the built site (scripts/zh-coverage.mjs). Starts `next start`, requests every prerendered route plus the dashboard once per locale cookie, and reads what a visitor gets: Chinese mode must be Chinese, English mode must carry no Chinese, and every icon a page declares must be one of the pinned files.",
+  "minHanPerHundred": 25,
+  "englishAllow": "",
+  "server": {
+    "start": "npx next start -p 4501",
+    "port": 4501,
+    "nextDir": ".next",
+    "$comment_routes": "The dashboard renders per request (it reads the session cookie), so it is in no prerender list, and the script skips app paths with a [segment] — every path here sits under [locale]. Named here so it is read.",
+    "routes": ["/dashboard"],
+    "stripLocalePrefix": ["en", "zh-CN"],
+    "locales": {
+      "zh-CN": { "headers": { "cookie": "covate_locale=zh-CN", "accept-language": "zh-CN" } },
+      "en": { "headers": { "cookie": "covate_locale=en", "accept-language": "en" } }
+    }
+  },
+  "$comment_skip": "/privacy/ms is the Malay privacy notice: its own language in both modes, and it must match the English notice line for line.",
+  "skip": ["^/privacy/ms$"],
+  "$comment_icons": "app/favicon.ico, app/icon.png and app/apple-icon.png — the same bytes covate.org serves today (checked 2026-10-29).",
+  "icons": {
+    "pinned": {
+      "favicon.ico": "2868318733a8d648cfe7ce4b01d0aa1402c74fa5998131bd39a8e30ce3792fb7",
+      "icon.png": "c380a80796aa399a5228f2c0e7e7afb051b1633593b2876d16addc33d177b204",
+      "apple-icon.png": "8af756f465b0925d91dac9bf9d74833c7cc121f0d2b6155940142b3285a09aef"
+    }
+  }
+}

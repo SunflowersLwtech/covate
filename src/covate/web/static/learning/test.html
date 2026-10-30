@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCP Learning Sidecar</title>
+    <title>Learning Sidecar</title>
     <meta name="description"
         content="Learning session for AI coding assistants - understand code changes through quizzes and reasoning">
     <link rel="icon" type="image/png" href="/static/favicon.png">
@@ -44,13 +44,13 @@
                 <span id="status-text" data-i18n="status.waiting">Waiting</span>
             </div>
             <div class="lang-selector">
-                <select id="lang-select" title="Language">
+                <select id="lang-select" title="Language" data-i18n-title="tooltips.language">
                     <option value="en">EN</option>
                     <option value="zh-CN">简中</option>
                     <option value="zh-TW">繁中</option>
                 </select>
             </div>
-            <button class="icon-btn" id="export-btn" title="Export session">
+            <button class="icon-btn" id="export-btn" title="Export session" data-i18n-title="tooltips.exportSession">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -58,7 +58,7 @@
                     <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
             </button>
-            <button class="icon-btn" id="theme-toggle" title="Toggle theme">
+            <button class="icon-btn" id="theme-toggle" title="Toggle theme" data-i18n-title="tooltips.toggleTheme">
                 <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
@@ -93,10 +93,10 @@
                             <polyline points="22 4 12 14.01 9 11.01" />
                         </svg>
                         <span class="card-header-title" data-i18n="summary.title">Session Summary</span>
-                        <span class="session-id copyable" id="session-id-display"
-                            data-copy-hint="Click to copy">Loading...</span>
+                        <span class="session-id copyable" id="session-id-display" data-i18n="badges.loading"
+                            data-copy-hint="Click to copy" data-i18n-copy-hint="tooltips.clickToCopy">Loading...</span>
                     </div>
-                    <button class="icon-btn" id="copy-summary-btn" title="Copy to clipboard">
+                    <button class="icon-btn" id="copy-summary-btn" title="Copy to clipboard" data-i18n-title="tooltips.copyToClipboard">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />

@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/cant-code-without-ai-anymore";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "I Can't Code Without AI Anymore — What to Do";
 const DESCRIPTION =
   "If writing code without an AI assistant now feels impossible, the fix is deliberate re-exposure, not quitting cold turkey: rebuild the skill of writing small pieces yourself, on a schedule, starting with code you already understand. How to diagnose what you actually lost and rebuild it in weeks.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -32,6 +34,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const DIAGNOSIS = [
   {
@@ -114,7 +120,6 @@ const ld = [
 
 export default async function CantCodeWithoutAi() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -126,147 +131,158 @@ export default async function CantCodeWithoutAi() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            &ldquo;I can&rsquo;t code without AI anymore&rdquo; — what to actually do about it
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            The fix is deliberate re-exposure, not quitting cold turkey: rebuild the skill of writing small pieces of
-            code yourself, on a schedule, starting with code you already understand — while keeping AI for what it&rsquo;s
-            genuinely good at. Here&rsquo;s how to diagnose exactly what you lost and rebuild it in weeks.
-          </p>
-          <ArticleByline updated="2026-08-16" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <p>
-              It usually dawns on you at an inconvenient moment: the assistant is down, or you&rsquo;re in an interview,
-              or you open a blank file and realize you don&rsquo;t know where to start without a prompt. Months of
-              accepting generated code were frictionless — and somewhere in there, the ability to produce code
-              unaided quietly left. If that&rsquo;s you: it&rsquo;s common, it&rsquo;s reversible, and the recovery
-              plan is shorter than the decline was.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">First, diagnose what you actually lost</h2>
-            <p className="mt-4">
-              &ldquo;Can&rsquo;t code without AI&rdquo; is four different problems wearing one coat, and they have
-              different fixes. Run yourself through these honestly:
-            </p>
-            <ol className="mt-6 space-y-5">
-              {DIAGNOSIS.map((c) => (
-                <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{c.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{c.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The rebuild: re-derivation, not new projects</h2>
-            <p className="mt-4">
-              The fastest known way to restore a decayed skill is retrieval practice on material you once knew —
-              not heroically starting fresh projects. Concretely: take a function, module, or SQL query the AI wrote
-              for you recently, close it, and rewrite it from memory of its purpose (not its text). Then diff your
-              version against the AI&rsquo;s. The gaps you see <em>are</em> your curriculum. Fifteen to thirty
-              minutes a day beats a weekend marathon, because spacing — not intensity — is what moves material into
-              durable memory.
-            </p>
-            <p className="mt-4">
-              Pair that with a decomposition warm-up: before delegating any task today, write the three-step plan
-              yourself first. You can still hand the plan to the AI afterwards. The difference is that the
-              architecture decision — the part that is actually you — happens in your head before it happens in
-              the prompt.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Keep AI, change your role in the loop</h2>
-            <p className="mt-4">
-              The end state isn&rsquo;t avoiding AI — it&rsquo;s being the kind of developer who could do it
-              unaided and delegates deliberately. Three role changes get you there: ask for explanations before
-              code (&ldquo;walk me through how you&rsquo;d solve this&rdquo;) so the reasoning reaches you first;
-              treat every generated diff as a comprehension test you must pass before merging; and keep a running
-              note of what you keep getting wrong — that list is your practice queue, and seeing it honestly is
-              half the battle. We wrote about the habit side of this in{" "}
-              <a href="/learn/how-to-avoid-over-relying-on-ai-when-coding" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                how to avoid over-relying on AI when coding
-              </a>{" "}
-              and the evidence behind it in{" "}
-              <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                does using AI make you a worse programmer?
-              </a>.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Turn the recovery into a habit — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Rebuilding by willpower fails precisely when you&rsquo;re busiest. Covate automates the
-              re-derivation step: it&rsquo;s a free, open-source MCP tool that plugs into your AI coding assistant
-              (Claude, Cursor, Copilot and others), watches what actually changes, and turns your real diffs into
-              short, targeted quizzes — blocking further generation until you answer. The free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                learning ledger
-              </a>{" "}
-              on covate.org then tracks each synced session, your running accuracy, and the topics you keep getting
-              wrong, so your practice time goes to your actual gaps. Nothing to buy — the MCP is MIT-licensed and the
-              ledger is free.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/how-to-avoid-over-relying-on-ai-when-coding" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to avoid over-relying on AI when coding →
-              </a>
-              <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Does using AI make you a worse programmer? →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          &ldquo;I can&rsquo;t code without AI anymore&rdquo; — what to actually do about it
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          The fix is deliberate re-exposure, not quitting cold turkey: rebuild the skill of writing small pieces of
+          code yourself, on a schedule, starting with code you already understand — while keeping AI for what it&rsquo;s
+          genuinely good at. Here&rsquo;s how to diagnose exactly what you lost and rebuild it in weeks.
+        </p>
+        <ArticleByline updated="2026-08-16" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <p>
+            It usually dawns on you at an inconvenient moment: the assistant is down, or you&rsquo;re in an interview,
+            or you open a blank file and realize you don&rsquo;t know where to start without a prompt. Months of
+            accepting generated code were frictionless — and somewhere in there, the ability to produce code
+            unaided quietly left. If that&rsquo;s you: it&rsquo;s common, it&rsquo;s reversible, and the recovery
+            plan is shorter than the decline was.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">First, diagnose what you actually lost</h2>
+          <p className="mt-4">
+            &ldquo;Can&rsquo;t code without AI&rdquo; is four different problems wearing one coat, and they have
+            different fixes. Run yourself through these honestly:
+          </p>
+          <ol className="mt-6 space-y-5">
+            {DIAGNOSIS.map((c) => (
+              <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{c.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{c.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The rebuild: re-derivation, not new projects</h2>
+          <p className="mt-4">
+            The fastest known way to restore a decayed skill is retrieval practice on material you once knew —
+            not heroically starting fresh projects. Concretely: take a function, module, or SQL query the AI wrote
+            for you recently, close it, and rewrite it from memory of its purpose (not its text). Then diff your
+            version against the AI&rsquo;s. The gaps you see <em>are</em> your curriculum. Fifteen to thirty
+            minutes a day beats a weekend marathon, because spacing — not intensity — is what moves material into
+            durable memory.
+          </p>
+          <p className="mt-4">
+            Pair that with a decomposition warm-up: before delegating any task today, write the three-step plan
+            yourself first. You can still hand the plan to the AI afterwards. The difference is that the
+            architecture decision — the part that is actually you — happens in your head before it happens in
+            the prompt.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Keep AI, change your role in the loop</h2>
+          <p className="mt-4">
+            The end state isn&rsquo;t avoiding AI — it&rsquo;s being the kind of developer who could do it
+            unaided and delegates deliberately. Three role changes get you there: ask for explanations before
+            code (&ldquo;walk me through how you&rsquo;d solve this&rdquo;) so the reasoning reaches you first;
+            treat every generated diff as a comprehension test you must pass before merging; and keep a running
+            note of what you keep getting wrong — that list is your practice queue, and seeing it honestly is
+            half the battle. We wrote about the habit side of this in{" "}
+            <a href="/learn/how-to-avoid-over-relying-on-ai-when-coding" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              how to avoid over-relying on AI when coding
+            </a>{" "}
+            and the evidence behind it in{" "}
+            <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              does using AI make you a worse programmer?
+            </a>.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Turn the recovery into a habit — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Rebuilding by willpower fails precisely when you&rsquo;re busiest. Covate automates the
+            re-derivation step: it&rsquo;s a free, open-source MCP tool that plugs into your AI coding assistant
+            (Claude, Cursor, Copilot and others), watches what actually changes, and turns your real diffs into
+            short, targeted quizzes — blocking further generation until you answer. The free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              learning ledger
+            </a>{" "}
+            on covate.org then tracks each synced session, your running accuracy, and the topics you keep getting
+            wrong, so your practice time goes to your actual gaps. Nothing to buy — the MCP is MIT-licensed and the
+            ledger is free.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/how-to-avoid-over-relying-on-ai-when-coding" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to avoid over-relying on AI when coding →
+            </a>
+            <a href="/learn/does-ai-make-you-a-worse-programmer" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Does using AI make you a worse programmer? →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

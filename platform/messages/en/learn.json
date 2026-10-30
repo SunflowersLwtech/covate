@@ -6,7 +6,6 @@
     "guides": "Guides",
     "count": "{count} articles",
     "read": "Read →",
-    "englishOnly": "These guides are currently published in English only.",
     "habit": {
       "eyebrow": "Reading is step one",
       "title": "The habit behind the guides",
@@ -16,7 +15,6 @@
   },
   "article": {
     "byline": "By the Covate team · Updated {date, date, long}",
-    "englishOnly": "This guide is currently published in English only.",
     "faq": "FAQ",
     "related": "Related",
     "getMcp": "Get the free open-source MCP →",

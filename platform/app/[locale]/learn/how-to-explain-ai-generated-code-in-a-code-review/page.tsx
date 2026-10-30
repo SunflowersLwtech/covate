@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/how-to-explain-ai-generated-code-in-a-code-review";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "How to Explain AI-Generated Code in a Code Review";
 const DESCRIPTION =
   "When reviewers ask about AI-generated code, 'the AI wrote it' ends the conversation and your credibility with it. How to explain generated changes — the four-question structure, what to put in the PR description, and what to say honestly when you don't know.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -30,6 +32,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const STRUCTURE = [
   {
@@ -112,7 +118,6 @@ const ld = [
 
 export default async function ExplainAiCode() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -124,143 +129,154 @@ export default async function ExplainAiCode() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            How to explain AI-generated code in a code review
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            &ldquo;The AI wrote it&rdquo; ends the conversation and your credibility with it. Explaining generated
-            changes well is a learnable structure: four questions, an honest account of what you didn&rsquo;t check,
-            and a PR description that survives interrogation.
-          </p>
-          <ArticleByline updated="2026-08-16" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          {/* Answer-first summary. This page has live impressions on the query it is
-              named after, and a retriever quoting it will quote the first passage under
-              the first question-shaped heading — so that passage is the whole answer,
-              not a lead-in to one. */}
-          <section className="rounded-2xl border border-border bg-surface/40 p-6">
-            <h2 className="text-lg font-semibold tracking-tight text-primary">What do you say when a reviewer asks why AI-written code works this way?</h2>
-            <p className="mt-3 text-sm leading-7 text-secondary">Answer in three parts: what the change does, why this approach rather than the obvious alternative, and what you checked before opening the pull request. If you cannot give all three, say so and go read the diff &mdash; &ldquo;the AI wrote it&rdquo; is not an answer, and 45% of developers already report that debugging AI-generated code takes longer than debugging their own.</p>
-          </section>
-
-          <section>
-            <p>
-              There&rsquo;s a specific silence that lands in a review when someone asks <em>why does this work this
-              way?</em> and the author starts with &ldquo;so, the AI…&rdquo;. Reviewers aren&rsquo;t hostile to
-              generated code — they&rsquo;re hostile to <em>unowned</em> code, and the fastest way to convert one
-              into the other is to answer questions the same way you would for hand-written code: with structure.
-              The moment you merge it, it&rsquo;s yours; the review is where you demonstrate that.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The four-question structure</h2>
-            <ol className="mt-6 space-y-5">
-              {STRUCTURE.map((c) => (
-                <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{c.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{c.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Rehearse it before a human asks</h2>
-            <p className="mt-4">
-              The four questions are predictable — which means the gap between being able to answer them and not is
-              detectable in private, before review. Walk the diff asking yourself each one; every stumble is a
-              reading assignment, not a character flaw. The mechanics of reviewing the change itself are covered in{" "}
-              <a href="/learn/how-to-review-ai-generated-code" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                how to review AI-generated code before you merge it
-              </a>, and keeping the explanations alive across a team is covered in{" "}
-              <a href="/learn/code-reading-routine-for-ai-heavy-teams" className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                a code reading routine for AI-heavy teams
-              </a>. Explaining is the same skill as understanding, performed out loud.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Get asked the hard questions first — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Covate is a private rehearsal for the review conversation. The free, open-source MCP plugs into your AI
-              coding assistant (Claude, Cursor, Copilot and others), watches what actually changes, and turns your
-              real diffs into short, targeted quizzes — behavior, trade-offs, edge cases — blocking further
-              generation until you answer. The free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                learning ledger
-              </a>{" "}
-              on covate.org then tracks each synced session, your running accuracy, and the topics you keep getting
-              wrong — so by the time a human reviewer asks, you&rsquo;ve already answered. Nothing to buy, on either
-              half.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence
-            sources={[
-              {
-                href: "https://google.github.io/eng-practices/review/",
-                label: "Google — Code Review Developer Guide",
-                note: "Covers both sides of the exchange: what a reviewer is looking for and what an author owes them.",
-              },
-              {
-                href: "https://git-scm.com/docs/git-log",
-                label: "Git — git-log documentation",
-                note: "The history you point a reviewer at when the question is why the code got this way.",
-              },
-            ]}
-          />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to review AI-generated code before you merge it →
-              </a>
-              <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to actually learn from AI-generated code (without skill decay) →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          How to explain AI-generated code in a code review
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          &ldquo;The AI wrote it&rdquo; ends the conversation and your credibility with it. Explaining generated
+          changes well is a learnable structure: four questions, an honest account of what you didn&rsquo;t check,
+          and a PR description that survives interrogation.
+        </p>
+        <ArticleByline updated="2026-08-16" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        {/* Answer-first summary. This page has live impressions on the query it is
+            named after, and a retriever quoting it will quote the first passage under
+            the first question-shaped heading — so that passage is the whole answer,
+            not a lead-in to one. */}
+        <section className="rounded-2xl border border-border bg-surface/40 p-6">
+          <h2 className="text-lg font-semibold tracking-tight text-primary">What do you say when a reviewer asks why AI-written code works this way?</h2>
+          <p className="mt-3 text-sm leading-7 text-secondary">Answer in three parts: what the change does, why this approach rather than the obvious alternative, and what you checked before opening the pull request. If you cannot give all three, say so and go read the diff &mdash; &ldquo;the AI wrote it&rdquo; is not an answer, and 45% of developers already report that debugging AI-generated code takes longer than debugging their own.</p>
+        </section>
+
+        <section>
+          <p>
+            There&rsquo;s a specific silence that lands in a review when someone asks <em>why does this work this
+            way?</em> and the author starts with &ldquo;so, the AI…&rdquo;. Reviewers aren&rsquo;t hostile to
+            generated code — they&rsquo;re hostile to <em>unowned</em> code, and the fastest way to convert one
+            into the other is to answer questions the same way you would for hand-written code: with structure.
+            The moment you merge it, it&rsquo;s yours; the review is where you demonstrate that.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The four-question structure</h2>
+          <ol className="mt-6 space-y-5">
+            {STRUCTURE.map((c) => (
+              <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{c.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{c.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Rehearse it before a human asks</h2>
+          <p className="mt-4">
+            The four questions are predictable — which means the gap between being able to answer them and not is
+            detectable in private, before review. Walk the diff asking yourself each one; every stumble is a
+            reading assignment, not a character flaw. The mechanics of reviewing the change itself are covered in{" "}
+            <a href="/learn/how-to-review-ai-generated-code" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              how to review AI-generated code before you merge it
+            </a>, and keeping the explanations alive across a team is covered in{" "}
+            <a href="/learn/code-reading-routine-for-ai-heavy-teams" className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              a code reading routine for AI-heavy teams
+            </a>. Explaining is the same skill as understanding, performed out loud.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Get asked the hard questions first — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Covate is a private rehearsal for the review conversation. The free, open-source MCP plugs into your AI
+            coding assistant (Claude, Cursor, Copilot and others), watches what actually changes, and turns your
+            real diffs into short, targeted quizzes — behavior, trade-offs, edge cases — blocking further
+            generation until you answer. The free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              learning ledger
+            </a>{" "}
+            on covate.org then tracks each synced session, your running accuracy, and the topics you keep getting
+            wrong — so by the time a human reviewer asks, you&rsquo;ve already answered. Nothing to buy, on either
+            half.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence
+          sources={[
+            {
+              href: "https://google.github.io/eng-practices/review/",
+              label: "Google — Code Review Developer Guide",
+              note: "Covers both sides of the exchange: what a reviewer is looking for and what an author owes them.",
+            },
+            {
+              href: "https://git-scm.com/docs/git-log",
+              label: "Git — git-log documentation",
+              note: "The history you point a reviewer at when the question is why the code got this way.",
+            },
+          ]}
+        />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to review AI-generated code before you merge it →
+            </a>
+            <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to actually learn from AI-generated code (without skill decay) →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

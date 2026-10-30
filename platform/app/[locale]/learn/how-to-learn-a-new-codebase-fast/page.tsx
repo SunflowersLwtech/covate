@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/how-to-learn-a-new-codebase-fast";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "How to Learn a New Codebase Fast";
 const DESCRIPTION =
   "Just joined a project or opened a big unfamiliar repo? Reading it top to bottom doesn't work. A practical, 7-step method for understanding a new codebase fast — run it, trace one real request end to end, read the tests, use git history — and how to get productive without understanding everything first.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -33,6 +35,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const STEPS = [
   {
@@ -126,7 +132,6 @@ const ld = [
 
 export default async function LearnNewCodebaseFast() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -138,123 +143,134 @@ export default async function LearnNewCodebaseFast() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            How to learn a new codebase fast
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            You&apos;ve just joined a project, inherited a service, or opened a big unfamiliar repo — maybe one an AI
-            largely wrote for you. Reading it top to bottom doesn&apos;t work and never finishes. The fastest way to
-            understand a codebase is to explore it deliberately, around real behavior, and go deep only where you need
-            to. Here&apos;s a practical 7-step method.
-          </p>
-          <ArticleByline updated="2026-08-05" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <p>
-              The instinct on day one is to read everything — open file after file until it all makes sense. It
-              never does, because a codebase isn&apos;t a book: it&apos;s a graph of behavior, and behavior is
-              understood by following it, not by reading files in alphabetical order. You don&apos;t need to
-              understand all of it. You need a good <em>map</em>, and a reliable method for going <em>deep on
-              demand</em>. These seven steps get you there.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The 7-step method</h2>
-            <ol className="mt-6 space-y-5">
-              {STEPS.map((c) => (
-                <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-sm text-accent">{c.n}</span>
-                    <h3 className="text-lg font-medium text-primary">{c.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Don&apos;t try to understand everything first</h2>
-            <p className="mt-4">
-              The trap that keeps new engineers stuck is trying to fully understand a large codebase before touching
-              anything. You don&apos;t need to, and you can&apos;t — even the people who wrote it don&apos;t hold it
-              all in their heads. Learn the <strong>architecture broadly</strong> (what the pieces are and how a
-              request flows), then learn the <strong>details just-in-time</strong> as each task pulls you into a new
-              area. Depth follows need. A shipped change on day three beats a perfect mental model on day thirty —
-              and the change is how you build the mental model anyway.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Understand code you didn&apos;t write — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              A new codebase and AI-generated code are the same problem: code you didn&apos;t write and need to
-              actually understand, not just accept. Covate builds that check into your workflow. It&apos;s a free,
-              open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others), watches
-              what actually changes as you work, and turns your real diffs into short, targeted quizzes about the
-              concepts, edge cases, and trade-offs — so you understand each change while the context is fresh. Every
-              session is saved; the free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate learning ledger
-              </a>{" "}
-              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
-              topics you keep getting wrong are there to review. Nothing to buy.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to actually learn from AI-generated code (without skill decay) →
-              </a>
-              <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to review AI-generated code before you merge it →
-              </a>
-              <a href="/learn" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                Browse the Covate Learning Center →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">Practical guide</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          How to learn a new codebase fast
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          You&apos;ve just joined a project, inherited a service, or opened a big unfamiliar repo — maybe one an AI
+          largely wrote for you. Reading it top to bottom doesn&apos;t work and never finishes. The fastest way to
+          understand a codebase is to explore it deliberately, around real behavior, and go deep only where you need
+          to. Here&apos;s a practical 7-step method.
+        </p>
+        <ArticleByline updated="2026-08-05" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <p>
+            The instinct on day one is to read everything — open file after file until it all makes sense. It
+            never does, because a codebase isn&apos;t a book: it&apos;s a graph of behavior, and behavior is
+            understood by following it, not by reading files in alphabetical order. You don&apos;t need to
+            understand all of it. You need a good <em>map</em>, and a reliable method for going <em>deep on
+            demand</em>. These seven steps get you there.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The 7-step method</h2>
+          <ol className="mt-6 space-y-5">
+            {STEPS.map((c) => (
+              <li key={c.n} className="rounded-xl border border-border bg-surface/40 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-sm text-accent">{c.n}</span>
+                  <h3 className="text-lg font-medium text-primary">{c.title}</h3>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-secondary">{c.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Don&apos;t try to understand everything first</h2>
+          <p className="mt-4">
+            The trap that keeps new engineers stuck is trying to fully understand a large codebase before touching
+            anything. You don&apos;t need to, and you can&apos;t — even the people who wrote it don&apos;t hold it
+            all in their heads. Learn the <strong>architecture broadly</strong> (what the pieces are and how a
+            request flows), then learn the <strong>details just-in-time</strong> as each task pulls you into a new
+            area. Depth follows need. A shipped change on day three beats a perfect mental model on day thirty —
+            and the change is how you build the mental model anyway.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Understand code you didn&apos;t write — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            A new codebase and AI-generated code are the same problem: code you didn&apos;t write and need to
+            actually understand, not just accept. Covate builds that check into your workflow. It&apos;s a free,
+            open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others), watches
+            what actually changes as you work, and turns your real diffs into short, targeted quizzes about the
+            concepts, edge cases, and trade-offs — so you understand each change while the context is fresh. Every
+            session is saved; the free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              Covate learning ledger
+            </a>{" "}
+            takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+            topics you keep getting wrong are there to review. Nothing to buy.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary">
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to actually learn from AI-generated code (without skill decay) →
+            </a>
+            <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to review AI-generated code before you merge it →
+            </a>
+            <a href="/learn" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Browse the Covate Learning Center →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }

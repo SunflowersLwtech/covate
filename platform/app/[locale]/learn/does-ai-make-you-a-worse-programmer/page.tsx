@@ -7,6 +7,8 @@ import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { ArticleBackLink } from "../../../_components/ArticleBackLink";
 import { ArticleByline } from "../../../_components/ArticleByline";
 import { getLocale, getTranslations } from "next-intl/server";
+import { zhMetadata } from "../../../lib/zh-metadata";
+import * as zh from "./zh-CN";
 
 const PATH = "/learn/does-ai-make-you-a-worse-programmer";
 const URL = SITE + PATH;
@@ -15,7 +17,7 @@ const TITLE = "Does Using AI Make You a Worse Programmer? An Honest Look";
 const DESCRIPTION =
   "Does relying on AI coding assistants make you a worse programmer? The honest answer: it can — through skill decay — but it doesn't have to. A balanced look at the evidence on both sides, and the single factor (active vs passive use) that decides which way it goes for you.";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE + " | Covate",
   description: DESCRIPTION,
   keywords: [
@@ -44,6 +46,10 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getLocale()) === "zh-CN" ? zhMetadata(metadata, zh.TITLE, zh.DESCRIPTION) : metadata;
+}
 
 const FAQ = [
   {
@@ -107,7 +113,6 @@ const ld = [
 
 export default async function DoesAiMakeYouWorse() {
   const locale = await getLocale();
-  const t = await getTranslations("learn.article");
   return (
     <div className="min-h-screen bg-deep text-primary">
       {ld.map((block, i) => (
@@ -120,155 +125,166 @@ export default async function DoesAiMakeYouWorse() {
       <main className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:pt-14">
         <Breadcrumb link />
 
-        <header lang="en" className="border-b border-border pb-8 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">The honest answer</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
-            Does using AI make you a <span className="text-brand">worse programmer</span>?
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-secondary">
-            Short answer: it can — but it doesn&apos;t have to, and which way it goes is almost entirely up to
-            you. Relying on AI coding assistants can quietly erode your skills through disuse; used differently,
-            the same tool can make you sharper than ever. Here&apos;s the honest case on both sides, and the one
-            factor that decides which one you get.
-          </p>
-          <ArticleByline updated="2026-08-04" />
-        </header>
-
-        <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The case that it does</h2>
-            <p className="mt-4">
-              There&apos;s a real mechanism behind the worry, and it&apos;s worth taking seriously. Programming
-              skill is built and maintained by two kinds of effort: <strong>retrieval</strong> (pulling APIs,
-              syntax and patterns out of your own memory) and <strong>problem-solving</strong> (working out why
-              something breaks and how to fix it). An AI assistant can remove both. When it hands you a working
-              solution before you&apos;ve tried to recall or reason your way to one, you skip the effort — and
-              it&apos;s the effort, not the finished code, that does the learning.
-            </p>
-            <p className="mt-4">
-              Do that consistently and the skills you&apos;ve stopped exercising get slower and less reliable,
-              the same way any unused skill does. The insidious part is that nothing feels wrong while it&apos;s
-              happening: the AI covers for you, the features ship, the tests pass. The gap only surfaces when you
-              hit a problem the model can&apos;t solve, sit an interview, or have to reason through a code review
-              unaided — and realize you&apos;ve been shipping code you couldn&apos;t have written or debugged
-              yourself. That&apos;s not a myth; it&apos;s ordinary skill decay, and heavy passive AI use is a
-              fast track to it.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The case that it doesn&apos;t — and can even reverse it</h2>
-            <p className="mt-4">
-              And yet plenty of developers are getting <em>better</em> with AI, not worse — because the same tool,
-              used actively, is arguably the best learning accelerator programming has ever had. It can explain
-              unfamiliar code line by line, lay out three approaches to a problem with their trade-offs, introduce
-              you to libraries and idioms you&apos;d never have stumbled on, and answer &ldquo;why&rdquo; the
-              instant you&apos;re curious — while the context is still fresh in your head.
-            </p>
-            <p className="mt-4">
-              It also lets you take on more ambitious projects than you could alone, and ambitious projects are
-              where real learning happens. The developers who improve with AI treat it like a tireless
-              pair-programming tutor: they read what it writes, ask it why, predict what it&apos;ll do before they
-              run it, and use it to go deeper instead of to avoid thinking. Exact same tool, opposite result. The
-              difference isn&apos;t the AI — it&apos;s the human&apos;s posture toward it.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">The deciding factor: active vs passive use</h2>
-            <p className="mt-4">
-              So the real question isn&apos;t &ldquo;is AI good or bad for my skills?&rdquo; It&apos;s
-              &ldquo;am I using it actively or passively?&rdquo; Passive use — generate, glance, accept, repeat —
-              is the road to decay. Active use — engaging with the code the AI produces while the context is
-              fresh — is the road to getting better. And staying active is cheapest at one specific moment: right
-              after a change is generated. A few concrete habits keep you on the right side:
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Read generated code to explain it, not just to approve it — if you can't say what it does and why, that's the gap to close.",
-                "Before accepting a change, predict what it does and what would break if you altered a line.",
-                "When the AI uses an API or pattern you don't fully know, learn it right then, while the context is fresh.",
-                "Every so often, solve something without the AI, to keep the underlying muscles warm.",
-              ].map((t) => (
-                <li key={t} className="flex gap-3">
-                  <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                  <span className="text-sm leading-7 text-secondary">{t}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6">
-              None of this means coding slower across the board. It means spending a minute of real attention on
-              the code that just entered your codebase — exactly when learning is cheapest and sticks best. Do
-              that, and AI makes you faster <em>and</em> better instead of trading one for the other.
-            </p>
-          </section>
-
-          {/* Product CTA */}
-          <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary">Stay on the right side — automatically — with Covate</h2>
-            <p className="mt-4 text-secondary">
-              Staying active is simple in theory and easy to forget in practice. Covate makes it automatic. It&apos;s
-              a free, open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others),
-              watches what actually changes, and turns your real diffs into short, targeted quizzes — blocking
-              further generation until you answer, so you understand each change while the context is fresh instead
-              of passively accepting it. Every session is saved locally, and the free{" "}
-              <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
-                Covate learning ledger
-              </a>{" "}
-              takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
-              topics you keep getting wrong are there to review. Nothing to buy.
-            </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <SignInCta />
-              <a
-                href={GITHUB}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary"
-              >
-                <span lang={locale}>{t("getMcp")}</span>
-              </a>
-            </div>
-            <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
-          </section>
-
-          {/* Shared evidence layer: sourced research, the verification comparison,
-              the tool's own checkable numbers, and the source list. Kept in one
-              module (app/_geo/Evidence.tsx) so the figures cannot drift apart
-              across the 20 pages that quote them. */}
-          <Evidence />
-
-          {/* FAQ */}
-          <section>
-            <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
-            <div className="mt-4 divide-y divide-border border-y border-border">
-              {FAQ.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
-                  </summary>
-                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Related */}
-          <section className="border-t border-border pt-6">
-            <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to actually learn from AI-generated code (without skill decay) →
-              </a>
-              <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
-                How to review AI-generated code before you merge it →
-              </a>
-            </div>
-          </section>
-        </article>
+        {locale === "zh-CN" ? <zh.Article /> : <ArticleEn />}
 
         <ArticleBackLink />
       </main>
     </div>
+  );
+}
+
+// The English article. ./zh-CN.tsx is the same article in Chinese — change both together.
+async function ArticleEn() {
+  const locale = await getLocale();
+  const t = await getTranslations("learn.article");
+  return (
+    <>
+      <header lang="en" className="border-b border-border pb-8 pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">The honest answer</p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.12] tracking-tight text-primary sm:text-5xl">
+          Does using AI make you a <span className="text-brand">worse programmer</span>?
+        </h1>
+        <p className="mt-5 text-lg leading-8 text-secondary">
+          Short answer: it can — but it doesn&apos;t have to, and which way it goes is almost entirely up to
+          you. Relying on AI coding assistants can quietly erode your skills through disuse; used differently,
+          the same tool can make you sharper than ever. Here&apos;s the honest case on both sides, and the one
+          factor that decides which one you get.
+        </p>
+        <ArticleByline updated="2026-08-04" />
+      </header>
+
+      <article lang="en" className="mt-10 space-y-10 text-[15px] leading-8 text-secondary">
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The case that it does</h2>
+          <p className="mt-4">
+            There&apos;s a real mechanism behind the worry, and it&apos;s worth taking seriously. Programming
+            skill is built and maintained by two kinds of effort: <strong>retrieval</strong> (pulling APIs,
+            syntax and patterns out of your own memory) and <strong>problem-solving</strong> (working out why
+            something breaks and how to fix it). An AI assistant can remove both. When it hands you a working
+            solution before you&apos;ve tried to recall or reason your way to one, you skip the effort — and
+            it&apos;s the effort, not the finished code, that does the learning.
+          </p>
+          <p className="mt-4">
+            Do that consistently and the skills you&apos;ve stopped exercising get slower and less reliable,
+            the same way any unused skill does. The insidious part is that nothing feels wrong while it&apos;s
+            happening: the AI covers for you, the features ship, the tests pass. The gap only surfaces when you
+            hit a problem the model can&apos;t solve, sit an interview, or have to reason through a code review
+            unaided — and realize you&apos;ve been shipping code you couldn&apos;t have written or debugged
+            yourself. That&apos;s not a myth; it&apos;s ordinary skill decay, and heavy passive AI use is a
+            fast track to it.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The case that it doesn&apos;t — and can even reverse it</h2>
+          <p className="mt-4">
+            And yet plenty of developers are getting <em>better</em> with AI, not worse — because the same tool,
+            used actively, is arguably the best learning accelerator programming has ever had. It can explain
+            unfamiliar code line by line, lay out three approaches to a problem with their trade-offs, introduce
+            you to libraries and idioms you&apos;d never have stumbled on, and answer &ldquo;why&rdquo; the
+            instant you&apos;re curious — while the context is still fresh in your head.
+          </p>
+          <p className="mt-4">
+            It also lets you take on more ambitious projects than you could alone, and ambitious projects are
+            where real learning happens. The developers who improve with AI treat it like a tireless
+            pair-programming tutor: they read what it writes, ask it why, predict what it&apos;ll do before they
+            run it, and use it to go deeper instead of to avoid thinking. Exact same tool, opposite result. The
+            difference isn&apos;t the AI — it&apos;s the human&apos;s posture toward it.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">The deciding factor: active vs passive use</h2>
+          <p className="mt-4">
+            So the real question isn&apos;t &ldquo;is AI good or bad for my skills?&rdquo; It&apos;s
+            &ldquo;am I using it actively or passively?&rdquo; Passive use — generate, glance, accept, repeat —
+            is the road to decay. Active use — engaging with the code the AI produces while the context is
+            fresh — is the road to getting better. And staying active is cheapest at one specific moment: right
+            after a change is generated. A few concrete habits keep you on the right side:
+          </p>
+          <ul className="mt-6 space-y-3">
+            {[
+              "Read generated code to explain it, not just to approve it — if you can't say what it does and why, that's the gap to close.",
+              "Before accepting a change, predict what it does and what would break if you altered a line.",
+              "When the AI uses an API or pattern you don't fully know, learn it right then, while the context is fresh.",
+              "Every so often, solve something without the AI, to keep the underlying muscles warm.",
+            ].map((t) => (
+              <li key={t} className="flex gap-3">
+                <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                <span className="text-sm leading-7 text-secondary">{t}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6">
+            None of this means coding slower across the board. It means spending a minute of real attention on
+            the code that just entered your codebase — exactly when learning is cheapest and sticks best. Do
+            that, and AI makes you faster <em>and</em> better instead of trading one for the other.
+          </p>
+        </section>
+
+        {/* Product CTA */}
+        <section id="join" className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">Stay on the right side — automatically — with Covate</h2>
+          <p className="mt-4 text-secondary">
+            Staying active is simple in theory and easy to forget in practice. Covate makes it automatic. It&apos;s
+            a free, open-source MCP tool that plugs into your AI assistant (Claude, Cursor, Copilot and others),
+            watches what actually changes, and turns your real diffs into short, targeted quizzes — blocking
+            further generation until you answer, so you understand each change while the context is fresh instead
+            of passively accepting it. Every session is saved locally, and the free{" "}
+            <a href={SITE + "/dashboard"} className="text-accent underline underline-offset-4 hover:text-accent-soft">
+              Covate learning ledger
+            </a>{" "}
+            takes them from there: sign in with GitHub and every synced session, your running accuracy, and the
+            topics you keep getting wrong are there to review. Nothing to buy.
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <SignInCta />
+            <a
+              href={GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs text-dim underline underline-offset-4 hover:text-secondary"
+            >
+              <span lang={locale}>{t("getMcp")}</span>
+            </a>
+          </div>
+          <p lang={locale} className="mt-4 font-mono text-[11px] text-dim">{t("finePrint")}</p>
+        </section>
+
+        {/* Shared evidence layer: sourced research, the verification comparison,
+            the tool's own checkable numbers, and the source list. Kept in one
+            module (app/_geo/Evidence.tsx) so the figures cannot drift apart
+            across the 20 pages that quote them. */}
+        <Evidence />
+
+        {/* FAQ */}
+        <section>
+          <h2 lang={locale} className="text-2xl font-semibold tracking-tight text-primary">{t("faq")}</h2>
+          <div className="mt-4 divide-y divide-border border-y border-border">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="cursor-pointer list-none">
+                  <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related */}
+        <section className="border-t border-border pt-6">
+          <p lang={locale} className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">{t("related")}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <a href="/learn/how-to-learn-from-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to actually learn from AI-generated code (without skill decay) →
+            </a>
+            <a href="/learn/how-to-review-ai-generated-code" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              How to review AI-generated code before you merge it →
+            </a>
+          </div>
+        </section>
+      </article>
+    </>
   );
 }
