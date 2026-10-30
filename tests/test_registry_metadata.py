@@ -11,6 +11,7 @@ image the registry refuses. These tests pin every pairing together; they read th
 repo files, not the installed package.
 """
 
+import hashlib
 import json
 import re
 import tomllib
@@ -75,3 +76,44 @@ def test_oci_package_tag_matches_version(server_json):
 def test_oci_package_is_stdio(server_json):
     """The image speaks stdio; a different transport would be a different entry."""
     assert server_json["packages"][0]["transport"]["type"] == "stdio"
+
+
+# The icons the registry shows, pinned: covate.org's mark (assets/favicon.png, the
+# README logo) at each size server.json lists. 512 is byte-for-byte the icon covate.org
+# serves (platform/app/icon.png); the others are that master scaled down. Regenerate
+# from the master and update a hash together; the old infinity mark, a placeholder or
+# another product's logo fails here. assets/icon.png keeps its path because the entry
+# already published (1.2.0) reads it from main.
+REGISTRY_ICONS = {
+    "assets/icon.png": (1024, "6620df92c42f96079d8f2787f1fec6a39afabdc2e6c0161302cd5f4be57fb9ef"),
+    "assets/icons/covate-512.png": (512, "c380a80796aa399a5228f2c0e7e7afb051b1633593b2876d16addc33d177b204"),
+    "assets/icons/covate-192.png": (192, "c74e2f83d92d8e66474e8108db21b19432b15e786269dcac979bf74e78f60763"),
+    "assets/icons/covate-96.png": (96, "4b41c4025fcf8e433a9f8550b8e23120081ebd66616b29325947397572380252"),
+    "assets/icons/covate-48.png": (48, "f18735c2fc86af1272b839d8cceec70650fbf6e4726ef307638233db840ea126"),
+}
+ICON_URL_PREFIX = "https://raw.githubusercontent.com/SunflowersLwtech/covate/main/"
+
+
+def _png_size(data: bytes) -> tuple[int, int]:
+    assert data[:8] == b"\x89PNG\r\n\x1a\n", "not a PNG file"
+    return int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+
+
+def test_registry_icons_are_covate_marks_at_their_declared_sizes(server_json):
+    """Every icon server.json lists is a repo file, the size it says, and covate.org's mark."""
+    listed = {}
+    for icon in server_json["icons"]:
+        assert icon["src"].startswith(ICON_URL_PREFIX), icon["src"]
+        path = icon["src"][len(ICON_URL_PREFIX):]
+        assert icon["mimeType"] == "image/png"
+        listed[path] = icon["sizes"]
+    assert set(listed) == set(REGISTRY_ICONS), "server.json and the pinned icon set disagree"
+    for path, (edge, digest) in REGISTRY_ICONS.items():
+        data = (ROOT / path).read_bytes()
+        assert _png_size(data) == (edge, edge), f"{path} is not {edge}×{edge}"
+        assert listed[path] == [f"{edge}x{edge}"], f"{path} declares {listed[path]}"
+        assert hashlib.sha256(data).hexdigest() == digest, f"{path} is not covate.org's mark"
+
+
+def test_registry_512_icon_is_the_one_covate_org_serves():
+    assert (ROOT / "assets/icons/covate-512.png").read_bytes() == (ROOT / "platform/app/icon.png").read_bytes()
