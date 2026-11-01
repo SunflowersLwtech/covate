@@ -21,6 +21,9 @@ const { getRouteRegex } = require("next/dist/shared/lib/router/utils/route-regex
 };
 
 const TOKEN = "t".repeat(40);
+// The console host's address, as Vercel reports it in x-vercel-forwarded-for.
+const CONSOLE_V4 = "54.179.255.138";
+const CONSOLE_V6 = "2406:da18:12cb:d000:9a14:fd47:f171:a291";
 const ALICE = "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f";
 const SYNC_TOKEN = "f00dfeedf00dfeedf00dfeedf00dfeedf00dfeedf00dfeed";
 const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"] as const;
@@ -115,7 +118,15 @@ type Handler = (req: Request, ctx: { params: Promise<Record<string, unknown>> })
 async function send(
   method: Method,
   path: string,
-  init: { token?: string | null; actor?: string | null; body?: unknown; raw?: string; headers?: Record<string, string> } = {},
+  init: {
+    token?: string | null;
+    actor?: string | null;
+    body?: unknown;
+    raw?: string;
+    headers?: Record<string, string>;
+    /** x-vercel-forwarded-for: the console's address unless given; null sends none. */
+    source?: string | null;
+  } = {},
 ): Promise<{ status: number; body: any; text: string; headers: Headers }> {
   const full = `/api/ops/v1${path}`;
   const { file, params } = resolve(full);
@@ -124,6 +135,8 @@ async function send(
   // Next answers 405 for a method the route file does not export.
   assert.equal(typeof handler, "function", `${relative(APP, file)} exports no ${method}: Next would answer 405`);
   const headers = new Headers(init.headers);
+  const source = init.source === undefined ? CONSOLE_V4 : init.source;
+  if (source !== null) headers.set("x-vercel-forwarded-for", source);
   const token = init.token === undefined ? TOKEN : init.token;
   if (token !== null) headers.set("authorization", `Bearer ${token}`);
   const actor = init.actor === undefined ? "weiliu" : init.actor;
@@ -189,6 +202,7 @@ afterEach(() => {
   setOpsSqlForTests(null);
   delete process.env.OPS_TOKEN;
   delete process.env.OPS_READS_PER_DAY;
+  delete process.env.OPS_ALLOWED_IPS;
 });
 
 // ── tests ──────────────────────────────────────────────────────────────────────
@@ -210,6 +224,126 @@ describe("ops: the route table", () => {
         assert.equal(typeof mod[method], "function", `${relative(APP, file)} ${method}`);
       }
     }
+  });
+});
+
+describe("ops: only the console's address, before anything else", () => {
+  const FOREIGN = "6.6.6.6";
+
+  /** Every method every route file exports, found on disk: a route added later is in here. */
+  async function everyHandler(): Promise<[string, Handler][]> {
+    const out: [string, Handler][] = [];
+    for (const file of ROUTES.values()) {
+      const mod = (await import(pathToFileURL(file).href)) as Record<string, unknown>;
+      for (const [name, value] of Object.entries(mod)) {
+        if (typeof value === "function" && /^[A-Z]+$/.test(name)) out.push([`${name} ${relative(APP, file)}`, value as Handler]);
+      }
+    }
+    return out;
+  }
+
+  /** Straight to the handler, with everything a route could want but the address. */
+  async function direct(handler: Handler, method: string, headers: Record<string, string>) {
+    const body = method === "GET" || method === "OPTIONS" ? undefined : JSON.stringify({ email: "alice@example.com", reason: "x" });
+    const req = new Request("http://127.0.0.1/api/ops/v1/users/lookup", {
+      method,
+      body,
+      headers: { authorization: `Bearer ${TOKEN}`, "x-ops-actor": "weiliu", "content-type": "application/json", ...headers },
+    });
+    const res = await handler(req, { params: Promise.resolve({ id: ALICE, rest: ["users", ALICE, "plan"] }) });
+    const text = await res.text();
+    return { status: res.status, body: text ? JSON.parse(text) : null };
+  }
+
+  it("lets the console's IPv4 and IPv6 in", async () => {
+    assert.equal((await send("GET", "/health", { source: CONSOLE_V4 })).status, 200);
+    assert.equal((await send("GET", "/health", { source: CONSOLE_V6 })).status, 200);
+    assert.equal((await lookup("alice@example.com", { source: CONSOLE_V6 })).status, 200);
+    // Only the first entry is the client; what follows does not matter.
+    assert.equal((await send("GET", "/health", { source: `${CONSOLE_V4}, ${FOREIGN}` })).status, 200);
+    // x-real-ip only when Vercel's own header is absent.
+    assert.equal((await send("GET", "/health", { source: null, headers: { "x-real-ip": CONSOLE_V4 } })).status, 200);
+  });
+
+  it("any other address, with the right token, is 403 source_not_allowed on every route file and method", async () => {
+    const handlers = await everyHandler();
+    assert.ok(handlers.length >= 4 * METHODS.length, String(handlers.length));
+    for (const [name, handler] of handlers) {
+      const method = name.split(" ")[0];
+      const res = await direct(handler, method, { "x-vercel-forwarded-for": FOREIGN });
+      assert.equal(res.status, 403, `${name}: ${JSON.stringify(res.body)}`);
+      assert.deepEqual(res.body, { ok: false, error: { code: "source_not_allowed", message: "this address may not use the ops surface" } }, name);
+    }
+    assert.equal(calls.length, 0, "a refused source touched the database");
+  });
+
+  it("is checked before the token: no 503 for a surface that is off, no 401 for a wrong token", async () => {
+    for (const [method, path] of [["GET", "/health"], ["POST", "/users/lookup"], ["GET", `/users/${ALICE}`], ["GET", "/pools"]] as const) {
+      assertError(await send(method, path, { source: FOREIGN, token: "nope" }), 403, "source_not_allowed");
+      delete process.env.OPS_TOKEN;
+      assertError(await send(method, path, { source: FOREIGN }), 403, "source_not_allowed");
+      // The same request from the console reaches the token check.
+      assertError(await send(method, path, { source: CONSOLE_V4 }), 503, "ops_disabled");
+      process.env.OPS_TOKEN = TOKEN;
+    }
+    assert.equal(calls.length, 0);
+  });
+
+  it("does not believe the headers a client can write", async () => {
+    const spoofs: [string, Parameters<typeof send>[2]][] = [
+      ["x-forwarded-for", { source: FOREIGN, headers: { "x-forwarded-for": CONSOLE_V4 } }],
+      ["true-client-ip", { source: FOREIGN, headers: { "true-client-ip": CONSOLE_V4 } }],
+      ["cf-connecting-ip", { source: FOREIGN, headers: { "cf-connecting-ip": CONSOLE_V4 } }],
+      ["forwarded", { source: FOREIGN, headers: { forwarded: `for=${CONSOLE_V4}` } }],
+      ["x-real-ip under a foreign vercel header", { source: FOREIGN, headers: { "x-real-ip": CONSOLE_V4 } }],
+      ["the console only in a later hop", { source: `${FOREIGN}, ${CONSOLE_V4}` }],
+      ["x-forwarded-for alone", { source: null, headers: { "x-forwarded-for": CONSOLE_V4 } }],
+      ["true-client-ip alone", { source: null, headers: { "true-client-ip": CONSOLE_V4 } }],
+      ["cf-connecting-ip alone", { source: null, headers: { "cf-connecting-ip": CONSOLE_V4 } }],
+      ["no platform header at all", { source: null }],
+    ];
+    for (const [label, init] of spoofs) {
+      assertError(await send("GET", "/health", init), 403, "source_not_allowed");
+      assertError(await lookup("alice@example.com", init), 403, "source_not_allowed");
+      assertError(await send("GET", `/users/${ALICE}`, init), 403, "source_not_allowed");
+      assert.equal(calls.length, 0, label);
+    }
+  });
+
+  it("refuses an address that does not parse", async () => {
+    for (const odd of ["", " ", "unknown", "054.179.255.138", `[${CONSOLE_V6}]`, `${CONSOLE_V6}%eth0`, `${CONSOLE_V4}/32`, `${CONSOLE_V4}:443`]) {
+      assertError(await send("GET", "/health", { source: odd }), 403, "source_not_allowed");
+    }
+  });
+
+  it("compares addresses, not spellings", async () => {
+    for (const same of [CONSOLE_V6.toUpperCase(), "2406:da18:12cb:d000:9a14:fd47:f171:A291", `::ffff:${CONSOLE_V4}`, "0:0:0:0:0:ffff:36b3:ff8a"]) {
+      assert.equal((await send("GET", "/health", { source: same })).status, 200, same);
+    }
+    process.env.OPS_ALLOWED_IPS = "2001:0DB8:0000:0000:0000:0000:0000:0001";
+    assert.equal((await send("GET", "/health", { source: "2001:db8::1" })).status, 200);
+    assertError(await send("GET", "/health", { source: "2001:db8::2" }), 403, "source_not_allowed");
+    process.env.OPS_ALLOWED_IPS = "::ffff:203.0.113.7";
+    assert.equal((await send("GET", "/health", { source: "203.0.113.7" })).status, 200, "mapped in the list, plain in the request");
+  });
+
+  it("OPS_ALLOWED_IPS replaces the console's addresses; blank means the default", async () => {
+    process.env.OPS_ALLOWED_IPS = "203.0.113.7";
+    assert.equal((await send("GET", "/health", { source: "203.0.113.7" })).status, 200);
+    assert.equal((await lookup("alice@example.com", { source: "203.0.113.7" })).status, 200);
+    assertError(await send("GET", "/health", { source: CONSOLE_V4 }), 403, "source_not_allowed");
+    assertError(await send("GET", "/health", { source: CONSOLE_V6 }), 403, "source_not_allowed");
+    process.env.OPS_ALLOWED_IPS = "  ";
+    assert.equal((await send("GET", "/health", { source: CONSOLE_V4 })).status, 200);
+  });
+
+  it("an entry that does not parse is skipped, not widened", async () => {
+    process.env.OPS_ALLOWED_IPS = "0.0.0.0/0, not-an-ip, 203.0.113.7 ,";
+    assert.equal((await send("GET", "/health", { source: "203.0.113.7" })).status, 200);
+    assertError(await send("GET", "/health", { source: FOREIGN }), 403, "source_not_allowed");
+    assertError(await send("GET", "/health", { source: "0.0.0.0" }), 403, "source_not_allowed");
+    process.env.OPS_ALLOWED_IPS = "not-an-ip";
+    assertError(await send("GET", "/health", { source: CONSOLE_V4 }), 403, "source_not_allowed");
   });
 });
 

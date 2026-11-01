@@ -1,4 +1,5 @@
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
+import { BlockList, isIP } from "node:net";
 import { db } from "./db";
 
 // The products console's door into covate: `/api/ops/v1` (app/api/ops/v1).
@@ -8,8 +9,10 @@ import { db } from "./db";
 // no write route of any kind, and every other path or method under /api/ops/v1
 // answers 404 (not 405), so a console that asks for a write learns it does not exist.
 //
-// The console holds this surface's own token (Vercel env `OPS_TOKEN`, 32+ characters,
-// or the surface is off: 503). The token is checked before anything else: an
+// Only the console host's own address may call it (`checkSource`, env
+// `OPS_ALLOWED_IPS`), checked before anything else, so a token that leaks is no use
+// from anywhere else. The console holds this surface's own token (Vercel env
+// `OPS_TOKEN`, 32+ characters, or the surface is off: 503), checked next: an
 // unauthenticated request never reaches the database, so it cannot wake Neon.
 //
 // Reads of personal data leave a row in ops_read_audit (who asked, for what, which
@@ -66,8 +69,49 @@ function sql(): Sql {
 
 const sha256 = (text: string) => createHash("sha256").update(text).digest();
 
+/** The console host's public egress (aws-sin's static IPv4 and its IPv6). */
+const CONSOLE_ADDRESSES = "54.179.255.138,2406:da18:12cb:d000:9a14:fd47:f171:a291";
+
+function allowedSources(): BlockList {
+  const raw = (process.env.OPS_ALLOWED_IPS ?? "").trim() || CONSOLE_ADDRESSES;
+  const list = new BlockList();
+  for (const entry of raw.split(",").map((part) => part.trim())) {
+    const family = isIP(entry);
+    // Exact addresses only; an entry that does not parse (a CIDR, a typo) is skipped
+    // rather than widening anything.
+    if (family && !entry.includes("%")) list.addAddress(entry, family === 6 ? "ipv6" : "ipv4");
+  }
+  return list;
+}
+
 /**
- * Bearer token check, before anything else. Compared as digests, so the time taken
+ * The address Vercel saw the request come from. `x-vercel-forwarded-for` is set by
+ * Vercel and a visitor's own value is replaced; `x-real-ip` likewise. `x-forwarded-for`
+ * is never read: it is the one a proxy (or a visitor, off Vercel) can write. Only the
+ * first entry counts.
+ */
+function sourceOf(req: Request): string {
+  const vercel = req.headers.get("x-vercel-forwarded-for");
+  return (vercel !== null ? vercel.split(",")[0] : (req.headers.get("x-real-ip") ?? "")).trim();
+}
+
+/**
+ * Only the console's own addresses (env `OPS_ALLOWED_IPS`, exact IPv4/IPv6,
+ * comma-separated; unset means the console host) may use this surface. First of all,
+ * before the token: a refused request costs this check and nothing else. Compared as
+ * parsed addresses: IPv6 case and zero compression do not matter, and `::ffff:a.b.c.d`
+ * is a.b.c.d.
+ */
+function checkSource(req: Request): void {
+  const source = sourceOf(req);
+  const family = isIP(source);
+  if (!family || source.includes("%") || !allowedSources().check(source, family === 6 ? "ipv6" : "ipv4")) {
+    refuse(403, "source_not_allowed", "this address may not use the ops surface");
+  }
+}
+
+/**
+ * Bearer token check, before anything but the source. Compared as digests, so the time taken
  * says nothing about the token or its length.
  */
 function checkToken(req: Request): void {
@@ -84,9 +128,10 @@ function json(status: number, body: unknown, retryAfter?: number): Response {
   return Response.json(body, { status, headers });
 }
 
-/** Every route: token first, then the work; failures in the contract's envelope. */
+/** Every route: source, then token, then the work; failures in the contract's envelope. */
 export async function handle(req: Request, work: () => Promise<unknown> | unknown): Promise<Response> {
   try {
+    checkSource(req);
     checkToken(req);
     return json(200, { ok: true, data: await work() });
   } catch (error) {
