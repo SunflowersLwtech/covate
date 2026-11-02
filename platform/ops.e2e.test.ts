@@ -22,6 +22,7 @@ if (DATABASE_URL && !["localhost", "127.0.0.1", "[::1]"].includes(new URL(DATABA
 }
 
 const TOKEN = "e".repeat(40);
+const CONSOLE = "54.179.255.138";
 const ACTOR = "ops-e2e";
 const PRODUCT_TABLES = ["platform_user", "learning_session", "quiz_answer", "topic_progress", "ingest_window"];
 const ACCOUNT_FIELDS = [
@@ -49,11 +50,19 @@ describe("ops surface on Postgres", { skip }, () => {
   let routes: { lookup: Handler; user: Handler; rest: Handler };
   let requestNo = 0;
 
-  async function call(handler: Handler, method: string, path: string, body?: unknown, params: Record<string, unknown> = {}) {
+  async function call(
+    handler: Handler,
+    method: string,
+    path: string,
+    body?: unknown,
+    params: Record<string, unknown> = {},
+    source = CONSOLE,
+  ) {
     const headers = new Headers({
       authorization: `Bearer ${TOKEN}`,
       "x-ops-actor": ACTOR,
       "x-request-id": `e2e-${++requestNo}`,
+      "x-vercel-forwarded-for": source,
     });
     if (body !== undefined) headers.set("content-type", "application/json");
     const req = new Request(`http://127.0.0.1/api/ops/v1${path}`, {
@@ -204,6 +213,23 @@ describe("ops surface on Postgres", { skip }, () => {
     }
     const [row] = await sql`select plan from platform_user where id = ${alice.id}`;
     assert.equal(row.plan, "paid");
+  });
+
+  it("another address is refused: no audit row, no read counted, nothing read", async () => {
+    const audited = (await auditRows()).length;
+    const windows = async () =>
+      (await sql`select bucket, window_start, requests from ops_window order by bucket, window_start`).map((r) => ({ ...r }));
+    const counted = await windows();
+    for (const res of [
+      await call(routes.lookup, "POST", "/users/lookup", { email: "alice.ops@example.com" }, {}, "6.6.6.6"),
+      await call(routes.user, "GET", `/users/${bob.id}`, undefined, { id: bob.id }, "6.6.6.6"),
+    ]) {
+      assert.equal(res.status, 403, res.text);
+      assert.equal(res.body.error.code, "source_not_allowed");
+      assert.ok(!res.text.toLowerCase().includes("alice"), res.text);
+    }
+    assert.equal((await auditRows()).length, audited);
+    assert.deepEqual(await windows(), counted);
   });
 
   it("no product table changed; each read left exactly one audit row", async () => {
