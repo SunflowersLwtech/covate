@@ -70,7 +70,7 @@ function sql(): Sql {
 const sha256 = (text: string) => createHash("sha256").update(text).digest();
 
 /** The console host's public egress (aws-sin's static IPv4 and its IPv6). */
-const CONSOLE_ADDRESSES = "54.179.255.138,2406:da18:12cb:d000:9a14:fd47:f171:a291";
+const CONSOLE_ADDRESSES = "43.217.12.182";
 
 function allowedSources(): BlockList {
   const raw = (process.env.OPS_ALLOWED_IPS ?? "").trim() || CONSOLE_ADDRESSES;
