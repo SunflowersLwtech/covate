@@ -22,7 +22,8 @@ const { getRouteRegex } = require("next/dist/shared/lib/router/utils/route-regex
 
 const TOKEN = "t".repeat(40);
 // The console host's address, as Vercel reports it in x-vercel-forwarded-for.
-const CONSOLE_V4 = "54.179.255.138";
+const CONSOLE_V4 = "43.217.12.182";
+// aws-sin's retired IPv6: now a foreign address that must not get in.
 const CONSOLE_V6 = "2406:da18:12cb:d000:9a14:fd47:f171:a291";
 const ALICE = "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f";
 const SYNC_TOKEN = "f00dfeedf00dfeedf00dfeedf00dfeedf00dfeedf00dfeed";
@@ -257,8 +258,8 @@ describe("ops: only the console's address, before anything else", () => {
 
   it("lets the console's IPv4 and IPv6 in", async () => {
     assert.equal((await send("GET", "/health", { source: CONSOLE_V4 })).status, 200);
-    assert.equal((await send("GET", "/health", { source: CONSOLE_V6 })).status, 200);
-    assert.equal((await lookup("alice@example.com", { source: CONSOLE_V6 })).status, 200);
+    assert.equal((await send("GET", "/health", { source: `::ffff:${CONSOLE_V4}` })).status, 200);
+    assert.equal((await lookup("alice@example.com", { source: CONSOLE_V4 })).status, 200);
     // Only the first entry is the client; what follows does not matter.
     assert.equal((await send("GET", "/health", { source: `${CONSOLE_V4}, ${FOREIGN}` })).status, 200);
     // x-real-ip only when Vercel's own header is absent.
@@ -311,13 +312,13 @@ describe("ops: only the console's address, before anything else", () => {
   });
 
   it("refuses an address that does not parse", async () => {
-    for (const odd of ["", " ", "unknown", "054.179.255.138", `[${CONSOLE_V6}]`, `${CONSOLE_V6}%eth0`, `${CONSOLE_V4}/32`, `${CONSOLE_V4}:443`]) {
+    for (const odd of ["", " ", "unknown", "043.217.12.182", `[${CONSOLE_V6}]`, `${CONSOLE_V6}%eth0`, `${CONSOLE_V4}/32`, `${CONSOLE_V4}:443`]) {
       assertError(await send("GET", "/health", { source: odd }), 403, "source_not_allowed");
     }
   });
 
   it("compares addresses, not spellings", async () => {
-    for (const same of [CONSOLE_V6.toUpperCase(), "2406:da18:12cb:d000:9a14:fd47:f171:A291", `::ffff:${CONSOLE_V4}`, "0:0:0:0:0:ffff:36b3:ff8a"]) {
+    for (const same of [`::ffff:${CONSOLE_V4}`, "0:0:0:0:0:ffff:2bd9:cb6"]) {
       assert.equal((await send("GET", "/health", { source: same })).status, 200, same);
     }
     process.env.OPS_ALLOWED_IPS = "2001:0DB8:0000:0000:0000:0000:0000:0001";

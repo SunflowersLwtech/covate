@@ -22,7 +22,7 @@ if (DATABASE_URL && !["localhost", "127.0.0.1", "[::1]"].includes(new URL(DATABA
 }
 
 const TOKEN = "e".repeat(40);
-const CONSOLE = "54.179.255.138";
+const CONSOLE = "43.217.12.182";
 const ACTOR = "ops-e2e";
 const PRODUCT_TABLES = ["platform_user", "learning_session", "quiz_answer", "topic_progress", "ingest_window"];
 const ACCOUNT_FIELDS = [
