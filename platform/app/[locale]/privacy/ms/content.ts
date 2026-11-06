@@ -24,7 +24,7 @@ export const MS = {
   breadcrumb: "Notis Privasi",
   eyebrow: "Perundangan",
   title: "Notis Privasi",
-  updated: "Kemas kini terakhir 16 Oktober 2026",
+  updated: "Kemas kini terakhir 6 November 2026",
   intro:
     "Versi ringkas: Covate menyimpan profil GitHub yang anda gunakan untuk log masuk, serta sesi pembelajaran yang anda sendiri pilih untuk dimuat naik. Ia tidak pernah memuat naik kod sumber anda, tidak pernah menghantar e-mel kepada anda, dan tidak pernah menjual data anda. Butirannya ada di bawah.",
   languageNote: {
@@ -97,6 +97,15 @@ export const MS = {
         "Alamat IP anda tidak disimpan dalam pangkalan data analitik itu: tiada medan untuk menyimpannya, di mana-mana di dalamnya. Ia digunakan pada saat itu sahaja, untuk menerbitkan satu pengenal pelawat — satu cincangan sehala bagi permintaan tersebut, dengan alamat IP dan pelayar anda antara inputnya, dibubuh garam dengan satu rahsia yang hanya dipegang oleh pelayan kami. Pengenal itu tidak boleh dikembalikan semula menjadi alamat IP anda, tetapi ia bersifat nama samaran dan bukannya tanpa nama: selagi anda kekal pada rangkaian dan pelayar yang sama, lawatan kemudian dikira sebagai pelawat yang sama, dan kami telah melihat perkara itu bertahan selama berminggu-minggu. Ia tidak dikongsi dengan sesiapa pun.",
         "Perisian ini juga mampu merakam apa yang dilakukan pelawat pada skrin dan membina peta haba daripadanya. Kedua-duanya dimatikan bagi covate.org dan tidak pernah dihidupkan: tiada ketukan kekunci, gerakan tetikus atau kandungan skrin anda yang dirakam.",
         "Oleh sebab tiada apa-apa daripada ini yang disimpan pada peranti anda, tiada apa-apa di sini yang memerlukan sepanduk kuki untuk meminta kebenaran anda — anda tidak melihatnya kerana ia memang tidak diperlukan, bukan kerana kami meninggalkannya. Sekiranya anda langsung tidak mahu dikira, sekat skrip itu dengan pelayar anda atau dengan penyekat kandungan, atau tetapkan umami.disabled kepada 1 dalam local storage laman ini; skrip tersebut memeriksa tanda itu sebelum ia menghantar apa-apa.",
+      ],
+      bullets: [],
+      footnote: "",
+    },
+    {
+      heading: "Borang maklum balas",
+      paragraphs: [
+        "Satu butang Maklum Balas terletak tetap di penjuru halaman. Ia dilayan oleh servis maklum balas kami sendiri, Agentic CS (agenticcs.net): skripnya tidak menetapkan sebarang kuki dan tidak menghantar apa-apa sehingga anda menekan hantar.",
+        "Satu penghantaran membawa mesej yang anda tulis, mana-mana tangkapan skrin yang anda lampirkan, dan satu id pelayar rawak yang skripnya simpan dalam storan setempat pelayar anda — ia tidak dikaitkan dengan log masuk GitHub anda.",
       ],
       bullets: [],
       footnote: "",

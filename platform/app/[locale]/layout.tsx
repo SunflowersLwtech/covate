@@ -7,6 +7,7 @@ import { getMessages, getTranslations } from "next-intl/server";
 import "../globals.css";
 import { isLocale, LOCALES } from "../i18n/messages";
 import { SITE } from "../lib/site";
+import { FeedbackWidget } from "../_components/FeedbackWidget";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
@@ -190,6 +191,12 @@ export default async function RootLayout({
             data-domains="covate.org,www.covate.org"
           />
         ) : null}
+        {/* The feedback form's script: no cookie, nothing sent until the
+            visitor presses send (see the FeedbackWidget doc comment and the
+            privacy policy's feedback-form section). Unlike Umami above it
+            needs no VERCEL_ENV gate — the key itself is the gate, set only
+            for production builds; a build without it renders no tag. */}
+        <FeedbackWidget />
       </body>
     </html>
   );
