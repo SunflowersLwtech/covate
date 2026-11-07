@@ -19,30 +19,30 @@
     --foreground: 225.71 48.84% 8.43%;    /* #0b1020 */
     --card: 0 0% 100%;                    /* #ffffff */
     --card-foreground: 225.71 48.84% 8.43%;
-    --primary: 231.17 81.07% 52.35%;      /* #2340e8 */
+    --primary: 193.43 87.01% 30.2%;         /* #0a7290 pale-blue dark */
     --primary-foreground: 0 0% 100%;
     --secondary: 225 33.33% 92.94%;       /* #e6eaf4 */
     --secondary-foreground: 225.71 48.84% 8.43%;
     --muted: 222 28% 86%;                 /* #d0d7e8 */
     --muted-foreground: 224.21 22.35% 33.33%; /* #424c68 */
-    --accent: 231 70% 95%;
-    --accent-foreground: 231.17 81.07% 52.35%; /* #2340e8 */
+    --accent: 216 60% 95%;
+    --accent-foreground: 225.58 68.14% 44.31%; /* #2449be */
     --destructive: 355.41 73.91% 45.1%;   /* #c81e2b */
     --destructive-foreground: 0 0% 100%;
-    --success: 193.38 89.04% 28.63%;      /* #086d8a */
+    --success: 165.41 83.46% 26.08%;      /* mint-dark #0b7a5f; mint stays an accent */
     --success-foreground: 0 0% 100%;
     --warning: 25.96 90.48% 37.06%;       /* #b45309 */
     --warning-foreground: 0 0% 100%;
-    --info: 193.38 89.04% 28.63%;         /* #086d8a */
+    --info: 193.16 87.69% 25.49%;         /* #08617a */
     --border: 221.05 26.03% 85.69%;       /* #d0d7e6 */
-    --ring: 231.17 81.07% 52.35%;
+    --ring: 193.43 87.01% 30.2%;  /* #0a7290 */;
     --radius: 0rem;
 
     /* Chart Colors */
-    --chart-1: 193.38 89.04% 27%;         /* signal cyan; 27% keeps .badge.action text ≥4.5:1 on its own 20% tint */
-    --chart-2: 231.17 81.07% 52.35%;      /* indigo */
+    --chart-1: 193.16 87.69% 25.49%;      /* sky-dark #08617a; keeps .badge text 4.5:1 on its 20% tint */
+    --chart-2: 225.58 68.14% 44.31%; /* #2449be */;      /* indigo */
     --chart-3: 25.96 90.48% 37.06%;       /* amber */
-    --chart-4: 231.17 81.07% 52.35%;      /* indigo */
+    --chart-4: 225.58 68.14% 44.31%; /* #2449be */;      /* indigo */
     --chart-5: 355.41 73.91% 45.1%;       /* red */
 
     /* Quiz Special */
@@ -62,28 +62,28 @@
     --foreground: 224 48.39% 93.92%;      /* primary     #e8ecf7 */
     --card: 225.71 44.68% 9.22%;          /* surface     #0d1222 */
     --card-foreground: 224 48.39% 93.92%;
-    --primary: 231.17 81.07% 52.35%;      /* accent      #2340e8 */
-    --primary-foreground: 0 0% 100%;
+    --primary: 216.67 100% 82.35%;         /* accent      #a5c8ff */
+    --primary-foreground: 227.14 46.67% 5.88%;  /* deep text on the pale fill */;
     --secondary: 223.5 39.22% 20%;        /* border      #1f2a47 */
     --secondary-foreground: 224 48.39% 93.92%;
     --muted: 223.5 38% 24%;               /*             #263454 */
     --muted-foreground: 223.33 25.35% 72.16%; /* secondary #a6b0ca */
-    --accent: 231 55% 16%;
+    --accent: 225 50% 17%;
     --accent-foreground: 228 100% 85.29%; /* accent-soft #b4c3ff */
     --destructive: 355 100% 74%;          /* #ff7a85 */
     --destructive-foreground: 227.14 46.67% 5.88%;
-    --success: 189.13 77.31% 53.33%;      /* #2cc8e4 */
+    --success: 157.5 68.09% 81.57%;       /* mint        #b0f0d8 */
     --success-foreground: 227.14 46.67% 5.88%;
     --warning: 43.26 96.41% 56.27%;       /* #fbbf24 */
     --warning-foreground: 227.14 46.67% 5.88%;
-    --info: 189.13 77.31% 53.33%;
+    --info: 190.59 83.61% 76.08%;   /* #8fe3f5 */;
     --border: 223.5 39.22% 20%;           /* border      #1f2a47 */
-    --ring: 228 100% 85.29%;
+    --ring: 216.67 100% 82.35%;  /* #a5c8ff */;
 
-    --chart-1: 189.13 77.31% 53.33%;      /* brand-blue  #2cc8e4 */
+    --chart-1: 190.59 83.61% 76.08%;      /* sky         #8fe3f5 */
     --chart-2: 228 100% 85.29%;           /* accent-soft #b4c3ff */
     --chart-3: 43.26 96.41% 56.27%;
-    --chart-4: 228.95 100% 77.65%;        /* #8da2ff */
+    --chart-4: 210.54 100% 78.04%;        /* #8fc6ff */
     --chart-5: 355 100% 74%;
 
     --quiz-bg: 225.71 44.68% 9.22%;

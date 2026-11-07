@@ -28,8 +28,8 @@ _STYLE = (
     "[data-fr-choice]{border:1px solid #1f2a47;border-radius:0;background:#0d1222;padding:1.25rem;margin:1.2rem 0}"
     "[data-fr-option]{display:block;width:100%;text-align:left;margin:.4rem 0;padding:.65rem .85rem;"
     "font:inherit;border:1px solid #1f2a47;border-radius:0;background:#080b16;color:#e8ecf7;cursor:pointer}"
-    "[data-fr-option]:hover{border-color:#2340e8;background:#131b31}"
-    ".concept{font:12px/1.4 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em;color:#8da2ff}"
+    "[data-fr-option]:hover{border-color:#a5c8ff;background:#131b31}"
+    ".concept{font:12px/1.4 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em;color:#a5c8ff}"
 )
 
 
