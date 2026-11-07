@@ -21,7 +21,7 @@ const state = {
     selectedAnswers: {},
     currentScore: 0,
     startTime: Date.now(),
-    isDark: false,
+    isDark: true,
     wsManager: null,
     shownWarnings: new Set()
 };
@@ -37,8 +37,7 @@ function toggleTheme() {
 
 function initTheme() {
     const saved = localStorage.getItem('mcp-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    state.isDark = saved ? saved === 'dark' : prefersDark;
+    state.isDark = saved ? saved === 'dark' : true;
     document.body.classList.toggle('dark', state.isDark);
     document.getElementById('moon-icon').style.display = state.isDark ? 'none' : 'block';
     document.getElementById('sun-icon').style.display = state.isDark ? 'block' : 'none';

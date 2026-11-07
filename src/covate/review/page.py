@@ -23,11 +23,13 @@ MAX_TEXT = 600
 MAX_EXPLANATION = 1500
 
 _STYLE = (
-    "body{font:16px/1.6 system-ui,sans-serif;max-width:42rem;margin:2rem auto;padding:0 1rem}"
-    "[data-fr-choice]{border:1px solid #8884;border-radius:12px;padding:1rem;margin:1.2rem 0}"
-    "[data-fr-option]{display:block;width:100%;text-align:left;margin:.4rem 0;padding:.6rem .8rem;"
-    "font:inherit;border:1px solid #8886;border-radius:8px;background:transparent;color:inherit;cursor:pointer}"
-    ".concept{font-size:.8rem;opacity:.7}"
+    "body{font:16px/1.6 system-ui,sans-serif;max-width:44rem;margin:2rem auto;padding:0 1rem;"
+    "background:#080b16;color:#e8ecf7}"
+    "[data-fr-choice]{border:1px solid #1f2a47;border-radius:0;background:#0d1222;padding:1.25rem;margin:1.2rem 0}"
+    "[data-fr-option]{display:block;width:100%;text-align:left;margin:.4rem 0;padding:.65rem .85rem;"
+    "font:inherit;border:1px solid #1f2a47;border-radius:0;background:#080b16;color:#e8ecf7;cursor:pointer}"
+    "[data-fr-option]:hover{border-color:#2340e8;background:#131b31}"
+    ".concept{font:12px/1.4 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em;color:#8da2ff}"
 )
 
 

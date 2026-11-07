@@ -42,14 +42,14 @@ export function HeaderMenu({ label, children }: { label: string; children: React
     <details ref={ref} className="group relative sm:hidden">
       <summary
         aria-label={label}
-        className="-m-2 flex cursor-pointer list-none items-center justify-center rounded-md p-2 transition-colors hover:text-primary [&::-webkit-details-marker]:hidden"
+        className="flex h-7 w-7 cursor-pointer list-none items-center justify-center border border-border bg-surface text-secondary transition-colors hover:border-accent/60 hover:text-primary [&::-webkit-details-marker]:hidden"
       >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" aria-hidden="true">
           <path d="M3 5.5h14M3 10h14M3 14.5h14" className="group-open:hidden" />
           <path d="M5 5l10 10M15 5L5 15" className="hidden group-open:block" />
         </svg>
       </summary>
-      <div className="absolute right-0 top-full z-50 mt-3 flex min-w-44 flex-col rounded-lg border border-border bg-surface py-1.5 shadow-xl shadow-black/40">
+      <div className="absolute right-0 top-full z-50 mt-2 flex min-w-44 flex-col border border-border bg-surface py-1.5 shadow-xl shadow-black/40">
         {children}
       </div>
     </details>

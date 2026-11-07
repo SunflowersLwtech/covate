@@ -12,6 +12,9 @@
     "switchLabel": "Switch language",
     "other": "中文"
   },
+  "theme": {
+    "switchLabel": "Switch theme"
+  },
   "footer": {
     "tagline": " — a DUOCODE TECHNOLOGY product",
     "learn": "Learn",

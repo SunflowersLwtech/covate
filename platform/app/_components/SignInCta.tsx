@@ -9,7 +9,7 @@ export async function SignInCta({ align = "start" }: { align?: "start" | "center
     <div className={`flex w-full flex-col gap-2 ${align === "center" ? "items-center" : "items-start"}`}>
       <a
         href="/dashboard"
-        className="rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-deep transition hover:bg-accent-soft"
+        className="btn-primary bg-accent px-6 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-white transition"
       >
         {t("button")}
       </a>
