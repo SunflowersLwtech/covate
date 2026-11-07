@@ -39,7 +39,7 @@
     --radius: 0rem;
 
     /* Chart Colors */
-    --chart-1: 193.38 89.04% 28.63%;      /* signal cyan */
+    --chart-1: 193.38 89.04% 27%;         /* signal cyan; 27% keeps .badge.action text ≥4.5:1 on its own 20% tint */
     --chart-2: 231.17 81.07% 52.35%;      /* indigo */
     --chart-3: 25.96 90.48% 37.06%;       /* amber */
     --chart-4: 231.17 81.07% 52.35%;      /* indigo */
