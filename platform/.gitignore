@@ -7,3 +7,4 @@ next-env.d.ts
 .env*.local
 *.tsbuildinfo
 .DS_Store
+.env*
