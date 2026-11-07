@@ -14,8 +14,8 @@ const PANEL = "#0d1222";
 const RULE = "#1f2a47";
 const INK = "#e8ecf7";
 const MUTED = "#a6b0ca";
-const ACCENT = "#2340e8";
-const ACCENT_TEXT = "#8da2ff";
+const GRAD = "linear-gradient(135deg, #8fe3f5 0%, #a5c8ff 50%, #b4c3ff 100%)";
+const ACCENT_TEXT = "#a5c8ff";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -38,7 +38,7 @@ export default function OpengraphImage() {
               width: 18,
               height: 18,
               borderRadius: 0,
-              background: ACCENT,
+              background: GRAD,
               display: "flex",
             }}
           />

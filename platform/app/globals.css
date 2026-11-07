@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Covate Indigo Engineering Palette — Dark Default (#2340E8 primary accent) */
+  /* Covate Pale-Blue Palette — Dark Default (favicon sky-blue gradient accents) */
   --color-deep: #080b16;
   --color-surface: #0d1222;
   --color-border: #1f2a47;
   --color-primary: #e8ecf7;
   --color-secondary: #a6b0ca;
   --color-dim: #8492b8;
-  --color-accent: #2340e8;
+  --color-accent: #a5c8ff;
   --color-accent-soft: #b4c3ff;
-  --color-brand-blue: #2cc8e4;
+  --color-brand-blue: #8fe3f5;
 
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
@@ -30,18 +30,21 @@ html[data-theme="dark"] {
   --fg-primary: #e8ecf7;
   --fg-secondary: #a6b0ca;
   --fg-dim: #8492b8;
-  --fg-accent: #8da2ff;
+  --fg-accent: #a5c8ff;
   --fg-accent-hover: #b4c3ff;
-  --accent-fill: #2340e8;
-  --accent-fill-hover: #3552f5;
-  --accent-on-fill: #ffffff;
-  --accent-tint: rgba(35, 64, 232, 0.11);
-  --accent-border-40: rgba(102, 130, 255, 0.45);
-  --accent-border-50: rgba(102, 130, 255, 0.55);
-  --accent-border-60: rgba(102, 130, 255, 0.65);
-  --signal-cyan: #2cc8e4;
+  --accent-fill: #a5c8ff;
+  --accent-fill-hover: #b4c3ff;
+  --accent-on-fill: #0b1020;
+  --accent-tint: rgba(165, 200, 255, 0.09);
+  --accent-border-40: rgba(165, 200, 255, 0.38);
+  --accent-border-50: rgba(165, 200, 255, 0.50);
+  --accent-border-60: rgba(165, 200, 255, 0.62);
+  --signal-cyan: #8fe3f5;
   --danger-text: #ff7a85;
   --grid-line: rgba(31, 42, 71, 0.42);
+  --grad-fill: linear-gradient(135deg, #8fe3f5 0%, #a5c8ff 50%, #b4c3ff 100%);
+  --grad-text: linear-gradient(135deg, #8fe3f5 0%, #a5c8ff 50%, #b4c3ff 100%);
+  --accent-dot: #b0f0d8;
   color-scheme: dark;
 }
 
@@ -58,18 +61,21 @@ html[data-theme="light"] {
   --fg-primary: #0b1020;
   --fg-secondary: #424c68;
   --fg-dim: #55607d;
-  --fg-accent: #2340e8;
-  --fg-accent-hover: #192fb8;
-  --accent-fill: #2340e8;
-  --accent-fill-hover: #1b34c7;
-  --accent-on-fill: #ffffff;
-  --accent-tint: rgba(35, 64, 232, 0.06);
-  --accent-border-40: rgba(35, 64, 232, 0.36);
-  --accent-border-50: rgba(35, 64, 232, 0.46);
-  --accent-border-60: rgba(35, 64, 232, 0.56);
-  --signal-cyan: #086d8a;
+  --fg-accent: #0a7290;
+  --fg-accent-hover: #08617a;
+  --accent-fill: #0a7290;
+  --accent-fill-hover: #08617a;
+  --accent-on-fill: #0b1020;
+  --accent-tint: rgba(46, 91, 214, 0.06);
+  --accent-border-40: rgba(46, 91, 214, 0.34);
+  --accent-border-50: rgba(46, 91, 214, 0.44);
+  --accent-border-60: rgba(46, 91, 214, 0.54);
+  --signal-cyan: #08617a;
   --danger-text: #c81e2b;
   --grid-line: rgba(184, 194, 217, 0.45);
+  --grad-fill: linear-gradient(135deg, #8fe3f5 0%, #a5c8ff 50%, #b4c3ff 100%);
+  --grad-text: linear-gradient(135deg, #0a7290 0%, #2e5bd6 50%, #3d50c4 100%);
+  --accent-dot: #b0f0d8;
   color-scheme: light;
 }
 
@@ -189,21 +195,34 @@ body {
   color: var(--fg-accent) !important;
 }
 
-/* Solid engineering brand highlight — replaces legacy green gradient */
+/* Brand highlight: the pale-blue gradient carried by the favicon — light as
+   color, never a block. Gradient stops are pinned per theme so every stop
+   keeps ≥4.5:1 against the page background (see --grad-text). */
 .text-brand {
-  color: var(--fg-accent);
-  background: none;
-  -webkit-text-fill-color: currentColor;
+  background-image: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Clean engineering hero container — no blur blobs */
+/* Hero glow: the gradient as light — soft radial washes, no hard shapes */
 .hero-aurora {
   position: relative;
   isolation: isolate;
   overflow-x: clip;
 }
 .hero-aurora::before {
-  display: none;
+  content: "";
+  position: absolute;
+  inset: -18% -8% auto -8%;
+  height: 130%;
+  background:
+    radial-gradient(620px 320px at 18% 6%, rgba(143, 227, 245, 0.10), transparent 70%),
+    radial-gradient(780px 400px at 80% -4%, rgba(180, 195, 255, 0.13), transparent 72%),
+    radial-gradient(440px 260px at 58% 28%, rgba(176, 240, 216, 0.05), transparent 70%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Blueprint coordinate grid backdrop */
@@ -233,20 +252,13 @@ textarea {
   border-radius: 2px !important;
 }
 
-/* Primary CTA button: Indigo #2340E8 fill, crisp white text, 45° 8px chamfer */
-.bg-accent {
-  background-color: var(--accent-fill) !important;
-}
-span.bg-accent {
-  background-color: var(--fg-accent) !important;
-}
-span.bg-secondary {
-  background-color: var(--fg-secondary) !important;
-}
+/* Primary CTA button: pale-blue gradient fill (the favicon ramp), deep text
+   for contrast on the light stops, 45° 8px chamfer */
 a.bg-accent,
 button.bg-accent,
 .btn-primary {
-  background-color: var(--accent-fill) !important;
+  background-color: transparent !important;
+  background-image: var(--grad-fill) !important;
   color: var(--accent-on-fill) !important;
   border-radius: 0 !important;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
@@ -254,8 +266,34 @@ button.bg-accent,
 a.bg-accent:hover,
 button.bg-accent:hover,
 .btn-primary:hover {
-  background-color: var(--accent-fill-hover) !important;
+  background-color: transparent !important;
+  background-image: var(--grad-fill) !important;
   color: var(--accent-on-fill) !important;
+  filter: brightness(1.06) saturate(1.04);
+}
+/* Decorative accent dots/spans ride the same gradient */
+span.bg-accent {
+  background-color: transparent !important;
+  background-image: var(--grad-fill) !important;
+}
+span.bg-secondary {
+  background-color: var(--fg-secondary) !important;
+}
+
+/* Site footer: gradient hairline where the page lands */
+footer.border-t {
+  position: relative;
+}
+footer.border-t::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-image: var(--grad-fill);
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 /* Accessible keyboard focus ring */
