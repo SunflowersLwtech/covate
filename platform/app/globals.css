@@ -1,80 +1,281 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Developer-dark palette (GitHub-dark lineage). Accent + gradient echo the Covate
-     favicon: a green ("growth"/leaf) → blue (cyan "V") gradient. */
-  --color-deep: #0a0e14;
-  --color-surface: #131a24;
-  --color-border: #232c39;
-  --color-primary: #e6edf3;
-  --color-secondary: #9aa7b5;
-  --color-dim: #667180;
-  --color-accent: #34d399;
-  --color-accent-soft: #6ee7b7;
-  --color-brand-blue: #38bdf8;
+  /* Covate Indigo Engineering Palette — Dark Default (#2340E8 primary accent) */
+  --color-deep: #080b16;
+  --color-surface: #0d1222;
+  --color-border: #1f2a47;
+  --color-primary: #e8ecf7;
+  --color-secondary: #a6b0ca;
+  --color-dim: #8492b8;
+  --color-accent: #2340e8;
+  --color-accent-soft: #b4c3ff;
+  --color-brand-blue: #2cc8e4;
 
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
 }
 
-/* Brand gradient (green → blue) mirroring the favicon's C→V color flow. */
-.text-brand {
-  background-image: linear-gradient(105deg, var(--color-accent-soft) 0%, var(--color-accent) 42%, var(--color-brand-blue) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+:root,
+html[data-theme="dark"] {
+  --bg-deep: #080b16;
+  --bg-surface: #0d1222;
+  --bg-surface-30: #0b1020;
+  --bg-surface-40: #0d1222;
+  --bg-surface-50: #10172b;
+  --bg-elevated: #131b31;
+  --border-subtle: #1f2a47;
+  --border-subtle-60: rgba(31, 42, 71, 0.72);
+  --border-strong: #2c3b63;
+  --fg-primary: #e8ecf7;
+  --fg-secondary: #a6b0ca;
+  --fg-dim: #8492b8;
+  --fg-accent: #8da2ff;
+  --fg-accent-hover: #b4c3ff;
+  --accent-fill: #2340e8;
+  --accent-fill-hover: #3552f5;
+  --accent-on-fill: #ffffff;
+  --accent-tint: rgba(35, 64, 232, 0.11);
+  --accent-border-40: rgba(102, 130, 255, 0.45);
+  --accent-border-50: rgba(102, 130, 255, 0.55);
+  --accent-border-60: rgba(102, 130, 255, 0.65);
+  --signal-cyan: #2cc8e4;
+  --danger-text: #ff7a85;
+  --grid-line: rgba(31, 42, 71, 0.42);
+  color-scheme: dark;
 }
 
-/* Soft brand aurora glow behind the hero — green→blue, echoing the favicon.
-   Adds depth/artistry over the terminal grid without touching content. */
-.hero-aurora {
-  position: relative;
-  isolation: isolate;
-  /* The glow below reaches 5% past each side. Without this the page scrolled
-     sideways at every width (about 40px at 1280, 12px at 390). clip, not
-     hidden: hidden would make the block a scroll container and cut off the glow
-     that rises above the hero. */
-  overflow-x: clip;
-}
-.hero-aurora::before {
-  content: "";
-  position: absolute;
-  inset: -30% -5% auto -5%;
-  height: 460px;
-  background:
-    radial-gradient(38% 60% at 28% 32%, rgba(52, 211, 153, 0.20), transparent 62%),
-    radial-gradient(42% 58% at 72% 42%, rgba(56, 189, 248, 0.18), transparent 62%),
-    radial-gradient(36% 52% at 50% 14%, rgba(110, 231, 183, 0.14), transparent 66%);
-  filter: blur(36px);
-  pointer-events: none;
-  z-index: -1;
-  animation: aurora-drift 22s ease-in-out infinite alternate;
-}
-@keyframes aurora-drift {
-  from { transform: translateX(-2%) translateY(0) scale(1); }
-  to   { transform: translateX(3%) translateY(-2%) scale(1.06); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-aurora::before { animation: none; }
+html[data-theme="light"] {
+  --bg-deep: #f5f6fa;
+  --bg-surface: #ffffff;
+  --bg-surface-30: #ffffff;
+  --bg-surface-40: #ffffff;
+  --bg-surface-50: #eef1f8;
+  --bg-elevated: #e8ecf5;
+  --border-subtle: #d5dbe8;
+  --border-subtle-60: #dfe4f0;
+  --border-strong: #b8c2d9;
+  --fg-primary: #0b1020;
+  --fg-secondary: #424c68;
+  --fg-dim: #55607d;
+  --fg-accent: #2340e8;
+  --fg-accent-hover: #192fb8;
+  --accent-fill: #2340e8;
+  --accent-fill-hover: #1b34c7;
+  --accent-on-fill: #ffffff;
+  --accent-tint: rgba(35, 64, 232, 0.06);
+  --accent-border-40: rgba(35, 64, 232, 0.36);
+  --accent-border-50: rgba(35, 64, 232, 0.46);
+  --accent-border-60: rgba(35, 64, 232, 0.56);
+  --signal-cyan: #086d8a;
+  --danger-text: #c81e2b;
+  --grid-line: rgba(184, 194, 217, 0.45);
+  color-scheme: light;
 }
 
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  background-color: var(--bg-deep);
+  color: var(--fg-primary);
 }
 
 body {
-  background-color: var(--color-deep);
-  color: var(--color-primary);
+  background-color: var(--bg-deep);
+  color: var(--fg-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Subtle grid backdrop, developer-terminal feel */
+/* Theme-reactive surface, border, and typography utilities */
+.bg-deep {
+  background-color: var(--bg-deep) !important;
+}
+.bg-surface {
+  background-color: var(--bg-surface) !important;
+}
+.bg-surface\/30 {
+  background-color: var(--bg-surface-30) !important;
+}
+.bg-surface\/40 {
+  background-color: var(--bg-surface-40) !important;
+}
+.bg-surface\/50 {
+  background-color: var(--bg-surface-50) !important;
+}
+.bg-accent\/\[0\.06\] {
+  background-color: var(--accent-tint) !important;
+}
+
+.border-border {
+  border-color: var(--border-subtle) !important;
+}
+.border-border\/60 {
+  border-color: var(--border-subtle-60) !important;
+}
+.divide-border > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--border-subtle) !important;
+}
+.border-accent {
+  border-color: var(--fg-accent) !important;
+}
+.border-accent\/40 {
+  border-color: var(--accent-border-40) !important;
+}
+.border-accent\/50 {
+  border-color: var(--accent-border-50) !important;
+}
+.border-accent\/60 {
+  border-color: var(--accent-border-60) !important;
+}
+.hover\:border-accent\/50:hover {
+  border-color: var(--accent-border-50) !important;
+}
+.hover\:border-accent\/60:hover {
+  border-color: var(--accent-border-60) !important;
+}
+
+/* Hover fills: without these, light mode hovers to the static dark token
+   (hover:bg-deep) or to accent-soft, which is unreadable under the forced
+   white text of the accent button overrides. */
+.hover\:bg-deep:hover {
+  background-color: var(--bg-deep) !important;
+}
+.hover\:bg-surface:hover {
+  background-color: var(--bg-surface) !important;
+}
+.hover\:bg-accent:hover,
+.hover\:bg-accent-soft:hover {
+  background-color: var(--accent-fill-hover) !important;
+}
+
+.text-primary {
+  color: var(--fg-primary) !important;
+}
+.text-secondary {
+  color: var(--fg-secondary) !important;
+}
+.text-dim {
+  color: var(--fg-dim) !important;
+}
+.text-accent {
+  color: var(--fg-accent) !important;
+}
+.text-accent-soft {
+  color: var(--fg-accent-hover) !important;
+}
+.text-red-400 {
+  color: var(--danger-text) !important;
+}
+.hover\:text-primary:hover {
+  color: var(--fg-primary) !important;
+}
+.hover\:text-secondary:hover {
+  color: var(--fg-secondary) !important;
+}
+.hover\:text-accent:hover {
+  color: var(--fg-accent) !important;
+}
+.hover\:text-accent-soft:hover {
+  color: var(--fg-accent-hover) !important;
+}
+.group:hover .group-hover\:text-accent,
+.group[open] .group-open\:text-accent {
+  color: var(--fg-accent) !important;
+}
+.marker\:text-accent\/60 ::marker,
+.marker\:text-accent\/60::marker {
+  color: var(--fg-accent) !important;
+}
+
+/* Solid engineering brand highlight — replaces legacy green gradient */
+.text-brand {
+  color: var(--fg-accent);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* Clean engineering hero container — no blur blobs */
+.hero-aurora {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+.hero-aurora::before {
+  display: none;
+}
+
+/* Blueprint coordinate grid backdrop */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(52, 211, 153, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(52, 211, 153, 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Engineering geometry: 0px square corners on cards, buttons, badges, menus */
+.rounded-2xl,
+.rounded-xl,
+.rounded-lg,
+.rounded-md,
+.rounded-full {
+  border-radius: 0 !important;
+}
+
+/* 2px micro-radius for code and form controls */
+code,
+pre,
+kbd,
+input,
+select,
+textarea {
+  border-radius: 2px !important;
+}
+
+/* Primary CTA button: Indigo #2340E8 fill, crisp white text, 45° 8px chamfer */
+.bg-accent {
+  background-color: var(--accent-fill) !important;
+}
+span.bg-accent {
+  background-color: var(--fg-accent) !important;
+}
+span.bg-secondary {
+  background-color: var(--fg-secondary) !important;
+}
+a.bg-accent,
+button.bg-accent,
+.btn-primary {
+  background-color: var(--accent-fill) !important;
+  color: var(--accent-on-fill) !important;
+  border-radius: 0 !important;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+}
+a.bg-accent:hover,
+button.bg-accent:hover,
+.btn-primary:hover {
+  background-color: var(--accent-fill-hover) !important;
+  color: var(--accent-on-fill) !important;
+}
+
+/* Accessible keyboard focus ring */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--fg-accent);
+  outline-offset: 2px;
+}
+
+/* Inline code inside prose/evidence */
+p > code,
+li > code,
+td > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  padding: 0.12rem 0.35rem;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--fg-accent);
 }

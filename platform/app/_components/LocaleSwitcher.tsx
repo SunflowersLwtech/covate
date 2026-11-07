@@ -26,7 +26,7 @@ export function LocaleSwitcher() {
       disabled={pending}
       lang={next}
       aria-label={t("switchLabel")}
-      className="font-mono text-xs transition-colors hover:text-primary disabled:opacity-60"
+      className="h-7 whitespace-nowrap border border-border bg-surface px-2.5 font-mono text-xs text-secondary transition-colors hover:border-accent/60 hover:text-primary disabled:opacity-60"
     >
       {t("other")}
     </button>

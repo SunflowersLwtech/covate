@@ -90,7 +90,7 @@ export default function DeviceSignIn() {
         type="button"
         onClick={begin}
         disabled={status === "starting"}
-        className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-deep transition hover:bg-accent-soft disabled:opacity-60"
+        className="btn-primary mt-8 inline-flex items-center gap-2 bg-accent px-6 py-3 font-mono text-xs font-semibold uppercase tracking-wider transition disabled:opacity-60"
       >
         {status === "starting" ? t("contacting") : t("continue")}
       </button>

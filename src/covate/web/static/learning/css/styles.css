@@ -14,40 +14,40 @@
 :root {
     color-scheme: light;
 
-    /* Colors - Light Theme */
-    --background: 210 28.57% 97.25%;      /* #f6f8fa */
-    --foreground: 211.76 36.17% 9.22%;    /* #0f1720 */
+    /* Colors - Light Theme ("Drafting Paper" Indigo) */
+    --background: 228 33.33% 97.06%;      /* #f5f6fa */
+    --foreground: 225.71 48.84% 8.43%;    /* #0b1020 */
     --card: 0 0% 100%;                    /* #ffffff */
-    --card-foreground: 211.76 36.17% 9.22%;
-    --primary: 162.93 93.55% 24.31%;      /* #047857 */
+    --card-foreground: 225.71 48.84% 8.43%;
+    --primary: 231.17 81.07% 52.35%;      /* #2340e8 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 27.78% 92.94%;       /* #e8edf2 */
-    --secondary-foreground: 211.76 36.17% 9.22%;
-    --muted: 210 23.81% 83.53%;           /* #cbd5df */
-    --muted-foreground: 212 16.3% 36.08%; /* #4d5b6b */
-    --accent: 160 40% 92%;
-    --accent-foreground: 162.93 93.55% 24.31%;
-    --destructive: 0 73.71% 41.76%;       /* #b91c1c */
+    --secondary: 225 33.33% 92.94%;       /* #e6eaf4 */
+    --secondary-foreground: 225.71 48.84% 8.43%;
+    --muted: 222 28% 86%;                 /* #d0d7e8 */
+    --muted-foreground: 224.21 22.35% 33.33%; /* #424c68 */
+    --accent: 231 70% 95%;
+    --accent-foreground: 231.17 81.07% 52.35%; /* #2340e8 */
+    --destructive: 355.41 73.91% 45.1%;   /* #c81e2b */
     --destructive-foreground: 0 0% 100%;
-    --success: 162.93 93.55% 24.31%;
+    --success: 193.38 89.04% 28.63%;      /* #086d8a */
     --success-foreground: 0 0% 100%;
     --warning: 25.96 90.48% 37.06%;       /* #b45309 */
     --warning-foreground: 0 0% 100%;
-    --info: 201.27 96.34% 32.16%;         /* #0369a1 */
-    --border: 211.76 25.37% 86.86%;       /* #d5dde6 */
-    --ring: 162.93 93.55% 24.31%;
-    --radius: 0.75rem;
+    --info: 193.38 89.04% 28.63%;         /* #086d8a */
+    --border: 221.05 26.03% 85.69%;       /* #d0d7e6 */
+    --ring: 231.17 81.07% 52.35%;
+    --radius: 0rem;
 
     /* Chart Colors */
-    --chart-1: 201.27 96.34% 32.16%;      /* blue */
-    --chart-2: 162.93 93.55% 24.31%;      /* green */
+    --chart-1: 193.38 89.04% 27%;         /* signal cyan; 27% keeps .badge.action text ≥4.5:1 on its own 20% tint */
+    --chart-2: 231.17 81.07% 52.35%;      /* indigo */
     --chart-3: 25.96 90.48% 37.06%;       /* amber */
-    --chart-4: 263.39 69.96% 50.39%;      /* violet */
-    --chart-5: 0 73.71% 41.76%;           /* red */
+    --chart-4: 231.17 81.07% 52.35%;      /* indigo */
+    --chart-5: 355.41 73.91% 45.1%;       /* red */
 
     /* Quiz Special */
-    --quiz-bg: 160 35% 95%;
-    --quiz-border: 160 30% 80%;
+    --quiz-bg: 0 0% 100%;
+    --quiz-border: 221.05 26.03% 85.69%;
 
     /* Fonts: the site's stacks. Nothing is fetched, so the page works offline. */
     --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -58,36 +58,36 @@
 .dark {
     color-scheme: dark;
 
-    --background: 216 33.33% 5.88%;       /* deep       #0a0e14 */
-    --foreground: 207.69 35.14% 92.75%;   /* primary    #e6edf3 */
-    --card: 215.29 30.91% 10.78%;         /* surface    #131a24 */
-    --card-foreground: 207.69 35.14% 92.75%;
-    --primary: 158.11 64.37% 51.57%;      /* accent     #34d399 */
-    --primary-foreground: 216 33.33% 5.88%;
-    --secondary: 215.45 23.91% 18.04%;    /* border     #232c39 */
-    --secondary-foreground: 207.69 35.14% 92.75%;
-    --muted: 213.6 21.74% 22.55%;         /*            #2d3846 */
-    --muted-foreground: 211.11 15.43% 65.69%; /* secondary #9aa7b5 */
-    --accent: 175 30% 14%;
-    --accent-foreground: 156.2 71.6% 66.86%; /* accent-soft #6ee7b7 */
-    --destructive: 0 90.6% 70.78%;        /* #f87171 */
-    --destructive-foreground: 216 33.33% 5.88%;
-    --success: 158.11 64.37% 51.57%;
-    --success-foreground: 216 33.33% 5.88%;
+    --background: 227.14 46.67% 5.88%;    /* deep        #080b16 */
+    --foreground: 224 48.39% 93.92%;      /* primary     #e8ecf7 */
+    --card: 225.71 44.68% 9.22%;          /* surface     #0d1222 */
+    --card-foreground: 224 48.39% 93.92%;
+    --primary: 231.17 81.07% 52.35%;      /* accent      #2340e8 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 223.5 39.22% 20%;        /* border      #1f2a47 */
+    --secondary-foreground: 224 48.39% 93.92%;
+    --muted: 223.5 38% 24%;               /*             #263454 */
+    --muted-foreground: 223.33 25.35% 72.16%; /* secondary #a6b0ca */
+    --accent: 231 55% 16%;
+    --accent-foreground: 228 100% 85.29%; /* accent-soft #b4c3ff */
+    --destructive: 355 100% 74%;          /* #ff7a85 */
+    --destructive-foreground: 227.14 46.67% 5.88%;
+    --success: 189.13 77.31% 53.33%;      /* #2cc8e4 */
+    --success-foreground: 227.14 46.67% 5.88%;
     --warning: 43.26 96.41% 56.27%;       /* #fbbf24 */
-    --warning-foreground: 216 33.33% 5.88%;
-    --info: 198.44 93.2% 59.61%;
-    --border: 215.45 23.91% 18.04%;       /* border     #232c39 */
-    --ring: 158.11 64.37% 51.57%;
+    --warning-foreground: 227.14 46.67% 5.88%;
+    --info: 189.13 77.31% 53.33%;
+    --border: 223.5 39.22% 20%;           /* border      #1f2a47 */
+    --ring: 228 100% 85.29%;
 
-    --chart-1: 198.44 93.2% 59.61%;       /* brand-blue #38bdf8 */
-    --chart-2: 158.11 64.37% 51.57%;
+    --chart-1: 189.13 77.31% 53.33%;      /* brand-blue  #2cc8e4 */
+    --chart-2: 228 100% 85.29%;           /* accent-soft #b4c3ff */
     --chart-3: 43.26 96.41% 56.27%;
-    --chart-4: 255.14 91.74% 76.27%;      /* #a78bfa */
-    --chart-5: 0 90.6% 70.78%;
+    --chart-4: 228.95 100% 77.65%;        /* #8da2ff */
+    --chart-5: 355 100% 74%;
 
-    --quiz-bg: 175 30% 10%;
-    --quiz-border: 175 25% 22%;
+    --quiz-bg: 225.71 44.68% 9.22%;
+    --quiz-border: 223.5 39.22% 20%;
 }
 
 /* ==================== Base Styles ==================== */
@@ -167,7 +167,7 @@ svg {
     background: hsl(var(--foreground));
     color: hsl(var(--background));
     font-size: 11px;
-    border-radius: 4px;
+    border-radius: 2px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
@@ -201,7 +201,7 @@ svg {
 .sidecar-header .logo svg {
     width: 20px;
     height: 20px;
-    color: hsl(var(--primary));
+    color: hsl(var(--accent-foreground));
 }
 
 .sidecar-header .logo span {
@@ -224,9 +224,13 @@ svg {
     align-items: center;
     gap: 6px;
     padding: 4px 12px;
-    border-radius: 9999px;
-    font-size: 12px;
+    border-radius: 0;
+    border: 1px solid hsl(var(--border));
+    font-family: var(--font-mono);
+    font-size: 11px;
     font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     background: hsl(var(--secondary) / 0.5);
 }
 
@@ -254,7 +258,7 @@ svg {
 .connection-indicator {
     width: 8px;
     height: 8px;
-    border-radius: 50%;
+    border-radius: 0;
     background: hsl(var(--chart-2));
 }
 
@@ -286,8 +290,8 @@ svg {
     justify-content: center;
     width: 32px;
     height: 32px;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0;
     background: transparent;
     color: hsl(var(--muted-foreground));
     cursor: pointer;
@@ -313,8 +317,9 @@ svg {
     appearance: none;
     background: hsl(var(--secondary) / 0.5);
     border: 1px solid hsl(var(--border));
-    border-radius: 6px;
+    border-radius: 2px;
     padding: 4px 24px 4px 8px;
+    font-family: var(--font-mono);
     font-size: 12px;
     color: hsl(var(--foreground));
     cursor: pointer;
@@ -358,7 +363,7 @@ svg {
 
 /* ==================== Card Base ==================== */
 .card {
-    border-radius: 12px;
+    border-radius: 0;
     border: 1px solid hsl(var(--border));
     background: hsl(var(--card));
     overflow: hidden;
@@ -366,7 +371,7 @@ svg {
 }
 
 .card:hover {
-    border-color: hsl(var(--primary) / 0.3);
+    border-color: hsl(var(--accent-foreground) / 0.45);
 }
 
 .card-header {
@@ -443,8 +448,9 @@ svg {
     align-items: center;
     gap: 4px;
     padding: 4px 10px;
-    border-radius: 9999px;
-    font-size: 12px;
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
     font-weight: 500;
     border: 1px solid;
 }
@@ -479,7 +485,7 @@ svg {
     font-size: 11px;
     padding: 2px 6px;
     background: hsl(var(--secondary) / 0.5);
-    border-radius: 4px;
+    border-radius: 2px;
     cursor: pointer;
 }
 
@@ -496,7 +502,7 @@ svg {
     top: 10px;
     bottom: 10px;
     width: 2px;
-    border-radius: 9999px;
+    border-radius: 0;
     background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--chart-1)) 100%);
 }
 
@@ -515,7 +521,7 @@ svg {
     top: 2px;
     width: 20px;
     height: 20px;
-    border-radius: 50%;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -530,8 +536,8 @@ svg {
 
 .timeline-dot.goal {
     background: hsl(var(--primary) / 0.2);
-    border-color: hsl(var(--primary));
-    color: hsl(var(--primary));
+    border-color: hsl(var(--accent-foreground));
+    color: hsl(var(--accent-foreground));
 }
 
 .timeline-dot.trigger {
@@ -562,7 +568,7 @@ svg {
 }
 
 .timeline-label.goal {
-    color: hsl(var(--primary));
+    color: hsl(var(--accent-foreground));
 }
 
 .timeline-label.trigger {
@@ -586,7 +592,7 @@ svg {
     font-family: var(--font-mono);
     background: hsl(var(--secondary) / 0.5);
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: 2px;
     display: inline-block;
     margin-top: 4px;
 }
@@ -692,20 +698,20 @@ svg {
     gap: 12px;
     padding: 12px 16px;
     border: 1px solid hsl(var(--border));
-    border-radius: 8px;
+    border-radius: 0;
     background: hsl(var(--secondary) / 0.3);
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .quiz-option:hover:not(.disabled) {
-    border-color: hsl(var(--primary) / 0.3);
+    border-color: hsl(var(--accent-foreground) / 0.5);
     background: hsl(var(--secondary) / 0.5);
 }
 
 .quiz-option.selected {
-    border-color: hsl(var(--primary));
-    background: hsl(var(--primary) / 0.1);
+    border-color: hsl(var(--accent-foreground));
+    background: hsl(var(--primary) / 0.14);
 }
 
 .quiz-option.correct {
@@ -769,7 +775,7 @@ svg {
 .quiz-feedback {
     margin-top: 16px;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 0;
     border: 1px solid;
     animation: fadeSlideIn 0.3s ease-out;
 }
@@ -876,14 +882,14 @@ svg {
 .progress-bar {
     height: 6px;
     background: hsl(var(--secondary));
-    border-radius: 9999px;
+    border-radius: 0;
     overflow: hidden;
 }
 
 .progress-bar-fill {
     height: 100%;
     background: hsl(var(--primary));
-    border-radius: 9999px;
+    border-radius: 0;
     transition: width 0.5s ease-out;
 }
 
@@ -906,8 +912,8 @@ svg {
     padding: 12px 24px;
     font-size: 14px;
     font-weight: 600;
-    border: none;
-    border-radius: 8px;
+    border: 1px solid transparent;
+    border-radius: 0;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -915,6 +921,7 @@ svg {
 .btn-primary {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -931,6 +938,7 @@ svg {
 
 .btn-secondary {
     background: hsl(var(--secondary));
+    border-color: hsl(var(--border));
     color: hsl(var(--secondary-foreground));
 }
 
@@ -967,7 +975,7 @@ svg {
 
 .toast {
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1051,7 +1059,7 @@ svg {
     color: hsl(var(--muted-foreground));
     background: hsl(var(--card));
     padding: 8px 12px;
-    border-radius: 6px;
+    border-radius: 0;
     border: 1px solid hsl(var(--border));
     opacity: 0.7;
 }
@@ -1059,7 +1067,7 @@ svg {
 .shortcuts-hint kbd {
     padding: 2px 6px;
     background: hsl(var(--secondary));
-    border-radius: 3px;
+    border-radius: 2px;
     font-family: var(--font-mono);
     font-size: 10px;
 }
@@ -1103,7 +1111,7 @@ svg {
             hsl(var(--secondary) / 0.4) 75%);
     background-size: 200% 100%;
     animation: skeleton-shimmer 1.5s infinite linear;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
 @keyframes skeleton-shimmer {
@@ -1128,13 +1136,13 @@ svg {
 .skeleton-badge {
     height: 24px;
     width: 80px;
-    border-radius: 9999px;
+    border-radius: 0;
 }
 
 .skeleton-button {
     height: 44px;
     width: 140px;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 /* ==================== Glassmorphism Effects ==================== */
@@ -1457,7 +1465,7 @@ svg {
 .term-card {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
-    border-radius: 12px;
+    border-radius: 0;
     padding: 16px;
     transition: all 0.2s ease;
     position: relative;
@@ -1502,14 +1510,15 @@ svg {
 }
 
 .term-domain {
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 2px 8px;
-    border-radius: 9999px;
+    border-radius: 0;
     background: hsl(var(--primary) / 0.15);
-    color: hsl(var(--primary));
+    color: hsl(var(--accent-foreground));
 }
 
 .term-definition {
@@ -1530,7 +1539,7 @@ svg {
     font-size: 11px;
     font-weight: 500;
     padding: 2px 8px;
-    border-radius: 9999px;
+    border-radius: 0;
     background: hsl(var(--chart-4) / 0.2);
     color: hsl(var(--chart-4));
 }

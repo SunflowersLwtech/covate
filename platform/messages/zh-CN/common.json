@@ -12,6 +12,9 @@
     "switchLabel": "切换语言",
     "other": "English"
   },
+  "theme": {
+    "switchLabel": "切换主题"
+  },
   "footer": {
     "tagline": " — DUOCODE TECHNOLOGY 出品",
     "learn": "学习",

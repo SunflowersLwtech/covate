@@ -91,7 +91,7 @@ export default function SyncToken() {
               type="button"
               onClick={() => call("POST")}
               disabled={busy !== null}
-              className="rounded-lg bg-accent px-4 py-2 font-mono text-xs font-semibold text-deep transition hover:bg-accent-soft disabled:opacity-60"
+              className="btn-primary bg-accent px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider transition disabled:opacity-60"
             >
               {busy === "rotate" ? t("rotating") : t("rotateYes")}
             </button>

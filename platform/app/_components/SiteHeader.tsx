@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { GITHUB, SITE } from "../lib/site";
 import { HeaderMenu } from "./HeaderMenu";
 import { LocaleSwitcher } from "./LocaleSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
 // The one site header. Every page used to inline its own copy of this markup
 // (22 copies, six slightly different nav lists); the presets below are the three
@@ -39,8 +40,8 @@ export const NAV = {
 
 export const SIGN_OUT: NavItem = { key: "signOut", href: "/api/auth/logout" };
 
-const INLINE = "hidden sm:inline";
-const MENU_ITEM = "block whitespace-nowrap px-4 py-2.5 transition-colors hover:bg-deep";
+const INLINE = "hidden whitespace-nowrap font-mono text-xs tracking-wide sm:inline";
+const MENU_ITEM = "block whitespace-nowrap px-4 py-2.5 font-mono text-xs transition-colors hover:bg-deep";
 
 function NavLink({ item, className, label }: { item: NavItem; className: string; label: string }) {
   return item.external ? (
@@ -80,40 +81,43 @@ export async function SiteHeader({
   const t = await getTranslations("common.nav");
   const shell =
     width === "5xl"
-      ? "mx-auto flex max-w-5xl items-center justify-between px-6 py-5"
-      : "mx-auto flex max-w-6xl items-center justify-between px-6 py-5";
+      ? "mx-auto flex max-w-5xl items-center justify-between px-6 py-4"
+      : "mx-auto flex max-w-6xl items-center justify-between px-6 py-4";
   return (
-    <header className={shell}>
-      {logoLink ? (
-        <a href={SITE} className={LOGO_CLASS}>
-          <Logo />
-        </a>
-      ) : (
-        <span className={LOGO_CLASS}>
-          <Logo />
-        </span>
-      )}
-      <nav className="flex items-center gap-6 text-sm text-secondary">
-        {items.map((it) => (
-          <NavLink
-            key={it.key}
-            item={it}
-            label={t(it.key)}
-            className={`${INLINE} ${it.current ? "text-primary transition-colors" : "transition-colors hover:text-primary"}`}
-          />
-        ))}
-        <LocaleSwitcher />
-        <HeaderMenu label={t("menu")}>
+    <div className="border-b border-border bg-deep">
+      <header className={shell}>
+        {logoLink ? (
+          <a href={SITE} className={LOGO_CLASS}>
+            <Logo />
+          </a>
+        ) : (
+          <span className={LOGO_CLASS}>
+            <Logo />
+          </span>
+        )}
+        <nav className="flex items-center gap-3 text-sm text-secondary sm:gap-5">
           {items.map((it) => (
             <NavLink
               key={it.key}
               item={it}
               label={t(it.key)}
-              className={`${MENU_ITEM} ${it.current ? "text-primary" : "hover:text-primary"}`}
+              className={`${INLINE} ${it.current ? "text-accent font-medium transition-colors" : "transition-colors hover:text-primary"}`}
             />
           ))}
-        </HeaderMenu>
-      </nav>
-    </header>
+          <ThemeToggle />
+          <LocaleSwitcher />
+          <HeaderMenu label={t("menu")}>
+            {items.map((it) => (
+              <NavLink
+                key={it.key}
+                item={it}
+                label={t(it.key)}
+                className={`${MENU_ITEM} ${it.current ? "text-accent font-medium" : "hover:text-primary"}`}
+              />
+            ))}
+          </HeaderMenu>
+        </nav>
+      </header>
+    </div>
   );
 }

@@ -9,12 +9,13 @@ export const alt = "Covate — turn AI-assisted coding into real understanding";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const BG = "#0a0e14";
-const PANEL = "#131a24";
-const RULE = "#232c39";
-const INK = "#e6edf3";
-const MUTED = "#9aa7b5";
-const ACCENT = "#34d399";
+const BG = "#080b16";
+const PANEL = "#0d1222";
+const RULE = "#1f2a47";
+const INK = "#e8ecf7";
+const MUTED = "#a6b0ca";
+const ACCENT = "#2340e8";
+const ACCENT_TEXT = "#8da2ff";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -36,7 +37,7 @@ export default function OpengraphImage() {
             style={{
               width: 18,
               height: 18,
-              borderRadius: 4,
+              borderRadius: 0,
               background: ACCENT,
               display: "flex",
             }}
@@ -96,10 +97,10 @@ export default function OpengraphImage() {
             style={{
               display: "flex",
               fontSize: 22,
-              color: ACCENT,
+              color: ACCENT_TEXT,
               background: PANEL,
               border: `1px solid ${RULE}`,
-              borderRadius: 6,
+              borderRadius: 0,
               padding: "8px 16px",
             }}
           >

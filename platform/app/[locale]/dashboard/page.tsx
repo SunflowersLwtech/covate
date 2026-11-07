@@ -87,7 +87,7 @@ async function SignIn({ configured, error }: { configured: boolean; error?: stri
           webConfigured ? (
             <a
               href="/api/auth/github"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-deep transition hover:bg-accent-soft"
+              className="btn-primary mt-8 inline-flex items-center gap-2 bg-accent px-6 py-3 font-mono text-xs font-semibold uppercase tracking-wider transition"
             >
               {t("signIn.continue")}
             </a>
