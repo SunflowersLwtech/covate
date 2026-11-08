@@ -4,7 +4,8 @@
     "description": "Covate 会就你自己的代码变更向你提问，让你在用 AI 构建的同时真正学到东西。MCP 工具免费且开源（MIT）；用 GitHub 登录后，你的学习会话会同步进一份学习台账，可以回看每一次测验、你的正确率，以及你反复答错的主题。完全免费——没有任何需要购买的东西。",
     "ogDescription": "从每一次变更中学习。一个免费开源的 MCP 会就你自己的 diff 向你提问；用 GitHub 登录后，每次会话都会同步进一份可回看的免费学习台账。",
     "twitterTitle": "Covate — 从每一次代码变更中学习",
-    "twitterDescription": "免费开源的 MCP，就你自己的代码变更向你提问，外加一份免费的学习台账——用 GitHub 登录，回看每一次同步的会话。"
+    "twitterDescription": "免费开源的 MCP，就你自己的代码变更向你提问，外加一份免费的学习台账——用 GitHub 登录，回看每一次同步的会话。",
+    "ogImageAlt": "深蓝底色上青绿渐变的 Covate 站名，下方是英文标语“Turn AI-assisted coding into real understanding.”和网址 covate.org。"
   },
   "hero": {
     "eyebrow": "开源 MCP · 免费学习台账",

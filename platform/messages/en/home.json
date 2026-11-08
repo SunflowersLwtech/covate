@@ -4,7 +4,8 @@
     "description": "Covate quizzes you on your own code changes so you actually learn while you build with AI. The MCP tool is free and open-source (MIT); sign in with GitHub and your sessions sync into a learning ledger where you can review every quiz, your accuracy, and the topics you keep getting wrong. Free — there is nothing to buy.",
     "ogDescription": "Learn from every change. A free, open-source MCP quizzes you on your own diffs; sign in with GitHub and every session syncs into a free learning ledger you can review.",
     "twitterTitle": "Covate — learn from every code change",
-    "twitterDescription": "Free open-source MCP that quizzes you on your own code changes, plus a free learning ledger — sign in with GitHub and review every synced session."
+    "twitterDescription": "Free open-source MCP that quizzes you on your own code changes, plus a free learning ledger — sign in with GitHub and review every synced session.",
+    "ogImageAlt": "The word Covate in a green-to-blue gradient on a deep navy background, with the line “Turn AI-assisted coding into real understanding.” and the address covate.org."
   },
   "hero": {
     "eyebrow": "Open-source MCP · free learning ledger",

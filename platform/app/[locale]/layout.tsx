@@ -49,8 +49,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description: t("ogDescription"),
       // A rendered card (public/media/og.jpg), not app/opengraph-image.tsx: one
       // source for every share, and a file the design can be looked at without
-      // building the app.
-      images: [{ url: "/media/og.jpg", width: 1200, height: 630, alt: t("title") }],
+      // building the app. The card carries the wordmark, the tagline and the
+      // domain, so the alt describes those rather than repeating the page title.
+      images: [{ url: "/media/og.jpg", width: 1200, height: 630, alt: t("ogImageAlt") }],
     },
     twitter: {
       card: "summary_large_image",
