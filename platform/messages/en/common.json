@@ -25,7 +25,8 @@
   },
   "breadcrumb": {
     "home": "Covate",
-    "learningCenter": "Learning Center"
+    "learningCenter": "Learning Center",
+    "back": "← Learning Center"
   },
   "back": {
     "learningCenter": "← Back to the Learning Center"
