@@ -61,8 +61,12 @@ html[data-theme="light"] {
   --fg-primary: #0b1020;
   --fg-secondary: #424c68;
   --fg-dim: #55607d;
-  --fg-accent: #0a7290;
-  --fg-accent-hover: #08617a;
+  /* Accent *text* only. #0a7290 was measured at 4.07:1 on the hero's aurora
+     (the palest-blue spot on the page) — under the 4.5 an 11px label needs.
+     Same hue, one step darker: 5.20:1 there and ≥5.2:1 on white. The fill
+     tokens below are backgrounds with dark text on them and are unchanged. */
+  --fg-accent: #086178;
+  --fg-accent-hover: #06556a;
   --accent-fill: #0a7290;
   --accent-fill-hover: #08617a;
   --accent-on-fill: #0b1020;
@@ -223,6 +227,66 @@ body {
     radial-gradient(440px 260px at 58% 28%, rgba(176, 240, 216, 0.05), transparent 70%);
   z-index: -1;
   pointer-events: none;
+}
+
+/* Hero media: the brand's light lines, behind the hero copy.
+   The still is the layer that always exists (server-rendered); the loop is a
+   <video> the browser adds after it has read prefers-reduced-motion and the
+   viewport, so nothing else is ever asked for. The scrim keeps the copy on the
+   deep background rather than on the brightest part of the lines — in the light
+   theme it is a light wash, so the dark text keeps its contrast there too. */
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-image: url("/media/poster.webp");
+  background-position: center;
+  background-size: cover;
+}
+.hero-media img,
+.hero-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-media video {
+  opacity: 0;
+  /* Halved before the scrim: the brightest line still has to leave the copy
+     above 4.5:1, and a line at full brightness does not. */
+  filter: brightness(0.5);
+  animation: hero-media-in 900ms ease-out 150ms forwards;
+}
+.hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 22, 0.62) 0%,
+    rgba(8, 11, 22, 0.78) 55%,
+    var(--bg-deep) 100%
+  );
+}
+/* The loop is near-black by design; under the light theme the wash needed to
+   keep dark text above 4.5:1 would have to be ~97% opaque, which is the same as
+   not showing it. The light theme keeps the clean hero it had. */
+html[data-theme="light"] .hero-media {
+  display: none;
+}
+@keyframes hero-media-in {
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-media video {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 /* Blueprint coordinate grid backdrop */

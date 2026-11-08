@@ -1,6 +1,8 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { GITHUB, SITE } from "../lib/site";
 import { Evidence } from "../_geo/Evidence";
+import { HeroMedia } from "../_components/HeroMedia";
+import { SectionFigure } from "../_components/SectionFigure";
 import { SignInCta } from "../_components/SignInCta";
 import { NAV, SiteHeader } from "../_components/SiteHeader";
 import { SiteFooter } from "../_components/SiteFooter";
@@ -63,6 +65,7 @@ export default async function Home() {
       <main>
         {/* Hero */}
         <section className="hero-aurora bg-grid border-b border-border">
+          <HeroMedia />
           <div className="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-16 text-center sm:pt-24">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
               {t("hero.eyebrow")}
@@ -117,6 +120,7 @@ export default async function Home() {
             <p className="mt-4 max-w-2xl text-base leading-8 text-secondary">
               {t("whatsHere.body")}
             </p>
+            <SectionFigure src="/media/still-1.webp" className="mt-10" />
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               <div className="rounded-xl border border-border bg-surface/50 p-7">
                 <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-secondary">{t("whatsHere.mcp.eyebrow")}</p>

@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { GITHUB, SITE } from "../../lib/site";
 import { ARTICLES } from "../../lib/articles";
 import { Evidence } from "../../_geo/Evidence";
+import { SectionFigure } from "../../_components/SectionFigure";
 import { SignInCta } from "../../_components/SignInCta";
 import { NAV, SiteHeader } from "../../_components/SiteHeader";
 import { SiteFooter } from "../../_components/SiteFooter";
@@ -121,6 +122,7 @@ export default async function LearnHub() {
               <h2 className="text-2xl font-semibold text-primary sm:text-3xl">{t("guides")}</h2>
               <span className="font-mono text-xs text-dim">{t("count", { count: ARTICLES.length })}</span>
             </div>
+            <SectionFigure src="/media/still-2.webp" className="mt-10" />
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               {articles.map((a) => (
                 <a
