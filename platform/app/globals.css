@@ -289,6 +289,54 @@ html[data-theme="light"] .hero-media {
   }
 }
 
+/* Pause/play for the hero loop (WCAG 2.2.2: anything that moves on its own for
+   more than five seconds needs a way to stop it). Icon-only, because the icon is
+   the whole message; the words live in the accessible name. It sits above the
+   copy layer (z-10) so it stays clickable, and is dark-on-glass so it reads the
+   same on the pale and the dark part of the loop. */
+.hero-media-toggle {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(232, 236, 247, 0.28);
+  border-radius: 9999px;
+  background: rgba(8, 11, 22, 0.55);
+  color: rgba(232, 236, 247, 0.92);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.hero-media-toggle:hover {
+  border-color: rgba(232, 236, 247, 0.55);
+  background: rgba(8, 11, 22, 0.78);
+  color: #fff;
+}
+.hero-media-toggle svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+@media (min-width: 768px) {
+  .hero-media-toggle {
+    right: 24px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+  }
+}
+/* The hero layer is hidden in the light theme, so its control goes with it. */
+html[data-theme="light"] .hero-media-toggle {
+  display: none;
+}
+
 /* Blueprint coordinate grid backdrop */
 .bg-grid {
   background-image:

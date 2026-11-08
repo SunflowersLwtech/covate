@@ -11,7 +11,9 @@
     "eyebrow": "Open-source MCP · free learning ledger",
     "title": "Turn AI-assisted coding into <brand>real understanding</brand>.",
     "body": "When AI writes most of your code, it’s easy to ship things you don’t actually understand. Covate quizzes you on your own changes so you learn while you build — then, if you sign in with GitHub, syncs every session into a learning ledger you can read back. It is free; there is nothing to buy.",
-    "fineprint": "MIT-licensed MCP · free learning ledger · no paid tier"
+    "fineprint": "MIT-licensed MCP · free learning ledger · no paid tier",
+    "pauseVideo": "Pause background video",
+    "playVideo": "Play background video"
   },
   "problem": {
     "title": "“It works… but could you explain it?”",

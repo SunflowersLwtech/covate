@@ -65,7 +65,7 @@ export default async function Home() {
       <main>
         {/* Hero */}
         <section className="hero-aurora bg-grid border-b border-border">
-          <HeroMedia />
+          <HeroMedia pauseLabel={t("hero.pauseVideo")} playLabel={t("hero.playVideo")} />
           <div className="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-16 text-center sm:pt-24">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
               {t("hero.eyebrow")}
