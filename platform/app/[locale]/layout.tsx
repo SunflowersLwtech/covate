@@ -47,15 +47,17 @@ export async function generateMetadata(): Promise<Metadata> {
       url: SITE,
       title: t("title"),
       description: t("ogDescription"),
-      // app/opengraph-image.tsx sits above this root layout, so the file convention no
-      // longer attaches it by itself; point at the route explicitly.
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: t("title") }],
+      // A rendered card (public/media/og.jpg), not app/opengraph-image.tsx: one
+      // source for every share, and a file the design can be looked at without
+      // building the app. The card carries the wordmark, the tagline and the
+      // domain, so the alt describes those rather than repeating the page title.
+      images: [{ url: "/media/og.jpg", width: 1200, height: 630, alt: t("ogImageAlt") }],
     },
     twitter: {
       card: "summary_large_image",
       title: t("twitterTitle"),
       description: t("twitterDescription"),
-      images: ["/opengraph-image"],
+      images: ["/media/og.jpg"],
     },
     robots: { index: true, follow: true },
   };

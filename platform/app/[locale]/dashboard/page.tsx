@@ -6,6 +6,7 @@ import DeviceSignIn from "./DeviceSignIn";
 import SyncToken from "./SyncToken";
 import { db } from "../../lib/db";
 import { GITHUB } from "../../lib/site";
+import { SectionFigure } from "../../_components/SectionFigure";
 import { NAV, SIGN_OUT, SiteHeader } from "../../_components/SiteHeader";
 
 export const dynamic = "force-dynamic";
@@ -167,6 +168,8 @@ export default async function DashboardPage({
         <Stat label={t("stats.correct")} value={String(totalC)} />
         <Stat label={t("stats.accuracy")} value={`${accuracy}%`} />
       </div>
+
+      <SectionFigure src="/media/still-3.webp" className="mt-8" />
 
       {/* Weak topics */}
       <section className="mt-10">
