@@ -16,7 +16,8 @@
  *
  * A build without NEXT_PUBLIC_ACS_FEEDBACK_WIDGET_KEY renders nothing at all.
  */
-export const ACS_FEEDBACK_WIDGET_SRC = "https://agenticcs.net/feedback/widget.js";
+// Agentic CS's Cloudflare mirror of the file: Vercel's DDoS challenge on agenticcs.net cannot hide it.
+export const ACS_FEEDBACK_WIDGET_SRC = "https://widget.agenticcs.net/feedback/widget.js";
 
 export function FeedbackWidget() {
   const widgetKey = process.env.NEXT_PUBLIC_ACS_FEEDBACK_WIDGET_KEY?.trim();
