@@ -49,7 +49,10 @@ export function HeaderMenu({ label, children }: { label: string; children: React
           <path d="M5 5l10 10M15 5L5 15" className="hidden group-open:block" />
         </svg>
       </summary>
-      <div className="absolute right-0 top-full z-50 mt-2 flex min-w-44 flex-col border border-border bg-surface py-1.5 shadow-xl shadow-black/40">
+      {/* Hidden until open: a closed <details> still gives its links a box (Chromium and
+          WebKit both), so tools — the UI/UX audit among them — read an unlabelled "Learn"
+          link in the header that did nothing when tapped. */}
+      <div className="absolute right-0 top-full z-50 mt-2 hidden min-w-44 flex-col group-open:flex border border-border bg-surface py-1.5 shadow-xl shadow-black/40">
         {children}
       </div>
     </details>

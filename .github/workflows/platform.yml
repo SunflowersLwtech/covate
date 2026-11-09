@@ -3,7 +3,8 @@ name: Platform
 # The Next.js site in platform/. Not a deploy: covate.org ships by `vercel deploy
 # --prebuilt` from a local build. This is the gate that build has to pass anyway —
 # locale parity, the CJK hardcode red line, key resolution, typecheck, build,
-# the rendered-language gate, and the header on phone widths in Chromium and WebKit.
+# the rendered-language gate, and the header and the way back from an article on phone
+# widths in Chromium and WebKit.
 on:
   push:
     branches: [main]
@@ -50,3 +51,5 @@ jobs:
         run: npx playwright install --with-deps chromium webkit
       - name: Phone-width header (one row, no wrapped links, every link reachable)
         run: npm run test:header
+      - name: The way back from an article (a labelled 44px link to /learn on phones)
+        run: npm run test:article-back

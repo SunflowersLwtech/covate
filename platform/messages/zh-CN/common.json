@@ -25,7 +25,8 @@
   },
   "breadcrumb": {
     "home": "Covate",
-    "learningCenter": "学习中心"
+    "learningCenter": "学习中心",
+    "back": "← 学习中心"
   },
   "back": {
     "learningCenter": "← 返回学习中心"
