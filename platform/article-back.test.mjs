@@ -71,12 +71,20 @@ function inspectArticle() {
     .filter(shown)
     .map((a) => {
       const b = a.getBoundingClientRect();
+      // A 44px box is only a 44px target if a tap lands on the link at every
+      // height — a later element can paint over part of it (negative margins,
+      // overlapping headers). Probe the bottom edge at three columns; the link
+      // (or a child) must be topmost at each.
+      const hits = [b.left + 8, b.left + b.width / 2, b.right - 8]
+        .map((x) => document.elementFromPoint(x, Math.min(b.bottom - 2, innerHeight - 1)))
+        .filter((el) => el === a || a.contains(el)).length;
       return {
         text: a.innerText.replace(/\s+/g, " ").trim(),
         top: b.top + scrollY,
         height: b.height,
         inHeader: !!a.closest("header"),
         aboveTitle: h1 ? b.bottom <= h1.getBoundingClientRect().top + 1 : false,
+        bottomHits: hits,
       };
     });
   const unlabelled = [...document.querySelectorAll("header a[href]")]
@@ -124,6 +132,7 @@ for (const [name, engine] of Object.entries(ENGINES)) {
             const [back] = top;
             if (back.text !== LABEL[locale]) problems.push(`${where}: the way back reads ${JSON.stringify(back.text)}, want ${JSON.stringify(LABEL[locale])}`);
             if (back.height < 44) problems.push(`${where}: the way back is ${back.height}px tall, want >= 44`);
+            if (back.bottomHits < 3) problems.push(`${where}: the way back is covered near its bottom edge (${back.bottomHits}/3 hit-tests land on the link)`);
             if (back.text !== LABEL[locale]) continue; // nothing labelled to tap
             await page.getByRole("link", { name: LABEL[locale], exact: true }).tap({ timeout: 5_000 });
             await page.waitForURL((u) => u.pathname.replace(/\/+$/, "") === "/learn", { timeout: 10_000 }).catch(() => {});

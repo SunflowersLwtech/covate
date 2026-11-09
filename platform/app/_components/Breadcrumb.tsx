@@ -9,6 +9,8 @@ import { SITE } from "../lib/site";
 // own "Learn" is folded into the menu there, and the two 14px crumbs were too small to hit.
 // The link's box is 44px tall; the negative margin keeps the article where it was. Same
 // look as the "← Back to the Learning Center" line that closes the article.
+// `relative` because -my-3.5 also pulls the article's <header> up over the link's lower
+// edge: without a stacking position the later-in-DOM header takes those taps.
 export async function Breadcrumb({ link = false, current }: { link?: boolean; current?: string }) {
   const t = await getTranslations("common.breadcrumb");
   const back = link && !current;
@@ -17,7 +19,7 @@ export async function Breadcrumb({ link = false, current }: { link?: boolean; cu
       {back ? (
         <a
           href="/learn"
-          className="-my-3.5 flex min-h-11 w-fit items-center font-mono text-xs text-dim transition-colors hover:text-secondary sm:hidden"
+          className="relative -my-3.5 flex min-h-11 w-fit items-center font-mono text-xs text-dim transition-colors hover:text-secondary sm:hidden"
         >
           {t("back")}
         </a>
