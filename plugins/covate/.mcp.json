@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "covate": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/SunflowersLwtech/covate@22f0adbffdc0d96f51cead4161d00847aba9ad9d", "covate"]
+    }
+  }
+}

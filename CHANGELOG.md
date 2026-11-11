@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- The Claude Code plugin moved to `plugins/covate`, ready for Anthropic's plugin directory: the marketplace entry points there, the server and the review commands run one pinned commit of this repository with uvx instead of the plugin folder itself, the commands no longer pre-approve the shell, and the folder carries its own README (what runs, what is stored, what is sent), license and icon. `/plugin install covate@covate` is unchanged.
+
 ## [1.2.0] - 2026-10-27
 
 ### Added

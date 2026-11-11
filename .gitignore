@@ -91,6 +91,8 @@ node_modules/
 
 # MCP config (contains absolute paths)
 .mcp.json
+# ...except the plugin's, which has none
+!plugins/covate/.mcp.json
 
 # Development files (not for distribution)
 dev/

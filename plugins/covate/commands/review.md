@@ -2,7 +2,6 @@
 description: Make a review quiz page from what is due and what you just learned
 argument-hint: "[topic or concept to include]"
 allowed-tools:
-  - Bash
   - Read
 ---
 
