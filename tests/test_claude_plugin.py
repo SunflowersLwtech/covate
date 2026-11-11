@@ -148,6 +148,9 @@ def test_the_plugin_folder_has_what_the_directory_requires():
     assert len(prose.split()) >= 40
     assert (PLUGIN_DIR / "LICENSE").read_text(encoding="utf-8") == (ROOT / "LICENSE").read_text(encoding="utf-8")
     assert PLUGIN["license"] == "MIT"
+    # Without these the directory takes links from the README's prose, trailing full stop included.
+    for key in ("privacyPolicyUrl", "termsOfServiceUrl", "supportUrl", "documentationUrl"):
+        assert re.fullmatch(r"https://[^\s]+[^.\s]", PLUGIN[key]), key
     png = (PLUGIN_DIR / ".claude-plugin" / "icon.png").read_bytes()
     assert png[:8] == b"\x89PNG\r\n\x1a\n"
     width, height = struct.unpack(">II", png[16:24])

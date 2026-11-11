@@ -5,8 +5,10 @@ quiz you on the change just made, remember how past bugs were fixed, and explain
 context of your project. Concepts you have met come back for spaced review after 1, 7 and 30
 days, and only your first answer to a question counts.
 
-The source, documentation and issue tracker are at https://github.com/SunflowersLwtech/covate.
-The project site is https://covate.org.
+- Source, documentation and issues: <https://github.com/SunflowersLwtech/covate>
+- Project site: <https://covate.org>
+- Privacy policy: <https://covate.org/privacy> (it covers the covate.org ledger; this README
+  covers what the plugin does on your computer)
 
 ## What this plugin adds
 

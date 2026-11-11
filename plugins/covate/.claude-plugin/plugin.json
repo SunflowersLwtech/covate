@@ -10,6 +10,10 @@
   "homepage": "https://covate.org",
   "repository": "https://github.com/SunflowersLwtech/covate",
   "license": "MIT",
+  "privacyPolicyUrl": "https://covate.org/privacy",
+  "termsOfServiceUrl": "https://covate.org/terms",
+  "supportUrl": "https://github.com/SunflowersLwtech/covate/issues",
+  "documentationUrl": "https://github.com/SunflowersLwtech/covate/tree/main/plugins/covate",
   "keywords": ["mcp", "learning", "quiz", "spaced-repetition", "review"],
   "mcpServers": "./.mcp.json"
 }
