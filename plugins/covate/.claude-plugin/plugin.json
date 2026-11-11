@@ -2,7 +2,7 @@
   "name": "covate",
   "displayName": "Covate",
   "version": "1.2.0",
-  "description": "Learn while your AI assistant codes: quizzes on the changes it makes, a memory of past debugging, term explanations, and spaced review (1, 7, then 30 days) scored on first answers.",
+  "description": "Spaced review of what you learned while your AI assistant codes: quiz pages built from what is due (after 1, 7, then 30 days) and what you just met, scored on your first answers.",
   "author": {
     "name": "SunflowersLwtech",
     "url": "https://github.com/SunflowersLwtech"
@@ -14,6 +14,10 @@
   "termsOfServiceUrl": "https://covate.org/terms",
   "supportUrl": "https://github.com/SunflowersLwtech/covate/issues",
   "documentationUrl": "https://github.com/SunflowersLwtech/covate/tree/main/plugins/covate",
-  "keywords": ["mcp", "learning", "quiz", "spaced-repetition", "review"],
-  "mcpServers": "./.mcp.json"
+  "keywords": [
+    "learning",
+    "quiz",
+    "spaced-repetition",
+    "review"
+  ]
 }

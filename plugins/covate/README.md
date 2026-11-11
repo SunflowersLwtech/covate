@@ -1,9 +1,9 @@
-# Covate for Claude Code
+# Covate review for Claude Code
 
-Covate helps you learn from the code your AI assistant writes for you. While you work, it can
-quiz you on the change just made, remember how past bugs were fixed, and explain terms in the
-context of your project. Concepts you have met come back for spaced review after 1, 7 and 30
-days, and only your first answer to a question counts.
+Covate helps you learn from the code your AI assistant writes for you. This plugin brings its
+spaced review: concepts you met while working (a decision, a bug cause, a rule worth
+remembering) come back as short quizzes after 1, 7 and 30 days, and only your first answer to a
+question counts.
 
 - Source, documentation and issues: <https://github.com/SunflowersLwtech/covate>
 - Project site: <https://covate.org>
@@ -12,11 +12,13 @@ days, and only your first answer to a question counts.
 
 ## What this plugin adds
 
-- **The Covate MCP server.** Tools for learning sessions (quizzes on a change, with a local web
-  page to answer them), a debugging memory, and term explanations.
 - **The `covate-review` skill and two commands.** `/covate:review` makes a review quiz page from
   what is due and what you just learned; `/covate:review-record <page>` scores the answers into
-  your review ledger.
+  your review ledger and shows where things stand.
+
+The plugin starts no server and installs no hooks. The rest of Covate (quizzes on each change,
+a debugging memory, term explanations) is the Covate MCP server, which you add separately if you
+want it: `/plugin install covate-mcp@covate` from the same marketplace, or see the main README.
 
 ## Install
 
@@ -26,30 +28,24 @@ days, and only your first answer to a question counts.
 ```
 
 You need [uv](https://docs.astral.sh/uv/) installed. The review commands publish quiz pages
-with the [FoldRender](https://foldrender.dev) command, so install it too if you want to use them.
+with the [FoldRender](https://foldrender.dev) command, so install it too.
 
 ## What runs on your computer, and what leaves it
 
-- **What runs.** The server and the review commands run with
+- **What runs.** The review commands run Covate's `review` command with
   `uvx --from git+https://github.com/SunflowersLwtech/covate@<commit>`: one fixed commit of the
-  repository above, written in full in `.mcp.json` and the skill. The first run downloads that
-  commit from GitHub and the Python packages it depends on from PyPI (about 100 MB, usually
-  under a minute); uv caches them. If `/mcp` shows covate failed on that first start,
-  reconnect it once the download has finished.
-- **What it stores.** Learning sessions, the debugging memory and terms are files in a
-  `.mcp-sidecar` folder inside the project you are working in. Add it to that project's
-  `.gitignore` if you do not want it committed. The review ledger is in
+  repository above, written in full in the skill. None of them is pre-approved, so your
+  assistant's usual permission prompt applies.
+  The first run downloads that commit from GitHub and the Python packages it depends on from
+  PyPI (about 100 MB, usually under a minute); uv caches them.
+- **What it stores.** The review ledger (concepts, due dates, first-answer scores) is a file in
   `mcp-sidecar/global/review/` under your user configuration folder (`~/.config` on macOS and
-  Linux, `%APPDATA%` on Windows). The quiz page is served on `127.0.0.1` by default.
-- **What it sends.** Nothing by default. Covate calls no model and no service of its own: your
-  assistant writes the questions. Two things send data, and only when you use them:
-  - The review commands publish each quiz page with your own FoldRender account. The page,
-    with its questions, goes to foldrender.dev and is private unless you share it. Do not put
-    secrets or private code in questions.
-  - The optional sync to the covate.org learning ledger runs only when you set
-    `COVATE_SYNC_URL` and `COVATE_SYNC_TOKEN` and run `python -m covate.platform_sync`
-    yourself. It uploads your learning sessions to that address.
-- The plugin installs no hooks and pre-approves no shell commands.
+  Linux, `%APPDATA%` on Windows).
+- **What it sends.** Covate calls no model and no service of its own: your assistant writes the
+  questions. The review commands publish each quiz page with your own FoldRender account: the
+  page, with its questions, goes to foldrender.dev and is private unless you share it, and
+  FoldRender's privacy policy applies to it. Do not put secrets or private code in questions.
+- The plugin installs no hooks, starts no server and pre-approves no shell commands.
 
 ## License
 

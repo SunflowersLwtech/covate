@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- The Claude Code plugin is now two: `covate` (the review skill and commands, no server; the one in Anthropic's plugin directory, which refuses servers that run on the user's computer from organizations it has not verified) and `covate-mcp` (the MCP server, in this repository's marketplace only). Install both for what `covate@covate` gave before.
 - The Claude Code plugin moved to `plugins/covate`, ready for Anthropic's plugin directory: the marketplace entry points there, the server and the review commands run one pinned commit of this repository with uvx instead of the plugin folder itself, the commands no longer pre-approve the shell, and the folder carries its own README (what runs, what is stored, what is sent), license and icon. `/plugin install covate@covate` is unchanged.
 
 ## [1.2.0] - 2026-10-27

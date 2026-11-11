@@ -1,0 +1,19 @@
+{
+  "name": "covate-mcp",
+  "displayName": "Covate MCP server",
+  "version": "1.2.0",
+  "description": "The Covate MCP server: quizzes on the changes your assistant makes, a memory of past debugging and term explanations, run on your computer from one pinned commit of this repository.",
+  "author": {
+    "name": "SunflowersLwtech",
+    "url": "https://github.com/SunflowersLwtech"
+  },
+  "homepage": "https://covate.org",
+  "repository": "https://github.com/SunflowersLwtech/covate",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "learning",
+    "quiz"
+  ],
+  "mcpServers": "./.mcp.json"
+}
