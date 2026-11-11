@@ -74,14 +74,19 @@ The ledger lives in the global Covate storage (override with `COVATE_REVIEW_LEDG
 `questions.json` is `{"title": ..., "questions": [{"concept", "question", "options": [...],
 "correct": <0-based index>, "explanation"?}]}`.
 
-In Claude Code, install the plugin to get the MCP server plus `/covate:review` and
-`/covate:review-record`, which walk your agent through the steps above (no hooks, nothing runs
-unless you call it):
+In Claude Code, add the marketplace, then install `covate` for `/covate:review` and
+`/covate:review-record`, which walk your agent through the steps above (no hooks, no server,
+nothing runs unless you call it), and `covate-mcp` for the MCP server:
 
 ```
 /plugin marketplace add SunflowersLwtech/covate
 /plugin install covate@covate
+/plugin install covate-mcp@covate
 ```
+
+`covate` is the one listed in Anthropic's plugin directory; `covate-mcp` is only in this
+marketplace, because the directory accepts servers that run on your computer only from
+organizations it has verified.
 
 ---
 

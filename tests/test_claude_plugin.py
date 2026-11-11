@@ -4,9 +4,12 @@ The skill and commands tell an agent to run `covate review <subcommand>`; if a s
 renamed, or the marketplace and plugin manifests drift apart, the agent is told to run
 something that does not exist. These tests read the files as the plugin loader would.
 
-The plugin lives in plugins/covate, not at the repository root: the plugin directory scans
-everything in a plugin's folder, and the root also holds the website, the tests and the
-images. Its server and commands run one pinned commit of this repository with uvx.
+Two plugins, not the repository root: the plugin directory scans everything in a plugin's
+folder, and the root also holds the website, the tests and the images. plugins/covate is the
+one listed in the directory: the review skill and commands, no server, because the directory
+accepts servers that run on the user's computer only from organizations it has verified.
+plugins/covate-mcp, in this repository's marketplace only, is the MCP server. Both run one
+pinned commit of this repository with uvx.
 """
 
 import json
@@ -19,9 +22,11 @@ from covate.review.cli import _parser
 
 ROOT = Path(__file__).resolve().parent.parent
 PLUGIN_DIR = ROOT / "plugins" / "covate"
+MCP_DIR = ROOT / "plugins" / "covate-mcp"
 PLUGIN = json.loads((PLUGIN_DIR / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+MCP_PLUGIN = json.loads((MCP_DIR / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
 MARKET = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-MCP = json.loads((PLUGIN_DIR / ".mcp.json").read_text(encoding="utf-8"))
+MCP = json.loads((MCP_DIR / ".mcp.json").read_text(encoding="utf-8"))
 SKILL = PLUGIN_DIR / "skills" / "covate-review" / "SKILL.md"
 COMMANDS = sorted((PLUGIN_DIR / "commands").glob("*.md"))
 SOURCE = "git+https://github.com/SunflowersLwtech/covate@"
@@ -45,13 +50,23 @@ def git(*args: str) -> str:
     return subprocess.run(["git", *args], cwd=ROOT, check=True, capture_output=True, text=True).stdout
 
 
-def test_marketplace_lists_the_plugin_under_its_own_name_and_version():
-    [entry] = MARKET["plugins"]
-    assert entry["name"] == PLUGIN["name"]
-    # The plugin's version is the version of the commit it pins (checked below), which can lag
-    # covate.__version__ between a release commit and the commit that moves the pin to it.
-    assert entry["version"] == PLUGIN["version"]
-    assert (ROOT / entry["source"]).resolve() == PLUGIN_DIR
+def test_marketplace_lists_both_plugins_under_their_own_names_and_versions():
+    entries = {e["name"]: e for e in MARKET["plugins"]}
+    assert set(entries) == {"covate", "covate-mcp"}
+    for manifest, folder in ((PLUGIN, PLUGIN_DIR), (MCP_PLUGIN, MCP_DIR)):
+        entry = entries[manifest["name"]]
+        # A plugin's version is the version of the commit it pins (checked below), which can lag
+        # covate.__version__ between a release commit and the commit that moves the pin to it.
+        assert entry["version"] == manifest["version"] == PLUGIN["version"]
+        assert (ROOT / entry["source"]).resolve() == folder
+
+
+def test_the_directory_plugin_starts_no_server():
+    # The directory refuses a version that declares an MCP server run on the user's computer
+    # unless the organization is Verified (finding LOCAL_CODE_MCP_SERVER, 11 November 2026).
+    assert "mcpServers" not in PLUGIN
+    assert not (PLUGIN_DIR / ".mcp.json").exists() and not (PLUGIN_DIR / "mcp.json").exists()
+    assert MCP_PLUGIN["mcpServers"] == "./.mcp.json"
 
 
 def test_the_repository_root_is_not_a_plugin_itself():
@@ -134,8 +149,9 @@ def test_the_commands_point_at_skill_steps_that_exist():
 def test_the_plugin_installs_no_hooks():
     # A review nudge must never be able to block or slow a tool call. A plugin's hooks can be
     # declared in plugin.json, in a hooks/ folder, or inline in its marketplace entry.
-    assert "hooks" not in PLUGIN
-    assert not (PLUGIN_DIR / "hooks").exists()
+    for manifest, folder in ((PLUGIN, PLUGIN_DIR), (MCP_PLUGIN, MCP_DIR)):
+        assert "hooks" not in manifest
+        assert not (folder / "hooks").exists()
     for entry in MARKET["plugins"]:
         assert "hooks" not in entry, f"marketplace entry {entry['name']} declares hooks"
 

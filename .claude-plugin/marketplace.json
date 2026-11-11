@@ -4,13 +4,19 @@
     "name": "SunflowersLwtech"
   },
   "metadata": {
-    "description": "Covate: a learning sidebar MCP server and spaced review for AI coding assistants."
+    "description": "Covate: spaced review and a learning-sidebar MCP server for AI coding assistants."
   },
   "plugins": [
     {
       "name": "covate",
       "source": "./plugins/covate",
-      "description": "Covate MCP server plus the /covate:review commands (spaced review of what you learned).",
+      "description": "The /covate:review commands: spaced review of what you learned, scored on first answers.",
+      "version": "1.2.0"
+    },
+    {
+      "name": "covate-mcp",
+      "source": "./plugins/covate-mcp",
+      "description": "The Covate MCP server (quizzes on changes, debugging memory, terms), run locally from a pinned commit.",
       "version": "1.2.0"
     }
   ]
