@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "covate",
-      "source": "./",
+      "source": "./plugins/covate",
       "description": "Covate MCP server plus the /covate:review commands (spaced review of what you learned).",
       "version": "1.2.0"
     }

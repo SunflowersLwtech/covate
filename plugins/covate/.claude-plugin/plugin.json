@@ -1,0 +1,15 @@
+{
+  "name": "covate",
+  "displayName": "Covate",
+  "version": "1.2.0",
+  "description": "Learn while your AI assistant codes: quizzes on the changes it makes, a memory of past debugging, term explanations, and spaced review (1, 7, then 30 days) scored on first answers.",
+  "author": {
+    "name": "SunflowersLwtech",
+    "url": "https://github.com/SunflowersLwtech"
+  },
+  "homepage": "https://covate.org",
+  "repository": "https://github.com/SunflowersLwtech/covate",
+  "license": "MIT",
+  "keywords": ["mcp", "learning", "quiz", "spaced-repetition", "review"],
+  "mcpServers": "./.mcp.json"
+}
