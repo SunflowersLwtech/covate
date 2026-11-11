@@ -19,7 +19,7 @@ export const MS = {
   meta: {
     title: "Notis Privasi | Covate",
     description:
-      "Apa yang dikumpul oleh covate.org, mengapa, dan ke mana perginya: profil GitHub yang anda gunakan untuk log masuk, sesi pembelajaran yang anda pilih untuk disegerakkan, empat kuki dan satu skrip analitik yang kami hoskan sendiri tanpa kuki. Dikendalikan oleh DUOCODE TECHNOLOGY di bawah Akta Perlindungan Data Peribadi 2010.",
+      "Apa yang dikumpul oleh covate.org, mengapa, dan ke mana perginya: profil GitHub yang anda gunakan untuk log masuk, sesi pembelajaran yang anda pilih untuk disegerakkan, lima kuki dan satu skrip analitik yang kami hoskan sendiri tanpa kuki. Dikendalikan oleh DUOCODE TECHNOLOGY di bawah Akta Perlindungan Data Peribadi 2010.",
   },
   breadcrumb: "Notis Privasi",
   eyebrow: "Perundangan",
@@ -80,15 +80,16 @@ export const MS = {
     },
     {
       heading: "Kuki",
-      paragraphs: ["Covate menetapkan empat kuki miliknya sendiri. Tiada satu pun daripadanya kuki pengiklanan."],
+      paragraphs: ["Covate menetapkan lima kuki miliknya sendiri. Tiada satu pun daripadanya kuki pengiklanan."],
       bullets: [
         "covate_locale — bahasa yang anda pilih, supaya laman ini terus menyajikannya. Boleh dibaca oleh halaman, disimpan selama setahun.",
+        "covate_theme — rupa cerah atau gelap yang anda pilih dengan butang tema, ditetapkan hanya apabila anda menekannya. Boleh dibaca oleh halaman, disimpan selama setahun.",
         "covate_session — sesi log masuk anda: pengenal akaun anda beserta satu tandatangan yang kami sahkan pada setiap permintaan. HTTP-only, disimpan selama 30 hari, dikosongkan apabila anda log keluar.",
         "covate_oauth_state — satu nilai rawak sekali guna yang menghalang log masuk GitHub daripada dipalsukan. HTTP-only, sepuluh minit.",
         "covate_device_code — semasa log masuk aliran peranti, kod yang sedang kami tukarkan dengan GitHub bagi pihak anda. HTTP-only, dibuang sebaik sahaja log masuk selesai atau tamat tempoh.",
       ],
       footnote:
-        "Empat inilah satu-satunya kuki yang ditetapkan oleh laman ini. Selain ID per pelayar butang maklum balas dalam storan setempat (seksyen 06), tiada apa-apa lain di sini yang menulis ke storan pelayar anda. Sehingga 3 September 2026, Google Analytics turut menetapkan kukinya sendiri di samping kuki-kuki ini; ia telah dibuang, dan kuki tersebut tidak lagi ditetapkan.",
+        "Lima inilah satu-satunya kuki yang ditetapkan oleh laman ini. Laman ini juga menyimpan tiga perkara dalam storan setempat pelayar anda: pilihan cerah atau gelap anda (covate-theme) dan sama ada anda menjeda animasi halaman utama (covate-hero-paused), masing-masing ditetapkan hanya apabila anda menekan butang itu dan tidak pernah dihantar kepada kami, serta ID per pelayar butang maklum balas (seksyen 06). Sehingga 3 September 2026, Google Analytics turut menetapkan kukinya sendiri di samping kuki-kuki ini; ia telah dibuang, dan kuki tersebut tidak lagi ditetapkan.",
     },
     {
       heading: "Analitik",

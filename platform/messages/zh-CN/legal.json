@@ -2,7 +2,7 @@
   "privacy": {
     "meta": {
       "title": "隐私政策 | Covate",
-      "description": "covate.org 收集什么、为什么收集、以及这些数据的去向：你用于登录的 GitHub 资料、你自己选择同步上来的学习记录、四个自有 Cookie，以及一段自建、不使用 Cookie 的分析脚本。由 DUOCODE TECHNOLOGY 运营，适用马来西亚《2010 年个人数据保护法》（PDPA）。"
+      "description": "covate.org 收集什么、为什么收集、以及这些数据的去向：你用于登录的 GitHub 资料、你自己选择同步上来的学习记录、五个自有 Cookie，以及一段自建、不使用 Cookie 的分析脚本。由 DUOCODE TECHNOLOGY 运营，适用马来西亚《2010 年个人数据保护法》（PDPA）。"
     },
     "breadcrumb": "隐私政策",
     "eyebrow": "法律条款",
@@ -59,15 +59,16 @@
       {
         "heading": "Cookie",
         "paragraphs": [
-          "Covate 自己设置四个 Cookie，其中没有任何广告类 Cookie。"
+          "Covate 自己设置五个 Cookie，其中没有任何广告类 Cookie。"
         ],
         "bullets": [
           "covate_locale——你选择的语言，网站据此继续用这门语言呈现。页面可读取，保存一年。",
+          "covate_theme——你用主题按钮选的浅色或深色外观，只在你按下按钮时设置。页面可读，保留一年。",
           "covate_session——你的登录会话：你的账户标识加上一个我们每次请求都会校验的签名。HTTP-only，保存 30 天，退出登录时清除。",
           "covate_oauth_state——一次性的随机值，用于防止 GitHub 登录被伪造。HTTP-only，十分钟。",
           "covate_device_code——设备码登录过程中，我们代你与 GitHub 交换的那个码。HTTP-only，登录完成或过期后即丢弃。"
         ],
-        "footnote": "这四个是本站设置的全部 Cookie。除了反馈按钮在本地存储里保存的一个每浏览器标识（见第 06 节），站内没有别的东西会往你的浏览器里写数据。2026 年 9 月 3 日之前，Google Analytics 还会在它们之外设置自己的 Cookie；它已被移除，那些 Cookie 不再出现。"
+        "footnote": "这五个是本站设置的全部 Cookie。本站还会在你浏览器的本地存储里保存三样东西：你选的浅色或深色外观（covate-theme）和你是否暂停了首页动画（covate-hero-paused），这两样都只在你按下相应按钮时写入，也不会发给我们；以及反馈按钮的每浏览器标识（见第 06 节）。2026 年 9 月 3 日之前，Google Analytics 还会在它们之外设置自己的 Cookie；它已被移除，那些 Cookie 不再出现。"
       },
       {
         "heading": "分析统计",

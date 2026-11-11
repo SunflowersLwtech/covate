@@ -2,7 +2,7 @@
   "privacy": {
     "meta": {
       "title": "Privacy Policy | Covate",
-      "description": "What covate.org collects, why, and what happens to it: the GitHub profile you sign in with, the learning sessions you choose to sync, four first-party cookies and one self-hosted, cookieless analytics script. Operated by DUOCODE TECHNOLOGY under Malaysia's PDPA 2010."
+      "description": "What covate.org collects, why, and what happens to it: the GitHub profile you sign in with, the learning sessions you choose to sync, five first-party cookies and one self-hosted, cookieless analytics script. Operated by DUOCODE TECHNOLOGY under Malaysia's PDPA 2010."
     },
     "breadcrumb": "Privacy",
     "eyebrow": "Legal",
@@ -59,15 +59,16 @@
       {
         "heading": "Cookies",
         "paragraphs": [
-          "Covate sets four cookies of its own. None of them are advertising cookies."
+          "Covate sets five cookies of its own. None of them are advertising cookies."
         ],
         "bullets": [
           "covate_locale — the language you picked, so the site keeps serving it. Readable by the page, kept for a year.",
+          "covate_theme — the light or dark look you chose with the theme button, set only when you press it. Readable by the page, kept for a year.",
           "covate_session — your signed-in session: your account identifier plus a signature we verify on every request. HTTP-only, kept for 30 days, cleared when you sign out.",
           "covate_oauth_state — a one-off random value that stops the GitHub sign-in from being forged. HTTP-only, ten minutes.",
           "covate_device_code — during a device-flow sign-in, the code we are exchanging with GitHub on your behalf. HTTP-only, dropped once the sign-in finishes or expires."
         ],
-        "footnote": "These four are the only cookies this site sets. Apart from the feedback button's per-browser id in local storage (section 06), nothing else here writes to your browser's storage. Until 3 September 2026 Google Analytics set cookies of its own alongside them; it has been removed, and those cookies are no longer set."
+        "footnote": "These five are the only cookies this site sets. The site also keeps three things in your browser's local storage: your light or dark choice (covate-theme) and whether you paused the home page's animation (covate-hero-paused), each set only when you press that button and never sent to us, and the feedback button's per-browser id (section 06). Until 3 September 2026 Google Analytics set cookies of its own alongside them; it has been removed, and those cookies are no longer set."
       },
       {
         "heading": "Analytics",
