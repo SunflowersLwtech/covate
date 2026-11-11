@@ -24,7 +24,7 @@ export const MS = {
   breadcrumb: "Notis Privasi",
   eyebrow: "Perundangan",
   title: "Notis Privasi",
-  updated: "Kemas kini terakhir 6 November 2026",
+  updated: "Kemas kini terakhir 12 November 2026",
   intro:
     "Versi ringkas: Covate menyimpan profil GitHub yang anda gunakan untuk log masuk, serta sesi pembelajaran yang anda sendiri pilih untuk dimuat naik. Ia tidak pernah memuat naik kod sumber anda, tidak pernah menghantar e-mel kepada anda, dan tidak pernah menjual data anda. Butirannya ada di bawah.",
   languageNote: {
@@ -40,6 +40,7 @@ export const MS = {
       paragraphs: [
         "Covate dikendalikan oleh DUOCODE TECHNOLOGY, sebuah perniagaan pemilikan tunggal yang berdaftar di Malaysia dengan nombor pendaftaran LA0087244-A. Dalam notis ini, “kami” dan “Covate” bermaksud DUOCODE TECHNOLOGY.",
         "Notis ini meliputi laman web covate.org, artikel Learning Center, dan lejar pembelajaran yang anda capai selepas log masuk di covate.org/dashboard. Pelayan MCP Covate ialah perkara yang berasingan: ia perisian sumber terbuka yang berjalan pada mesin anda sendiri, menyimpan sesi pembelajarannya dalam storan tempatan di situ, dan tidak menghantar apa-apa pun kepada kami melainkan anda sendiri menetapkan penyegerakan yang diterangkan di bawah.",
+        "Pemalam Covate untuk Claude Code juga berjalan pada mesin anda, dan kedua-duanya tidak menghantar apa-apa kepada kami melainkan anda menyediakan penyegerakan yang diterangkan di bawah. Arahan semakan menyimpan lejar semakan (konsep, tarikh semakan dan skor jawapan pertama) dalam satu fail di bawah folder konfigurasi pengguna anda, dan menerbitkan setiap halaman kuiz semakan dengan akaun FoldRender anda sendiri: halaman itu dan soalannya dihantar ke foldrender.dev, peribadi melainkan anda berkongsinya, dan diliputi oleh dasar privasi FoldRender (foldrender.dev/privacy), bukan oleh notis ini. Pelayan MCP menyimpan sesi pembelajaran, memori penyahpepijatan dan istilah dalam folder .mcp-sidecar di dalam projek yang anda kerjakan; tambahkan folder itu ke .gitignore projek jika anda tidak mahu ia dikomit. Kali pertama salah satunya dijalankan, uv memuat turun Covate daripada GitHub dan kebergantungan Python-nya daripada PyPI. README setiap pemalam di GitHub (github.com/SunflowersLwtech/covate, dalam folder plugins) menerangkan apa yang dijalankan, disimpan dan dihantarnya.",
       ],
       bullets: [],
       footnote: "",
@@ -87,7 +88,7 @@ export const MS = {
         "covate_device_code — semasa log masuk aliran peranti, kod yang sedang kami tukarkan dengan GitHub bagi pihak anda. HTTP-only, dibuang sebaik sahaja log masuk selesai atau tamat tempoh.",
       ],
       footnote:
-        "Empat inilah satu-satunya kuki yang ditetapkan oleh laman ini, dan tiada apa-apa lain di sini yang menulis ke storan pelayar anda. Sehingga 3 September 2026, Google Analytics turut menetapkan kukinya sendiri di samping kuki-kuki ini; ia telah dibuang, dan kuki tersebut tidak lagi ditetapkan.",
+        "Empat inilah satu-satunya kuki yang ditetapkan oleh laman ini. Selain ID per pelayar butang maklum balas dalam storan setempat (seksyen 06), tiada apa-apa lain di sini yang menulis ke storan pelayar anda. Sehingga 3 September 2026, Google Analytics turut menetapkan kukinya sendiri di samping kuki-kuki ini; ia telah dibuang, dan kuki tersebut tidak lagi ditetapkan.",
     },
     {
       heading: "Analitik",
@@ -170,7 +171,7 @@ export const MS = {
         "Dapatkan satu salinan — kami akan menghantar kepada anda apa yang kami pegang, dalam bentuk yang boleh anda baca dan guna semula.",
         "Betulkannya — hampir kesemuanya datang daripada GitHub, jadi membetulkannya di sana dan log masuk semula akan menyegarkan nama, nama pengguna, avatar dan e-mel anda di sini.",
         "Padamkannya — papan pemuka belum mempunyai butang padam, jadi mintalah kepada kami melalui e-mel dan kami akan membuang akaun itu dan segala-galanya yang terikat kepadanya.",
-        "Berhenti menyegerakkan — keluarkan token penyegerakan daripada konfigurasi MCP anda, atau putarkannya di papan pemuka, yang membatalkan token lama dengan serta-merta. Sesi yang telah dimuat naik akan kekal sehingga anda meminta kami memadamkannya.",
+        "Berhenti menyegerakkan — berhenti menjalankan klien penyegerakan dan keluarkan COVATE_SYNC_TOKEN daripada persekitarannya, atau putarkan token di papan pemuka, yang membatalkan token lama dengan serta-merta. Sesi yang telah dimuat naik akan kekal sehingga anda meminta kami memadamkannya.",
         "Membuat aduan — jika kami tidak membetulkan sesuatu, anda boleh membuat aduan kepada Pesuruhjaya Perlindungan Data Peribadi (Jabatan Perlindungan Data Peribadi) di Malaysia.",
       ],
       footnote: "",
