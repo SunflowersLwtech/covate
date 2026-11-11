@@ -70,6 +70,10 @@ def test_the_pinned_commit_is_this_version_and_has_the_review_commands():
     # A pin to a commit that is not in this repository's history, or that is an older release,
     # installs something the skill does not describe. CI checks out full history for this.
     git("cat-file", "-e", f"{PIN}^{{commit}}")
+    # and on this branch's history: a pin to a release PR's own head passes the PR's CI, then
+    # breaks once that PR is squash-merged and its branch deleted.
+    ancestor = subprocess.run(["git", "merge-base", "--is-ancestor", PIN, "HEAD"], cwd=ROOT)
+    assert ancestor.returncode == 0, f"{PIN} is not an ancestor of HEAD"
     pyproject = git("show", f"{PIN}:pyproject.toml")
     assert f'\nversion = "{PLUGIN["version"]}"\n' in pyproject
     cli = git("show", f"{PIN}:src/covate/review/cli.py")

@@ -31,11 +31,14 @@ with the [FoldRender](https://foldrender.dev) command, so install it too if you 
 - **What runs.** The server and the review commands run with
   `uvx --from git+https://github.com/SunflowersLwtech/covate@<commit>`: one fixed commit of the
   repository above, written in full in `.mcp.json` and the skill. The first run downloads that
-  commit from GitHub and the Python packages it depends on from PyPI; uv caches them.
-- **What it stores.** Learning sessions, the debugging memory, terms and the review ledger are
-  files on your computer, in `mcp-sidecar` under your user configuration folder
-  (`~/.config` on macOS and Linux, `%APPDATA%` on Windows). The quiz page is served on
-  `127.0.0.1` by default.
+  commit from GitHub and the Python packages it depends on from PyPI (about 100 MB, usually
+  under a minute); uv caches them. If `/mcp` shows covate failed on that first start,
+  reconnect it once the download has finished.
+- **What it stores.** Learning sessions, the debugging memory and terms are files in a
+  `.mcp-sidecar` folder inside the project you are working in. Add it to that project's
+  `.gitignore` if you do not want it committed. The review ledger is in
+  `mcp-sidecar/global/review/` under your user configuration folder (`~/.config` on macOS and
+  Linux, `%APPDATA%` on Windows). The quiz page is served on `127.0.0.1` by default.
 - **What it sends.** Nothing by default. Covate calls no model and no service of its own: your
   assistant writes the questions. Two things send data, and only when you use them:
   - The review commands publish each quiz page with your own FoldRender account. The page,
