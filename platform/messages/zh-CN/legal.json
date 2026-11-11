@@ -2,12 +2,12 @@
   "privacy": {
     "meta": {
       "title": "隐私政策 | Covate",
-      "description": "covate.org 收集什么、为什么收集、以及这些数据的去向：你用于登录的 GitHub 资料、你自己选择同步上来的学习记录、四个自有 Cookie，以及一段自建、不使用 Cookie 的分析脚本。由 DUOCODE TECHNOLOGY 运营，适用马来西亚《2010 年个人数据保护法》（PDPA）。"
+      "description": "covate.org 收集什么、为什么收集、以及这些数据的去向：你用于登录的 GitHub 资料、你自己选择同步上来的学习记录、五个自有 Cookie，以及一段自建、不使用 Cookie 的分析脚本。由 DUOCODE TECHNOLOGY 运营，适用马来西亚《2010 年个人数据保护法》（PDPA）。"
     },
     "breadcrumb": "隐私政策",
     "eyebrow": "法律条款",
     "title": "隐私政策",
-    "updated": "最后更新：2026 年 11 月 6 日",
+    "updated": "最后更新：2026 年 11 月 12 日",
     "intro": "一句话版本：Covate 会保存你登录时使用的 GitHub 资料，以及你主动上传的学习记录。它从不上传你的源代码，从不给你发邮件，也从不出售你的数据。以下是完整说明。",
     "languages": {
       "note": "本通知以英文、中文，以及马来西亚《2010 年个人数据保护法》第 7(2) 条所要求的马来文三种语言发布。三个版本内容一致；若有出入，以英文版为准。",
@@ -19,7 +19,8 @@
         "heading": "我们是谁，本政策适用于什么",
         "paragraphs": [
           "Covate 由 DUOCODE TECHNOLOGY 运营，这是一家在马来西亚注册的独资企业，注册号 LA0087244-A。本政策中的「我们」和「Covate」均指 DUOCODE TECHNOLOGY。",
-          "本政策适用于 covate.org 网站、学习中心的文章，以及你登录 covate.org/dashboard 后使用的学习台账。Covate MCP 服务器是另一回事：它是运行在你自己机器上的开源软件，学习记录保存在本地；除非你主动配置下文所说的同步，否则它不会向我们发送任何东西。"
+          "本政策适用于 covate.org 网站、学习中心的文章，以及你登录 covate.org/dashboard 后使用的学习台账。Covate MCP 服务器是另一回事：它是运行在你自己机器上的开源软件，学习记录保存在本地；除非你主动配置下文所说的同步，否则它不会向我们发送任何东西。",
+          "Covate 给 Claude Code 的插件也运行在你自己的机器上，除非你配置下文所说的同步，否则都不会向我们发送任何东西。复习命令把复习台账（概念、到期日和首答得分）存成你用户配置文件夹里的一个文件，并用你自己的 FoldRender 账号发布每一个复习测验页：页面和其中的题目会发到 foldrender.dev，除非你分享，否则只有你能看，适用 FoldRender 自己的隐私政策（foldrender.dev/privacy），不适用本政策。MCP 服务器把学习记录、调试记忆和术语存在你所在项目里的 .mcp-sidecar 文件夹中；如果不想把它提交进代码库，请把这个文件夹加进项目的 .gitignore。两者第一次运行时，uv 会从 GitHub 下载 Covate、从 PyPI 下载它依赖的 Python 包。各插件在 GitHub（github.com/SunflowersLwtech/covate 的 plugins 文件夹）里的 README 写明了它运行什么、存什么、发什么。"
         ],
         "bullets": [],
         "footnote": ""
@@ -58,15 +59,16 @@
       {
         "heading": "Cookie",
         "paragraphs": [
-          "Covate 自己设置四个 Cookie，其中没有任何广告类 Cookie。"
+          "Covate 自己设置五个 Cookie，其中没有任何广告类 Cookie。"
         ],
         "bullets": [
           "covate_locale——你选择的语言，网站据此继续用这门语言呈现。页面可读取，保存一年。",
+          "covate_theme——你用主题按钮选的浅色或深色外观，只在你按下按钮时设置。页面可读，保留一年。",
           "covate_session——你的登录会话：你的账户标识加上一个我们每次请求都会校验的签名。HTTP-only，保存 30 天，退出登录时清除。",
           "covate_oauth_state——一次性的随机值，用于防止 GitHub 登录被伪造。HTTP-only，十分钟。",
           "covate_device_code——设备码登录过程中，我们代你与 GitHub 交换的那个码。HTTP-only，登录完成或过期后即丢弃。"
         ],
-        "footnote": "这四个是本站设置的全部 Cookie，站内也没有别的东西会往你的浏览器里写数据。2026 年 9 月 3 日之前，Google Analytics 还会在它们之外设置自己的 Cookie；它已被移除，那些 Cookie 不再出现。"
+        "footnote": "这五个是本站设置的全部 Cookie。本站还会在你浏览器的本地存储里保存三样东西：你选的浅色或深色外观（covate-theme）和你是否暂停了首页动画（covate-hero-paused），这两样都只在你按下相应按钮时写入，也不会发给我们；以及反馈按钮的每浏览器标识（见第 06 节）。2026 年 9 月 3 日之前，Google Analytics 还会在它们之外设置自己的 Cookie；它已被移除，那些 Cookie 不再出现。"
       },
       {
         "heading": "分析统计",
@@ -150,7 +152,7 @@
           "取得副本——我们会把持有的内容以你可读、可再利用的形式发给你。",
           "更正——这些数据几乎全部来自 GitHub，所以在 GitHub 那边改好、再登录一次，这里的姓名、用户名、头像和邮箱就会刷新。",
           "删除——dashboard 目前还没有删除按钮，请写邮件告诉我们，我们会删掉账户以及挂在它下面的一切。",
-          "停止同步——把同步令牌从你的 MCP 配置里去掉，或者在 dashboard 里更换令牌，旧的会立刻失效。已经上传的会话记录会保留，直到你要求删除。",
+          "停止同步——不再运行同步程序，并把 COVATE_SYNC_TOKEN 从它的环境变量里去掉，或者在 dashboard 里更换令牌，旧的会立刻失效。已经上传的会话记录会保留，直到你要求删除。",
           "投诉——如果我们没有把问题处理好，你可以向马来西亚个人数据保护专员公署（Jabatan Perlindungan Data Peribadi）投诉。"
         ],
         "footnote": ""

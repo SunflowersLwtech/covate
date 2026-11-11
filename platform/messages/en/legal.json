@@ -2,12 +2,12 @@
   "privacy": {
     "meta": {
       "title": "Privacy Policy | Covate",
-      "description": "What covate.org collects, why, and what happens to it: the GitHub profile you sign in with, the learning sessions you choose to sync, four first-party cookies and one self-hosted, cookieless analytics script. Operated by DUOCODE TECHNOLOGY under Malaysia's PDPA 2010."
+      "description": "What covate.org collects, why, and what happens to it: the GitHub profile you sign in with, the learning sessions you choose to sync, five first-party cookies and one self-hosted, cookieless analytics script. Operated by DUOCODE TECHNOLOGY under Malaysia's PDPA 2010."
     },
     "breadcrumb": "Privacy",
     "eyebrow": "Legal",
     "title": "Privacy Policy",
-    "updated": "Last updated 6 November 2026",
+    "updated": "Last updated 12 November 2026",
     "intro": "The short version: Covate stores the GitHub profile you sign in with, plus the learning sessions you deliberately choose to upload. It never uploads your source code, never sends you email, and never sells your data. The detail is below.",
     "languages": {
       "note": "This notice is published in English, in Chinese, and — as section 7(2) of Malaysia's Personal Data Protection Act 2010 requires — in Bahasa Malaysia. The three say the same thing; if they ever differ, the English version prevails.",
@@ -19,7 +19,8 @@
         "heading": "Who we are, and what this covers",
         "paragraphs": [
           "Covate is operated by DUOCODE TECHNOLOGY, a sole proprietorship registered in Malaysia under registration number LA0087244-A. In this policy \"we\", \"us\" and \"Covate\" mean DUOCODE TECHNOLOGY.",
-          "This policy covers the covate.org website, the Learning Center articles, and the learning ledger you reach by signing in at covate.org/dashboard. The Covate MCP server is a separate thing: it is open-source software that runs on your own machine, keeps its learning sessions in local storage there, and sends us nothing at all unless you deliberately configure the sync described further down."
+          "This policy covers the covate.org website, the Learning Center articles, and the learning ledger you reach by signing in at covate.org/dashboard. The Covate MCP server is a separate thing: it is open-source software that runs on your own machine, keeps its learning sessions in local storage there, and sends us nothing at all unless you deliberately configure the sync described further down.",
+          "Covate's plugins for Claude Code run on your machine too, and neither sends us anything unless you set up the sync described below. The review commands keep a review ledger (concepts, due dates and first-answer scores) in a file under your user configuration folder, and publish each review quiz page with your own FoldRender account: the page and its questions go to foldrender.dev, are private unless you share them, and are covered by FoldRender's privacy policy (foldrender.dev/privacy), not by this one. The MCP server keeps learning sessions, a debugging memory and terms in a .mcp-sidecar folder inside the project you work in; add that folder to the project's .gitignore if you do not want it committed. The first time either runs, uv downloads Covate from GitHub and its Python dependencies from PyPI. Each plugin's README on GitHub (github.com/SunflowersLwtech/covate, in the plugins folder) sets out what it runs, stores and sends."
         ],
         "bullets": [],
         "footnote": ""
@@ -58,15 +59,16 @@
       {
         "heading": "Cookies",
         "paragraphs": [
-          "Covate sets four cookies of its own. None of them are advertising cookies."
+          "Covate sets five cookies of its own. None of them are advertising cookies."
         ],
         "bullets": [
           "covate_locale — the language you picked, so the site keeps serving it. Readable by the page, kept for a year.",
+          "covate_theme — the light or dark look you chose with the theme button, set only when you press it. Readable by the page, kept for a year.",
           "covate_session — your signed-in session: your account identifier plus a signature we verify on every request. HTTP-only, kept for 30 days, cleared when you sign out.",
           "covate_oauth_state — a one-off random value that stops the GitHub sign-in from being forged. HTTP-only, ten minutes.",
           "covate_device_code — during a device-flow sign-in, the code we are exchanging with GitHub on your behalf. HTTP-only, dropped once the sign-in finishes or expires."
         ],
-        "footnote": "These four are the only cookies this site sets, and nothing else here writes to your browser's storage. Until 3 September 2026 Google Analytics set cookies of its own alongside them; it has been removed, and those cookies are no longer set."
+        "footnote": "These five are the only cookies this site sets. The site also keeps three things in your browser's local storage: your light or dark choice (covate-theme) and whether you paused the home page's animation (covate-hero-paused), each set only when you press that button and never sent to us, and the feedback button's per-browser id (section 06). Until 3 September 2026 Google Analytics set cookies of its own alongside them; it has been removed, and those cookies are no longer set."
       },
       {
         "heading": "Analytics",
@@ -150,7 +152,7 @@
           "Get a copy — we will send you what we hold, in a form you can read and re-use.",
           "Correct it — nearly all of it comes from GitHub, so correcting it there and signing in again refreshes your name, username, avatar and email here.",
           "Delete it — the dashboard has no delete button yet, so ask us by email and we will remove the account and everything attached to it.",
-          "Stop syncing — take the sync token out of your MCP configuration, or rotate it in the dashboard, which invalidates the old one straight away. Sessions already uploaded stay until you ask us to delete them.",
+          "Stop syncing — stop running the sync client and remove COVATE_SYNC_TOKEN from its environment, or rotate the token in the dashboard, which invalidates the old one straight away. Sessions already uploaded stay until you ask us to delete them.",
           "Complain — if we have not put something right, you can complain to the Personal Data Protection Commissioner (Jabatan Perlindungan Data Peribadi) in Malaysia."
         ],
         "footnote": ""

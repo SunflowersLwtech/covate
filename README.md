@@ -88,6 +88,10 @@ nothing runs unless you call it), and `covate-mcp` for the MCP server:
 marketplace, because the directory accepts servers that run on your computer only from
 organizations it has verified.
 
+Installed `covate@covate` before 12 November 2026? It no longer includes the MCP server, and
+updating drops it without a message: run `/plugin install covate-mcp@covate` to keep it. Its
+tools are now named under `plugin:covate-mcp:covate`, so add any saved permission rules again.
+
 ---
 
 ## 📦 Available Tools

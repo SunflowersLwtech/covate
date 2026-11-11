@@ -40,7 +40,8 @@ with the [FoldRender](https://foldrender.dev) command, so install it too.
   PyPI (about 100 MB, usually under a minute); uv caches them.
 - **What it stores.** The review ledger (concepts, due dates, first-answer scores) is a file in
   `mcp-sidecar/global/review/` under your user configuration folder (`~/.config` on macOS and
-  Linux, `%APPDATA%` on Windows).
+  Linux, `%APPDATA%` on Windows). Making a quiz also leaves `questions.json` and `page.html` in
+  the folder you are working in.
 - **What it sends.** Covate calls no model and no service of its own: your assistant writes the
   questions. The review commands publish each quiz page with your own FoldRender account: the
   page, with its questions, goes to foldrender.dev and is private unless you share it, and
