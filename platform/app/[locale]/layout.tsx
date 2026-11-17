@@ -131,10 +131,10 @@ export default async function RootLayout({
   return (
     <html lang={locale} data-theme="dark" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable}`}>
       <head>
-        <meta name="theme-color" content="#080b16" />
+        <meta name="theme-color" content="#f5f6fa" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem("covate-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t)}}catch(e){}`,
+            __html: `try{var t=localStorage.getItem("covate-theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light")}catch(e){}`,
           }}
         />
         {[orgLd, siteLd, appLd].map((ld, i) => (

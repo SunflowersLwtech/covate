@@ -112,6 +112,14 @@ export default async function LearnHub() {
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-secondary">
               {t("body")}
             </p>
+            <div className="mx-auto mt-10 max-w-2xl overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/hero-lightblue.png"
+                alt="Covate learning illustration — light-blue graph paper"
+                className="block w-full"
+              />
+            </div>
           </div>
         </section>
 

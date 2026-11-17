@@ -16,7 +16,6 @@
   --font-mono: var(--font-mono), ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
 }
 
-:root,
 html[data-theme="dark"] {
   --bg-deep: #080b16;
   --bg-surface: #0d1222;
@@ -48,6 +47,7 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
+:root,
 html[data-theme="light"] {
   --bg-deep: #f5f6fa;
   --bg-surface: #ffffff;
@@ -92,6 +92,11 @@ html {
 
 body {
   background-color: var(--bg-deep);
+  /* persistent graph-paper grid site-wide (subtler than the hero .bg-grid) */
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--grid-line) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--grid-line) 35%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
   color: var(--fg-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

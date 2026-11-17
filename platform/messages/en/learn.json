@@ -18,6 +18,7 @@
     "faq": "FAQ",
     "related": "Related",
     "getMcp": "Get the free open-source MCP →",
-    "finePrint": "The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy."
+    "finePrint": "The MCP is free and open-source (MIT). So is the learning ledger on covate.org — sign in with GitHub, nothing to buy.",
+    "englishOnly": "This guide is written in English."
   }
 }
