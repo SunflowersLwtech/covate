@@ -79,6 +79,20 @@ export default async function Home() {
                 {t("hero.fineprint")}
               </p>
             </div>
+            <div className="mx-auto mt-12 max-w-2xl overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
+              {/* PLACEHOLDER loop: ffmpeg Ken-Burns over the Gemini hero illustration.
+                  Replace with a real Gemini/Veo clip once a Veo-enabled key/account is available. */}
+              <video
+                className="block w-full"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster="/hero-lightblue.png"
+                src="/hero-lightblue.mp4"
+                aria-label="Covate hero loop — light-blue graph paper"
+              />
+            </div>
           </div>
         </section>
 

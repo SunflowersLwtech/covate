@@ -128,7 +128,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={`${geist.variable} ${geistMono.variable}`}>
       <head>
-        <meta name="theme-color" content="#0a0e14" />
+        <meta name="theme-color" content="#f1f6fb" />
         {[orgLd, siteLd, appLd].map((ld, i) => (
           <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         ))}
