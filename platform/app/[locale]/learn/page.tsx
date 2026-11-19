@@ -62,7 +62,7 @@ const collectionLd = {
   url: URL,
   inLanguage: "en",
   datePublished: "2026-08-04",
-  dateModified: "2026-08-27",
+  dateModified: "2026-11-19",
   isPartOf: { "@id": SITE + "#website" },
   publisher: { "@id": SITE + "#organization" },
   mainEntity: {
@@ -86,14 +86,35 @@ const breadcrumbLd = {
   ],
 };
 
+// The hub's own questions — what this library is, that every guide also exists in
+// Chinese, that reading costs nothing, and where the figures come from — answered in
+// the visitor's language from messages/<locale>/learn.json. The CollectionPage above
+// describes the list; this describes the reading experience, which is what an answer
+// engine is actually asked about when someone searches for these guides.
+function faqLd(items: readonly { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": URL + "#faq",
+    isPartOf: { "@id": URL + "#page" },
+    mainEntity: items.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+}
+
 export default async function LearnHub() {
   const locale = await getLocale();
   const t = await getTranslations("learn.hub");
+  const faq = t.raw("faq.items") as { q: string; a: string }[];
   const articles = locale === "zh-CN" ? ARTICLES.map((a) => ({ ...a, ...zh.ARTICLES[a.slug] })) : ARTICLES;
   return (
     <div className="min-h-screen bg-deep text-primary">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd(faq)) }} />
 
       {/* Nav */}
       <SiteHeader items={NAV.learn} />
@@ -184,6 +205,24 @@ export default async function LearnHub() {
               >
                 {t("habit.install")}
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* The same questions the FAQPage above answers, rendered so a reader gets
+            them too — structured data must describe the page, not invent one. */}
+        <section className="border-b border-border">
+          <div className="mx-auto max-w-3xl px-6 py-16">
+            <h2 className="text-2xl font-semibold text-primary sm:text-3xl">{t("faq.title")}</h2>
+            <div className="mt-6 divide-y divide-border border-y border-border">
+              {faq.map((f) => (
+                <details key={f.q} className="group py-4">
+                  <summary className="cursor-pointer list-none">
+                    <h3 className="text-sm font-medium text-primary transition group-open:text-accent hover:text-accent">{f.q}</h3>
+                  </summary>
+                  <p className="mt-2 text-sm leading-7 text-secondary">{f.a}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>

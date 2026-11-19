@@ -5,7 +5,7 @@ import type { LegalSection } from "../../../_components/LegalDoc";
 // Why this lives in a TypeScript module and not in messages/<locale>/legal.json:
 // scripts/i18n-check.mjs enforces key-for-key parity across every directory under
 // messages/, so a messages/ms/ directory would demand a full Malay translation of
-// common, home, dashboard, learn (nineteen long-form articles) and evidence before
+// common, home, dashboard, learn (twenty long-form articles) and evidence before
 // the build would pass. "ms" is not a UI locale of this site and is not meant to
 // become one — this is one fixed-language legal document, so it is data, not a
 // translation catalogue. The CJK red line and the t("…") resolution check are both

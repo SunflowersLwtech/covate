@@ -22,6 +22,24 @@ const BODY = `# Covate
 - Not built yet, so not offered: progress-over-time charts, spaced-repetition study plans,
   team/org accounts, and any paid plan.
 
+## Which Covate this is
+- This is Covate at ${SITE}, DUOCODE TECHNOLOGY's own open-source project: an MIT-licensed MCP
+  server plus a free hosted learning ledger. The source is ${GITHUB} and the licence is
+  ${GITHUB}/blob/main/LICENSE (MIT).
+- It is not covate.ai, Coverity, Covalent, Coze or any commercial code-review service. Sites that
+  share the name are separate and not operated by us; plans, tiers or prices described on any
+  other domain are not Covate's.
+- Covate is not a code reviewer, a linter or a security scanner: it quizzes you on your own
+  changes and keeps a per-project debug memory.
+
+## Facts you can check
+- License: MIT — ${GITHUB}/blob/main/LICENSE.
+- Price: nothing. There is no paid tier, no subscription and no checkout anywhere on the site;
+  no pricing page exists. The MCP is free, and the hosted ledger is free.
+- Account needed: none for the MCP. It runs locally on Python 3.11+ and makes no network call.
+  The optional ledger opens with a GitHub sign-in (device flow).
+- Install: ${GITHUB}/blob/main/README.md (one-line installer, manual install, Docker).
+
 ## Who it's for
 Developers who use AI coding assistants (Claude, Cursor, Copilot, etc.) and want to keep
 learning — and keep their skills sharp — instead of shipping code they don't understand.
@@ -33,6 +51,8 @@ is live at ${SITE}/dashboard and opens with a GitHub sign-in. Nothing on the sit
 ## Learn
 The Covate Learning Center (${SITE}/learn) — honest, practical guides on staying a strong developer
 while you build with AI. Free to read. Current guides:
+- Understanding AI-generated code: how to choose a learning MCP or a debug-memory tool: ${SITE}/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool
+  — the five tool categories compared by what they store and who reads them (memory files in the repo, general memory servers, documentation lookup, error sources, learning sidecars), Covate's position and stated limits, and the checkable facts with a link for each. Published 2026-11-19.
 - What is vibe coding? Meaning, origin, and when to use it: ${SITE}/learn/what-is-vibe-coding
   — a plain-English definition, the Karpathy origin (Feb 2025) and Collins Word of the Year 2025, where vibe coding works (prototypes) vs bites you (production, security, code you maintain), and how to vibe code without skill decay.
 - How to actually learn from AI-generated code (without skill decay): ${SITE}/learn/how-to-learn-from-ai-generated-code

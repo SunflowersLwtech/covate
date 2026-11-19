@@ -6,7 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import "../globals.css";
 import { isLocale, LOCALES } from "../i18n/messages";
-import { SITE } from "../lib/site";
+import { GITHUB, SITE } from "../lib/site";
 import { FeedbackWidget } from "../_components/FeedbackWidget";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
@@ -64,10 +64,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Off-site profiles that resolve "Covate" to one entity for an answer engine.
-// Every URL here returned HTTP 200 when checked on 2026-08-27, and that check is
-// the entry condition: a sameAs pointing at a profile that does not exist tells
-// a resolver the entity's own account of itself is wrong, which is worse than
-// listing nothing. (A LinkedIn company page was rejected for exactly that — 404.)
+// Every URL here returned HTTP 200 — re-checked with curl on 2026-11-19 (the first
+// check was 2026-08-27) — and that check is the entry condition: a sameAs pointing
+// at a profile that does not exist tells a resolver the entity's own account of
+// itself is wrong, which is worse than listing nothing. (A LinkedIn company page was
+// rejected for exactly that — 404.) Nothing is added here that has not answered 200.
 export const SAME_AS = [
   "https://github.com/SunflowersLwtech/covate",
   "https://github.com/SunflowersLwtech",
@@ -75,6 +76,11 @@ export const SAME_AS = [
   "https://duocodetech.com/",
 ];
 
+// Answer engines confuse Covate with same-named third parties — the 2026-11-19 GEO
+// sampling had one engine describe it as a closed-source service with Pro/Team/
+// Enterprise tiers (see GEO/reports/geo-lab-2026-11-19/audit-covate.md). Two schema
+// properties do the disambiguating: `disambiguatingDescription` on the Organization
+// says what this entity is not, and `owns` points at the open-source project itself.
 const orgLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -82,8 +88,29 @@ const orgLd = {
   name: "Covate",
   url: SITE,
   description: "Covate is free developer-learning software: an open-source (MIT) MCP learning tool plus a free learning ledger you reach by signing in with GitHub.",
+  disambiguatingDescription: "Covate at covate.org is DUOCODE TECHNOLOGY's own open-source project: a free, MIT-licensed MCP learning tool that runs on your machine, plus a free hosted learning ledger. It is not covate.ai, Coverity, Covalent, Coze or any commercial code-review service, and covate.org has no paid tier, subscription or checkout.",
   parentOrganization: { "@type": "Organization", name: "DUOCODE TECHNOLOGY" },
+  owns: { "@id": SITE + "#mcp" },
   sameAs: SAME_AS,
+};
+
+// The project the Organization owns, stated as a separate node so an answer engine can
+// read the licence and the repository off the entity instead of inferring them. Every
+// value is checkable in the repository: LICENSE is MIT, pyproject.toml says >=3.11,
+// README.md links the repository itself.
+const sourceLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "@id": SITE + "#mcp",
+  name: "Covate MCP",
+  description: "Open-source (MIT) MCP server that quizzes developers on their own recent code changes and keeps a project-level debug memory. Runs locally; no account required.",
+  codeRepository: GITHUB,
+  license: "https://opensource.org/license/mit",
+  programmingLanguage: "Python 3.11+",
+  runtimePlatform: "Model Context Protocol",
+  isAccessibleForFree: true,
+  author: { "@id": SITE + "#organization" },
+  publisher: { "@id": SITE + "#organization" },
 };
 
 // Only site-wide entities (Organization, WebSite, WebApplication) are injected globally.
@@ -137,7 +164,7 @@ export default async function RootLayout({
             __html: `try{var t=localStorage.getItem("covate-theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light")}catch(e){}`,
           }}
         />
-        {[orgLd, siteLd, appLd].map((ld, i) => (
+        {[orgLd, sourceLd, siteLd, appLd].map((ld, i) => (
           <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         ))}
         {/* Cloudflare Web Analytics: cookieless, no localStorage, nothing written

@@ -4,7 +4,8 @@ import { SITE } from "./lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: SITE, lastModified: "2026-08-27", changeFrequency: "weekly", priority: 1 },
-    { url: SITE + "/learn", lastModified: "2026-08-27", changeFrequency: "weekly", priority: 0.9 },
+    { url: SITE + "/learn", lastModified: "2026-11-19", changeFrequency: "weekly", priority: 0.9 },
+    { url: SITE + "/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool", lastModified: "2026-11-19", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/what-is-vibe-coding", lastModified: "2026-08-27", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/how-to-learn-from-ai-generated-code", lastModified: "2026-08-27", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/how-to-learn-a-new-codebase-fast", lastModified: "2026-08-27", changeFrequency: "monthly", priority: 0.8 },

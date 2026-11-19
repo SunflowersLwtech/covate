@@ -170,6 +170,9 @@ export async function Article() {
             <a href="/learn/keep-a-learning-ledger-from-your-commits" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
               如何从你的提交中记一份学习台账 →
             </a>
+            <a href="/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              理解 AI 生成的代码：学习类 MCP 与调试记忆工具怎么选 →
+            </a>
           </div>
         </section>
       </article>

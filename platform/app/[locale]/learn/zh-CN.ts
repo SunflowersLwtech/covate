@@ -10,6 +10,12 @@ export const DESCRIPTION =
   "Covate 学习中心：关于在用 AI 构建的同时保持扎实开发能力的坦诚、实用指南——如何从 AI 生成的代码中学习、如何评审它、如何记住学到的东西，以及到底还要不要学编程。免费阅读，就像会就你自己的代码向你提问的 Covate MCP、以及保存这些结果的学习台账一样免费。";
 
 export const ARTICLES: Record<string, Omit<Article, "slug">> = {
+  "how-to-choose-a-learning-mcp-or-debug-memory-tool": {
+    category: "工具选型",
+    title: "理解 AI 生成的代码：学习类 MCP 与调试记忆工具怎么选",
+    description:
+      "挑 AI 编程工具时，开发者常把两件事混在一起：理解你刚接受的那段代码，以及不要同一个 bug 再解一遍。本文讲清这五类工具的真实差别——仓库里的记忆文件、通用记忆服务器、文档检索、错误来源，以及学习侧车——Covate 在其中处在什么位置、它刻意不做什么，以及哪些事实你可以自己核对。",
+  },
   "what-is-vibe-coding": {
     category: "基础概念",
     title: "什么是氛围编程（vibe coding）？含义、来历与适用场景",

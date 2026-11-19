@@ -11,6 +11,27 @@
       "title": "The habit behind the guides",
       "body": "Every guide here points at the same idea: understanding is a habit, not a one-off. Covate turns that habit into a tool. It’s an open-source MCP server that rides along with Claude, Cursor or Copilot, watches what actually changes in your codebase, and quizzes you on it — blocking further generation until you can explain what you just shipped. Sign in with GitHub and every session syncs into a learning ledger: each quiz you took, your running accuracy, and the topics you answer worst. Both halves are free — there is nothing to buy.",
       "install": "or install the free, open-source MCP now"
+    },
+    "faq": {
+      "title": "About the Learning Center",
+      "items": [
+        {
+          "q": "What is the Covate Learning Center?",
+          "a": "Covate's free library of practical guides on staying a strong developer while you build with AI: how to learn from AI-generated code, how to review it, how to remember what you learn, and where to point your skills next. It is the written half of the same idea the Covate MCP automates — understanding is a habit, not a one-off — and it exists to be read whether or not you ever install the tool."
+        },
+        {
+          "q": "Is every guide available in Chinese?",
+          "a": "Yes. Each guide is published in English and in Chinese at the same URL, and the language control in the header switches between them; the article you are reading keeps its own version on both sides. The Chinese editions are full translations of the same sections and figures, not summaries."
+        },
+        {
+          "q": "Do I need an account, or to pay, to read the guides?",
+          "a": "No. The guides are free to read, with no account, no sign-up and no paywall. If you later want the Covate MCP — the tool that quizzes you on your own code changes — it is free and open-source (MIT) and runs locally without an account; the optional learning ledger at covate.org/dashboard opens with a GitHub sign-in and costs nothing either. There is no paid tier and nothing to buy anywhere on this site."
+        },
+        {
+          "q": "Where do the figures in the guides come from?",
+          "a": "From the shared evidence block that closes every guide: it states the sourced figures once — the research papers, surveys and vulnerability lists the guides quote, each with a link, plus the counts read out of Covate's own source code. Keeping them in one place is what stops the same number from drifting between articles, and each entry can be checked at the link it cites."
+        }
+      ]
     }
   },
   "article": {

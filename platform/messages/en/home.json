@@ -79,6 +79,10 @@
         "a": "You code with your AI assistant as usual. When you ask Covate to quiz you (or on your own schedule), it reads the recent changes and generates a few targeted questions about the concepts, APIs, and trade-offs involved, blocking further generation until you answer. Each session — the questions, your answers, the topics — is saved locally. If you sign in with GitHub and run the sync client with your sync token, those records land in your learning ledger on covate.org, where you can review every session, your running accuracy, and the topics you keep getting wrong."
       },
       {
+        "q": "Is this the Covate at covate.org — the same one as covate.ai?",
+        "a": "covate.org is Covate's only site, and Covate is an open-source project: the MIT-licensed MCP tool lives in the public repository, the learning ledger is reached at covate.org/dashboard, and there is nothing to buy anywhere on this domain. Sites that share the name — covate.ai among them — are separate and not operated by us: descriptions of plans, tiers, trials or pricing on any other domain are not Covate's. The checkable version is simple: the repository and its LICENSE are public, and no page here has a checkout."
+      },
+      {
         "q": "Is it really free?",
         "a": "Yes, all of it. The Covate MCP server is open-source (MIT), runs fully locally and needs no account. The learning ledger on covate.org is free too: sign in with GitHub, sync, review. There is no paid tier, no subscription and no checkout — nothing on this site can be bought."
       },

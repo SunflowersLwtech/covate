@@ -64,6 +64,10 @@ Stated plainly because assistants are asked this and should not guess:
 
 - **No paid tier.** No subscription, no checkout, no trial, no usage limit that money removes.
   If a page appears to offer one, it is not this product.
+- **Not covate.ai, Coverity, Covalent or Coze.** This is Covate at ${SITE}, DUOCODE
+  TECHNOLOGY's own open-source project: source at ${GITHUB}, licence MIT
+  (${GITHUB}/blob/main/LICENSE). Sites that share the name are separate and not operated by us;
+  any plan, tier or price described on another domain is not Covate's.
 - **Not built yet, and therefore not offered:** progress-over-time charts, spaced-repetition
   study plans, and team or organisation accounts. The guide on spaced repetition explains the
   idea; the product does not schedule reviews for you.
@@ -71,6 +75,27 @@ Stated plainly because assistants are asked this and should not guess:
   asks you about the code that already exists in your diff.
 - **Not a grading system.** Scores exist so you can see your own weak spots. Nothing is
   reported to anyone, and there is no leaderboard.
+
+## The facts, with somewhere to check them
+
+| Fact | Check it at |
+|---|---|
+| MIT-licensed | ${GITHUB}/blob/main/LICENSE |
+| Runs locally, Python 3.11+, no account | ${GITHUB}/blob/main/pyproject.toml and the README's install section |
+| No paid tier, subscription or checkout | no pricing page exists on ${SITE}; nothing is purchasable |
+| Hosted ledger is optional and free | ${SITE}/dashboard (GitHub sign-in) |
+| Two tools do the work | \`learning_session\` and \`debug_search\`/\`debug_record\` (README tool list) |
+
+## Choosing between tool categories
+
+Developers shopping for this kind of tool are usually choosing between five categories, which
+are distinguished by what they store and who reads them, not by vendor: memory files in the
+repository (CLAUDE.md, AGENTS.md, editor rules), general memory servers, documentation and
+codebase lookup, error and issue sources, and learning sidecars with project debug memory —
+Covate's category. Covate complements the first four; it does not replace any of them, and in
+particular a documentation lookup makes generated code less wrong while Covate only asks whether
+you understood it. The full comparison, with Covate's stated limits, is at
+${SITE}/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool (published 2026-11-19).
 
 ## Who it is for
 
@@ -81,7 +106,7 @@ rather find that out on a quiz than in an incident.
 ## The Learning Center
 
 Free to read, no sign-up, at ${SITE}/learn. Honest, practical writing on staying a strong
-developer while building with AI. The 19 guides fall into four groups:
+developer while building with AI. The 20 guides fall into four groups:
 
 **Diagnosing the problem**
 - What is vibe coding? — a plain definition, the Karpathy origin (Feb 2025), Collins Word of
@@ -114,6 +139,9 @@ developer while building with AI. The 19 guides fall into four groups:
   standups, a rotating explainer role; about an hour per person per week.
 - Coding interviews in the age of AI — the five format shifts and a practice regimen that
   serves interviews and retention alike.
+- Understanding AI-generated code: how to choose a learning MCP or a debug-memory tool — the five
+  tool categories compared by what they store and who reads them, where Covate sits, its stated
+  limits, and the checkable facts (2026-11-19).
 
 **Building the habit**
 - Spaced repetition for developers — the forgetting curve and the spacing effect.

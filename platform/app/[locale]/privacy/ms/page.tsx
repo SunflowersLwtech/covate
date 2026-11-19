@@ -9,7 +9,7 @@ import { MS } from "./content";
 // It is a route of its own rather than a third site locale. The site's locale
 // mechanism (proxy.ts + app/i18n/messages.ts) prerenders EVERY page once per locale
 // and scripts/i18n-check.mjs enforces key-for-key parity across message catalogues,
-// so adding "ms" would mean translating the home page, the dashboard and nineteen
+// so adding "ms" would mean translating the home page, the dashboard and twenty
 // Learning Center articles before the build would pass — and would put a half-Malay
 // marketing site in front of visitors. Only the notice is required in Malay, so only
 // the notice exists in Malay. en / zh-CN routing is untouched: /privacy/ms is an

@@ -262,6 +262,9 @@ async function ArticleEn() {
             <a href="/learn/keep-a-learning-ledger-from-your-commits" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
               How to keep a learning ledger from your commits →
             </a>
+            <a href="/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool" className="text-sm text-accent underline underline-offset-4 hover:text-accent-soft">
+              Understanding AI-generated code: how to choose a learning MCP or a debug-memory tool →
+            </a>
           </div>
         </section>
       </article>

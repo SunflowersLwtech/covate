@@ -33,6 +33,10 @@
       "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
     },
     {
+      "path": "app/[locale]/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool/zh-CN.tsx",
+      "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
+    },
+    {
       "path": "app/[locale]/learn/how-to-debug-with-ai-without-losing-the-skill/zh-CN.tsx",
       "reason": "content data, not UI: the Chinese edition of the article in the page.tsx beside it"
     },

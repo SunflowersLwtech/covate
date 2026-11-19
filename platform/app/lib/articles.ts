@@ -11,6 +11,13 @@ export type Article = {
 
 export const ARTICLES: readonly Article[] = [
   {
+    slug: "how-to-choose-a-learning-mcp-or-debug-memory-tool",
+    category: "Tooling",
+    title: "Understanding AI-generated code: how to choose a learning MCP or a debug-memory tool",
+    description:
+      "Two jobs get mixed together when developers shop for AI-coding tools: understanding the code you just accepted, and not re-solving the same bug twice. How the five categories actually differ — memory files in the repo, general memory servers, documentation lookup, error sources, and a learning sidecar — where Covate sits, what it deliberately does not do, and which facts you can check yourself.",
+  },
+  {
     slug: "what-is-vibe-coding",
     category: "Fundamentals",
     title: "What is vibe coding? Meaning, origin, and when to use it",
