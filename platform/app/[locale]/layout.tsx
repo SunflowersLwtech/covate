@@ -140,6 +140,18 @@ export default async function RootLayout({
         {[orgLd, siteLd, appLd].map((ld, i) => (
           <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         ))}
+        {/* Cloudflare Web Analytics: cookieless, no localStorage, nothing written
+            to the visitor's browser — same consent-banner stance as Umami below.
+            Same VERCEL_ENV build-time gate as the Umami tag: `vercel build --prod`
+            sets it, so dev and preview builds never render the beacon and cannot
+            report into the production token. */}
+        {process.env.VERCEL_ENV === "production" ? (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "c0c263d7eed04c44a9d02e7fd19d7d36"}'
+          />
+        ) : null}
       </head>
       <body>
         {/* Only the client components on the dashboard read messages in the browser;
@@ -147,9 +159,10 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={{ common: messages.common, dashboard: messages.dashboard }}>
           {children}
         </NextIntlClientProvider>
-        {/* The only analytics on this site: Umami, self-hosted on our own server,
-            replacing the shared GA4 tag that used to sit here. It sets no cookie
-            and writes nothing to the visitor's browser, so covate.org needs no
+        {/* Umami analytics, self-hosted on our own server, replacing the shared
+            GA4 tag that used to sit here (Cloudflare Web Analytics also runs,
+            in <head> above). It sets no cookie and writes nothing to the
+            visitor's browser, so covate.org needs no
             consent banner — which is what the privacy policy now says. The
             tracker derives its collector endpoint from its own src by swapping
             /script.js for /api/send, so no data-host-url is needed here.
