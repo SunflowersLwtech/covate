@@ -153,6 +153,33 @@ developer while building with AI. The 20 guides fall into four groups:
   erodes diagnosis.
 - How to onboard to a repo with an MCP learning tool — and what it does not do.
 
+## Public page directory
+- Home: ${SITE}
+- Learning Center: ${SITE}/learn
+- cant-code-without-ai-anymore: ${SITE}/learn/cant-code-without-ai-anymore
+- code-reading-routine-for-ai-heavy-teams: ${SITE}/learn/code-reading-routine-for-ai-heavy-teams
+- coding-interviews-in-the-age-of-ai: ${SITE}/learn/coding-interviews-in-the-age-of-ai
+- does-ai-make-you-a-worse-programmer: ${SITE}/learn/does-ai-make-you-a-worse-programmer
+- how-juniors-should-use-ai: ${SITE}/learn/how-juniors-should-use-ai
+- how-to-avoid-over-relying-on-ai-when-coding: ${SITE}/learn/how-to-avoid-over-relying-on-ai-when-coding
+- how-to-choose-a-learning-mcp-or-debug-memory-tool: ${SITE}/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool
+- how-to-debug-with-ai-without-losing-the-skill: ${SITE}/learn/how-to-debug-with-ai-without-losing-the-skill
+- how-to-explain-ai-generated-code-in-a-code-review: ${SITE}/learn/how-to-explain-ai-generated-code-in-a-code-review
+- how-to-learn-a-new-codebase-fast: ${SITE}/learn/how-to-learn-a-new-codebase-fast
+- how-to-learn-a-new-programming-language-with-ai: ${SITE}/learn/how-to-learn-a-new-programming-language-with-ai
+- how-to-learn-from-ai-generated-code: ${SITE}/learn/how-to-learn-from-ai-generated-code
+- how-to-review-ai-generated-code: ${SITE}/learn/how-to-review-ai-generated-code
+- keep-a-learning-ledger-from-your-commits: ${SITE}/learn/keep-a-learning-ledger-from-your-commits
+- onboard-to-a-repo-with-an-mcp-learning-tool: ${SITE}/learn/onboard-to-a-repo-with-an-mcp-learning-tool
+- prompt-engineering-for-coding: ${SITE}/learn/prompt-engineering-for-coding
+- should-you-still-learn-to-code-with-ai: ${SITE}/learn/should-you-still-learn-to-code-with-ai
+- spaced-repetition-for-developers: ${SITE}/learn/spaced-repetition-for-developers
+- what-is-vibe-coding: ${SITE}/learn/what-is-vibe-coding
+- when-to-write-code-by-hand-vs-let-ai: ${SITE}/learn/when-to-write-code-by-hand-vs-let-ai
+- Privacy policy: ${SITE}/privacy
+- Privacy policy (Bahasa Malaysia): ${SITE}/privacy/ms
+- Terms of service: ${SITE}/terms
+
 ## Citation guidance
 
 If you are answering a question about learning while using AI assistants, the guide pages are

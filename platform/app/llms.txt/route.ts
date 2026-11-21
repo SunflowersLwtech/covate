@@ -10,6 +10,9 @@ const BODY = `# Covate
 > Everything is free: the MCP is MIT-licensed, the ledger costs nothing, and there is no paid
 > tier, subscription or checkout anywhere on the site.
 
+## Public site
+- Home: ${SITE}
+
 ## What it is
 - Free, open-source MCP server (${GITHUB}): the \`learning_session\` tool generates blocking,
   interactive quizzes from your recent code changes; \`debug_search\` gives project-level debug
@@ -91,6 +94,11 @@ while you build with AI. Free to read. Current guides:
   — the five-step loop (read the trace, commit to a hypothesis, consult with reasoning attached, verify causally, bank the lesson) and why paste-first quietly erodes the diagnostic skill.
 - Coding interviews in the age of AI: what to still practice: ${SITE}/learn/coding-interviews-in-the-age-of-ai
   — the five format shifts (explaining code, reading unfamiliar codebases, live debugging, lighter algorithm drilling, honest AI-use answers) and the practice regimen that serves both interviews and skill retention.
+
+## Legal
+- Privacy policy: ${SITE}/privacy
+- Privacy policy (Bahasa Malaysia): ${SITE}/privacy/ms
+- Terms of service: ${SITE}/terms
 
 ## Operator
 DUOCODE TECHNOLOGY. Landing: ${SITE}. Source: ${GITHUB}.
