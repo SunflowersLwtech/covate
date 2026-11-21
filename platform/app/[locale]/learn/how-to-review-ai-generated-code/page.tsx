@@ -31,8 +31,14 @@ const metadata: Metadata = {
     "review code you didn't write",
   ],
   alternates: { canonical: PATH },
-  openGraph: { type: "article", siteName: "Covate", url: URL, title: TITLE, description: DESCRIPTION },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  openGraph: {
+    images: [{ url: SITE + "/media/og.jpg", width: 1200, height: 630, alt: "Covate" }],
+    type: "article", siteName: "Covate", url: URL, title: TITLE, description: DESCRIPTION,
+  },
+  twitter: {
+    images: [SITE + "/media/og.jpg"],
+    card: "summary_large_image", title: TITLE, description: DESCRIPTION,
+  },
   robots: { index: true, follow: true },
 };
 
@@ -113,7 +119,7 @@ const ld = [
     "@id": URL + "#breadcrumb",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Covate", item: SITE },
-      { "@type": "ListItem", position: 2, name: "Learn", item: SITE + "/learn/how-to-review-ai-generated-code" },
+      { "@type": "ListItem", position: 2, name: "Learn", item: SITE + "/learn" },
       { "@type": "ListItem", position: 3, name: "Review AI-generated code", item: URL },
     ],
   },

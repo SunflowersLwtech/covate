@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../../lib/site";
+import { NOVEMBER_CONTENT_UPDATED } from "../../../lib/content-dates";
 import { Evidence } from "../../../_geo/Evidence";
 import { SignInCta } from "../../../_components/SignInCta";
 import { NAV, SiteHeader } from "../../../_components/SiteHeader";
@@ -28,8 +29,14 @@ const metadata: Metadata = {
     "onboarding developer tools",
   ],
   alternates: { canonical: PATH },
-  openGraph: { type: "article", siteName: "Covate", url: URL, title: TITLE, description: DESCRIPTION },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  openGraph: {
+    images: [{ url: SITE + "/media/og.jpg", width: 1200, height: 630, alt: "Covate" }],
+    type: "article", siteName: "Covate", url: URL, title: TITLE, description: DESCRIPTION,
+  },
+  twitter: {
+    images: [SITE + "/media/og.jpg"],
+    card: "summary_large_image", title: TITLE, description: DESCRIPTION,
+  },
   robots: { index: true, follow: true },
 };
 
@@ -102,7 +109,7 @@ const ld = [
     description: DESCRIPTION,
     inLanguage: "en",
     datePublished: "2026-08-16",
-    dateModified: "2026-08-27",
+    dateModified: NOVEMBER_CONTENT_UPDATED,
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     author: { "@id": SITE + "#organization" },
     publisher: { "@id": SITE + "#organization" },

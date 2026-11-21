@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { GITHUB, SITE } from "../lib/site";
+import { NOVEMBER_CONTENT_UPDATED } from "../lib/content-dates";
 import { Evidence } from "../_geo/Evidence";
 import { HeroMedia } from "../_components/HeroMedia";
 import { SectionFigure } from "../_components/SectionFigure";
@@ -28,7 +29,7 @@ export default async function Home() {
       description: t("ld.description"),
       inLanguage: locale,
       datePublished: "2026-08-04",
-      dateModified: "2026-08-27",
+      dateModified: NOVEMBER_CONTENT_UPDATED,
       mainEntityOfPage: { "@type": "WebPage", "@id": SITE },
       author: { "@id": SITE + "#organization" },
       publisher: { "@id": SITE + "#organization" },

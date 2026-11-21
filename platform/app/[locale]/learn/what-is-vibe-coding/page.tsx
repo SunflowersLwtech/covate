@@ -32,6 +32,7 @@ const metadata: Metadata = {
   ],
   alternates: { canonical: PATH },
   openGraph: {
+    images: [{ url: SITE + "/media/og.jpg", width: 1200, height: 630, alt: "Covate" }],
     type: "article",
     siteName: "Covate",
     url: URL,
@@ -39,6 +40,7 @@ const metadata: Metadata = {
     description: DESCRIPTION,
   },
   twitter: {
+    images: [SITE + "/media/og.jpg"],
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
@@ -123,7 +125,7 @@ const ld = [
     "@id": URL + "#breadcrumb",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Covate", item: SITE },
-      { "@type": "ListItem", position: 2, name: "Learn", item: SITE + "/learn/what-is-vibe-coding" },
+      { "@type": "ListItem", position: 2, name: "Learn", item: SITE + "/learn" },
       { "@type": "ListItem", position: 3, name: "What is vibe coding?", item: URL },
     ],
   },

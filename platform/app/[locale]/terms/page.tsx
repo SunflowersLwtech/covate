@@ -18,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: PATH },
     robots: { index: true, follow: true },
     openGraph: {
+      images: [{ url: SITE + "/media/og.jpg", width: 1200, height: 630, alt: "Covate" }],
       type: "website",
       siteName: "Covate",
       url: URL,
@@ -25,6 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: t("meta.description"),
     },
     twitter: {
+      images: [SITE + "/media/og.jpg"],
       card: "summary_large_image",
       title: t("meta.title"),
       description: t("meta.description"),

@@ -9,7 +9,7 @@ import { LegalDoc, type LegalSection } from "../../_components/LegalDoc";
 const PATH = "/privacy";
 const URL = SITE + PATH;
 const PUBLISHED = "2026-09-03";
-const UPDATED = "2026-11-06";
+const UPDATED = "2026-11-12";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("legal.privacy");
@@ -22,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: PATH, languages: { "ms-MY": "/privacy/ms" } },
     robots: { index: true, follow: true },
     openGraph: {
+      images: [{ url: SITE + "/media/og.jpg", width: 1200, height: 630, alt: "Covate" }],
       type: "website",
       siteName: "Covate",
       url: URL,
@@ -29,6 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: t("meta.description"),
     },
     twitter: {
+      images: [SITE + "/media/og.jpg"],
       card: "summary_large_image",
       title: t("meta.title"),
       description: t("meta.description"),

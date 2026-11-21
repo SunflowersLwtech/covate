@@ -22,7 +22,7 @@ import { MS } from "./content";
 const PATH = "/privacy/ms";
 const URL = SITE + PATH;
 const PUBLISHED = "2026-09-03";
-const UPDATED = "2026-10-16";
+const UPDATED = "2026-11-12";
 
 export function generateMetadata(): Metadata {
   return {
@@ -31,6 +31,7 @@ export function generateMetadata(): Metadata {
     alternates: { canonical: PATH, languages: { en: "/privacy" } },
     robots: { index: true, follow: true },
     openGraph: {
+      images: [{ url: SITE + "/media/og.jpg", width: 1200, height: 630, alt: "Covate" }],
       type: "website",
       siteName: "Covate",
       url: URL,
@@ -39,6 +40,7 @@ export function generateMetadata(): Metadata {
       locale: "ms_MY",
     },
     twitter: {
+      images: [SITE + "/media/og.jpg"],
       card: "summary_large_image",
       title: MS.meta.title,
       description: MS.meta.description,

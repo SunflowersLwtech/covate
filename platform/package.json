@@ -8,7 +8,7 @@
     "zh:coverage": "node scripts/zh-coverage.mjs",
     "start": "next start",
     "i18n:check": "node scripts/i18n-check.mjs",
-    "test:proxy": "node --import tsx --test proxy.test.ts",
+    "test:proxy": "node --import tsx --test proxy.test.ts seo.test.ts",
     "test:ingest": "node --import tsx --test ingest.test.ts ingest.e2e.test.ts",
     "test:header": "node --test header.test.mjs",
     "test:article-back": "node --test article-back.test.mjs",

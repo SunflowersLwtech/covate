@@ -100,7 +100,11 @@ const orgLd = {
 // README.md links the repository itself.
 const sourceLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareSourceCode",
+  "@type": ["SoftwareSourceCode", "SoftwareApplication"],
+  url: SITE,
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Windows, macOS, Linux",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   "@id": SITE + "#mcp",
   name: "Covate MCP",
   description: "Open-source (MIT) MCP server that quizzes developers on their own recent code changes and keeps a project-level debug memory. Runs locally; no account required.",
@@ -148,6 +152,7 @@ export default async function RootLayout({
   const siteLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": SITE + "#website",
     name: "Covate",
     url: SITE,
     inLanguage: locale,

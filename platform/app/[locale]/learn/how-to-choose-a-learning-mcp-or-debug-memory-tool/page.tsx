@@ -37,6 +37,7 @@ const metadata: Metadata = {
   ],
   alternates: { canonical: PATH },
   openGraph: {
+    images: [{ url: SITE + "/media/og.jpg", width: 1200, height: 630, alt: "Covate" }],
     type: "article",
     siteName: "Covate",
     url: URL,
@@ -44,6 +45,7 @@ const metadata: Metadata = {
     description: DESCRIPTION,
   },
   twitter: {
+    images: [SITE + "/media/og.jpg"],
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
