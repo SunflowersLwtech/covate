@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GITHUB, SITE } from "../../../lib/site";
+import { NOVEMBER_CONTENT_UPDATED } from "../../../lib/content-dates";
 import { Evidence } from "../../../_geo/Evidence";
 import { SignInCta } from "../../../_components/SignInCta";
 import { NAV, SiteHeader } from "../../../_components/SiteHeader";
@@ -103,7 +104,7 @@ const ld = [
     description: DESCRIPTION,
     inLanguage: "en",
     datePublished: "2026-08-16",
-    dateModified: "2026-08-27",
+    dateModified: NOVEMBER_CONTENT_UPDATED,
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     author: { "@id": SITE + "#organization" },
     publisher: { "@id": SITE + "#organization" },

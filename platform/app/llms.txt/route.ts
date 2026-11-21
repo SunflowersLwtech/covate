@@ -12,6 +12,7 @@ const BODY = `# Covate
 
 ## Public site
 - Home: ${SITE}
+- Learning Center: ${SITE}/learn
 
 ## What it is
 - Free, open-source MCP server (${GITHUB}): the \`learning_session\` tool generates blocking,

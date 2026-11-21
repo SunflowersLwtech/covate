@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "./lib/site";
+import { NOVEMBER_CONTENT_UPDATED } from "./lib/content-dates";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Content commits: e3fc1da (home/hub/new guide and two cross-links),
   // 11e7b4d (Chinese editions), 91fd996 (privacy), 6595ab4 (terms).
   // Styling, refactors and comment-only edits do not reset content dates.
   return [
-    { url: SITE, lastModified: "2026-11-19", changeFrequency: "weekly", priority: 1 },
+    { url: SITE, lastModified: NOVEMBER_CONTENT_UPDATED, changeFrequency: "weekly", priority: 1 },
     { url: SITE + "/learn", lastModified: "2026-11-19", changeFrequency: "weekly", priority: 0.9 },
     { url: SITE + "/learn/how-to-choose-a-learning-mcp-or-debug-memory-tool", lastModified: "2026-11-19", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/what-is-vibe-coding", lastModified: "2026-10-30", changeFrequency: "monthly", priority: 0.8 },
@@ -24,9 +25,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: SITE + "/learn/keep-a-learning-ledger-from-your-commits", lastModified: "2026-10-30", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/code-reading-routine-for-ai-heavy-teams", lastModified: "2026-10-30", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/how-to-explain-ai-generated-code-in-a-code-review", lastModified: "2026-10-30", changeFrequency: "monthly", priority: 0.8 },
-    { url: SITE + "/learn/onboard-to-a-repo-with-an-mcp-learning-tool", lastModified: "2026-11-19", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/onboard-to-a-repo-with-an-mcp-learning-tool", lastModified: NOVEMBER_CONTENT_UPDATED, changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/how-to-learn-a-new-programming-language-with-ai", lastModified: "2026-10-30", changeFrequency: "monthly", priority: 0.8 },
-    { url: SITE + "/learn/how-to-debug-with-ai-without-losing-the-skill", lastModified: "2026-11-19", changeFrequency: "monthly", priority: 0.8 },
+    { url: SITE + "/learn/how-to-debug-with-ai-without-losing-the-skill", lastModified: NOVEMBER_CONTENT_UPDATED, changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/learn/coding-interviews-in-the-age-of-ai", lastModified: "2026-10-30", changeFrequency: "monthly", priority: 0.8 },
     { url: SITE + "/privacy", lastModified: "2026-11-12", changeFrequency: "yearly", priority: 0.3 },
     { url: SITE + "/privacy/ms", lastModified: "2026-11-12", changeFrequency: "yearly", priority: 0.3 },
