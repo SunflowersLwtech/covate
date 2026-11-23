@@ -39,6 +39,8 @@ jobs:
         run: npm run test:ingest
       - name: Ops surface unit tests (the Postgres part runs in sync-e2e.yml)
         run: npm run test:ops
+      - name: Privacy notice matches what analytics and its server keep
+        run: npm run test:privacy
       - name: Build (prerenders every page in every locale)
         run: npx next build
       - name: Image optimizer stays off (/_next/image must not come back)

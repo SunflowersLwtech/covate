@@ -56,8 +56,8 @@ test("every public page is in the sitemap and both absolute-URL llms directories
     assert.match(String(entry.lastModified), /^\d{4}-\d{2}-\d{2}$/);
   }
   for (const path of excluded) assert.ok(!entries.some((entry) => entry.url === SITE + path));
-  assert.equal(entries.find((entry) => entry.url === SITE + "/privacy/ms")?.lastModified, "2026-11-12");
-  assert.equal(entries.find((entry) => entry.url === SITE + "/privacy")?.lastModified, "2026-11-12");
+  assert.equal(entries.find((entry) => entry.url === SITE + "/privacy/ms")?.lastModified, "2026-11-23");
+  assert.equal(entries.find((entry) => entry.url === SITE + "/privacy")?.lastModified, "2026-11-23");
   assert.equal(entries.find((entry) => entry.url === SITE + "/terms")?.lastModified, "2026-09-03");
 });
 
