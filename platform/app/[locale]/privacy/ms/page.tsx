@@ -22,7 +22,7 @@ import { MS } from "./content";
 const PATH = "/privacy/ms";
 const URL = SITE + PATH;
 const PUBLISHED = "2026-09-03";
-const UPDATED = "2026-11-12";
+const UPDATED = "2026-11-23";
 
 export function generateMetadata(): Metadata {
   return {
