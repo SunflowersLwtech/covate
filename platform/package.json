@@ -14,7 +14,7 @@
     "test:header": "node --test header.test.mjs",
     "test:article-back": "node --test article-back.test.mjs",
     "test:ops": "node --import tsx --test ops.test.ts ops.e2e.test.ts",
-    "test:privacy": "node --import tsx --test privacy.test.ts",
+    "test:privacy": "node --import tsx --test privacy.test.ts umamiFilter.test.ts",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "npm run i18n:check && npm run typecheck"
   },
