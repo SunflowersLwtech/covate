@@ -1,11 +1,16 @@
 import { getTranslations } from "next-intl/server";
 import { NAV, SiteHeader } from "../_components/SiteHeader";
 import { SiteFooter } from "../_components/SiteFooter";
+import { UMAMI_NOT_FOUND_ATTR } from "@/app/lib/umamiFilter";
 
+// The hidden marker tells the Umami filter (app/lib/umamiFilter.ts) this is the
+// not-found page: text typed or pasted into the address bar lands here as the
+// path, and while the marker is on the page the view is recorded as "/404".
 export default async function NotFound() {
   const t = await getTranslations("common.notFound");
   return (
     <div className="min-h-screen bg-deep text-primary">
+      <div hidden {...{ [UMAMI_NOT_FOUND_ATTR]: "" }} />
       <SiteHeader items={NAV.learn} />
       <main className="mx-auto max-w-3xl px-6 py-24 text-center">
         <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">{t("eyebrow")}</p>

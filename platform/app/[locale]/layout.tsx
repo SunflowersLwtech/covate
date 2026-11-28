@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import "../globals.css";
 import { isLocale, LOCALES } from "../i18n/messages";
 import { GITHUB, SITE } from "../lib/site";
 import { FeedbackWidget } from "../_components/FeedbackWidget";
+import { UmamiTag } from "../_components/UmamiTag";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
@@ -235,14 +235,12 @@ export default async function RootLayout({
             Prefer giving a new subdomain its own website-id over widening either list.
             A staging host reporting into the production id is the failure this gate
             exists to prevent. */}
-        {process.env.VERCEL_ENV === "production" ? (
-          <Script
-            defer
-            src="https://fluentdojo.com/umami/script.js"
-            data-website-id="18334797-f828-4567-9415-c3af0b5325c0"
-            data-domains="covate.org,www.covate.org"
-          />
-        ) : null}
+        {/* The tag is in UmamiTag, together with its address filter
+            (app/lib/umamiFilter.ts): the not-found page (marked by
+            app/[locale]/not-found.tsx) and any path no page of ours has (an email
+            or text pasted into the address bar) are sent as /404 with the title
+            "404", in the next view's referrer too; everything else as it is. */}
+        {process.env.VERCEL_ENV === "production" ? <UmamiTag /> : null}
         {/* The feedback form's script: no cookie, nothing sent until the
             visitor presses send (see the FeedbackWidget doc comment and the
             privacy policy's feedback-form section). Unlike Umami above it
