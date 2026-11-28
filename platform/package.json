@@ -14,11 +14,12 @@
     "test:article-back": "node --test article-back.test.mjs",
     "test:ops": "node --import tsx --test ops.test.ts ops.e2e.test.ts",
     "test:privacy": "node --import tsx --test privacy.test.ts",
+    "test:deps": "node --test next-version.test.mjs",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "npm run i18n:check && npm run typecheck"
   },
   "dependencies": {
-    "next": "^16.4.3",
+    "next": "^16.4.6",
     "next-intl": "^4.14.2",
     "postgres": "^3.4.9",
     "react": "19.2.3",
