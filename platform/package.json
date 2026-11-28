@@ -8,6 +8,7 @@
     "zh:coverage": "node scripts/zh-coverage.mjs",
     "start": "next start",
     "i18n:check": "node scripts/i18n-check.mjs",
+    "test:deps": "node --test next-version.test.mjs",
     "test:proxy": "node --import tsx --test proxy.test.ts seo.test.ts",
     "test:ingest": "node --import tsx --test ingest.test.ts ingest.e2e.test.ts",
     "test:header": "node --test header.test.mjs",
@@ -18,7 +19,7 @@
     "test": "npm run i18n:check && npm run typecheck"
   },
   "dependencies": {
-    "next": "^16.4.3",
+    "next": "^16.4.6",
     "next-intl": "^4.14.2",
     "postgres": "^3.4.9",
     "react": "19.2.3",

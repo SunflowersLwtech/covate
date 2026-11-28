@@ -31,6 +31,8 @@ jobs:
           cache: npm
           cache-dependency-path: platform/package-lock.json
       - run: npm ci
+      - name: Next.js is at or above the November 2026 security fixes
+        run: npm run test:deps
       - name: i18n red lines (locale parity, CJK hardcode, key resolution)
         run: npm run i18n:check
       - name: Proxy unit tests (locale rewrite / redirect)
